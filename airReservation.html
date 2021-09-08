@@ -1,0 +1,777 @@
+<!--
+ * @Description: 预定页面
+ * @Author: wish.WuJunLong
+ * @Date: 2021-08-03 15:57:24
+ * @LastEditTime: 2021-09-07 17:48:21
+ * @LastEditors: wish.WuJunLong
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/airReservation.css" />
+
+    <link rel="stylesheet" href="plugins/ax.css" />
+    <link rel="stylesheet" href="plugins/mobiscroll.jquery.css" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.ttf" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.woff" />
+
+    <link
+      href="https://at.alicdn.com/t/font_1551254_rxrrzgz2kjc.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <div id="loading">
+      <span class="ax-loading" style="width: 60px; height: 60px"
+        ><svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20" /></svg>
+      </span>
+    </div>
+    <div class="air_reservation">
+      <div class="air_header">
+        <div class="air_title">机票预定</div>
+        <button class="air_back_btn ax-primary ax-btn">返 回</button>
+      </div>
+      <div class="air_message"></div>
+
+      <!-- 乘客信息输入 -->
+      <div class="passenger_box"></div>
+
+      <!-- 联系人信息 -->
+      <div class="contact_box">
+        <div class="contact_title">联系人信息</div>
+        <div class="box_list">
+          <div class="list_title">姓名</div>
+          <div class="list_input">
+            <input
+              name="contactName"
+              placeholder="输入姓名"
+              value=""
+              class="ax-md contact_input"
+              type="text"
+            />
+          </div>
+        </div>
+        <div class="box_list">
+          <div class="list_title">电话</div>
+          <div class="list_input">
+            <input
+              name="contactPhone"
+              placeholder="输入电话"
+              value=""
+              class="ax-md contact_input"
+              type="text"
+            />
+          </div>
+        </div>
+        <div class="box_list">
+          <div class="list_title">邮箱</div>
+          <div class="list_input">
+            <input
+              name="contactEmail"
+              placeholder="输入名邮箱"
+              value=""
+              class="ax-md contact_input"
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 金额计算 -->
+      <div class="price_box">
+        <div class="price_list"></div>
+        <div class="price_total">
+          总价
+          <p>8960</p>
+          <span>CNY</span>
+        </div>
+
+        <button type="button" class="pay_btn ax-btn ax-primary ax-square">预 定</button>
+      </div>
+    </div>
+
+    <!-- 提示弹窗 -->
+    <div class="ax-window" data-mask="true" id="warning_tip">
+      <div class="ax-window-overlay"></div>
+      <div class="ax-window-contain">
+        <div class="ax-window-tips">
+          <div class="ax-tips-icon ax-result ax-warning">
+            <i class="ax-iconfont ax-icon-close-o"></i>
+          </div>
+          <div class="ax-tips-title"></div>
+          <div class="ax-tips-des"></div>
+          <div class="ax-tips-btn">
+            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+              关 闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 成功弹窗 -->
+    <div class="ax-window" data-mask="true" id="success_tip">
+      <div class="ax-window-overlay"></div>
+      <div class="ax-window-contain">
+        <div class="ax-window-tips">
+          <div class="ax-tips-icon ax-result ax-success">
+            <i class="ax-iconfont ax-icon-check-o"></i>
+          </div>
+          <div class="ax-tips-title"></div>
+          <div class="ax-tips-des"></div>
+          <div class="ax-tips-btn">
+            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+              关 闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="plugins/jquery-1.10.2.min.js"></script>
+    <script src="plugins/ax.min.js"></script>
+    <script src="plugins/mobiscroll.jquery.min.js"></script>
+
+    <script>
+      // 返回航班列表
+      $(function () {
+        $(".air_back_btn").click(function () {
+          parent.window.backAirList();
+        });
+      });
+
+      $("#loading").hide();
+
+      // 航班信息
+      var airMessage = JSON.parse(sessionStorage.getItem("airMessage"));
+      // sessionStorage.removeItem("airMessage");
+      console.log(airMessage);
+      // 乘客信息
+      var passengerData = JSON.parse(sessionStorage.getItem("passengerMessage"));
+      // sessionStorage.removeItem("passengerMessage");
+
+      // 组装航班数据
+      function getTicketDetail(val, retVal) {
+        var data;
+
+        // 航程三字码组装
+        airportDom =
+          "<div class='item_airport'>" +
+          val[0].depAirport +
+          " - " +
+          val[val.length - 1].arrAirport +
+          (retVal.length > 0 ? " 往返" : "") +
+          "</div>";
+
+        // 航班时间组装
+        var dateStart = new Date(val[0].depTime);
+        var dateEnd = new Date(val[val.length - 1].arrTime);
+        var difValue = parseInt(
+          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) / (1000 * 60 * 60 * 24)
+        );
+
+        airTimeDom =
+          "<div class='item_time'>" +
+          (dateStart.getHours() < 10
+            ? "0" + dateStart.getHours()
+            : dateStart.getHours()) +
+          ":" +
+          (dateStart.getMinutes() < 10
+            ? "0" + dateStart.getMinutes()
+            : dateStart.getMinutes()) +
+          " - " +
+          (dateEnd.getHours() < 10 ? "0" + dateEnd.getHours() : dateEnd.getHours()) +
+          ":" +
+          (dateEnd.getMinutes() < 10
+            ? "0" + dateEnd.getMinutes()
+            : dateEnd.getMinutes()) +
+          (difValue > 0 ? "<span>+" + difValue + "</span>" : "") +
+          (retVal.length > 0
+            ? " / " +
+              (new Date(retVal[0].depTime).getHours() < 10
+                ? "0" + new Date(retVal[0].depTime).getHours()
+                : new Date(retVal[0].depTime).getHours()) +
+              ":" +
+              (new Date(retVal[0].depTime).getMinutes() < 10
+                ? "0" + new Date(retVal[0].depTime).getMinutes()
+                : new Date(retVal[0].depTime).getMinutes()) +
+              " - " +
+              (new Date(retVal[retVal.length - 1].arrTime).getHours() < 10
+                ? "0" + new Date(retVal[retVal.length - 1].arrTime).getHours()
+                : new Date(retVal[retVal.length - 1].arrTime).getHours()) +
+              ":" +
+              (new Date(retVal[retVal.length - 1].arrTime).getMinutes() < 10
+                ? "0" + new Date(retVal[retVal.length - 1].arrTime).getMinutes()
+                : new Date(retVal[retVal.length - 1].arrTime).getMinutes()) +
+              (parseInt(
+                (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                  getNotTimeDate(new Date(retVal[0].depTime))) /
+                  (1000 * 60 * 60 * 24)
+              ) > 0
+                ? "<span>+" +
+                  parseInt(
+                    (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                      getNotTimeDate(new Date(retVal[0].depTime))) /
+                      (1000 * 60 * 60 * 24)
+                  ) +
+                  "</span>"
+                : "")
+            : "") +
+          "</div>";
+
+        // 单程
+        var arrAirTime = 0;
+        airDetail = [];
+        for (var o = 0; o < val.length; o++) {
+          arrAirTime += val[o].duration;
+          airDetail +=
+            '<div class="item_box">' +
+            '<div class="item_box_message item_box_flighunumber">' +
+            '<div class="message_title">航班号：</div>' +
+            '<div class="message_content">' +
+            val[o].flightNumber +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            val[o].depAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            val[o].depTime +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message item_box_detailtime">' +
+            '<div class="message_content message_content_date">' +
+            Math.floor(Number(val[o].duration) / 60) +
+            "H" +
+            Math.floor(Number(val[o].duration) % 60) +
+            "M" +
+            "</div>" +
+            '<div class="message_content_line"></div>' +
+            '<div class="message_content message_content_cabin">' +
+            val[o].cabin +
+            "舱</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            val[o].arrAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            val[o].arrTime +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        }
+
+        // 往返数据
+        var retArrAirTime = 0;
+        retAirDetail = [];
+        for (var o = 0; o < retVal.length; o++) {
+          retArrAirTime += retVal[o].duration;
+          retAirDetail +=
+            '<div class="item_box">' +
+            '<div class="item_box_message item_box_flighunumber">' +
+            '<div class="message_title">航班号：</div>' +
+            '<div class="message_content">' +
+            retVal[o].flightNumber +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            retVal[o].depAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            retVal[o].depTime +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message item_box_detailtime">' +
+            '<div class="message_content message_content_date">' +
+            Math.floor(Number(retVal[o].duration) / 60) +
+            "H" +
+            Math.floor(Number(retVal[o].duration) % 60) +
+            "M" +
+            "</div>" +
+            '<div class="message_content_line"></div>' +
+            '<div class="message_content message_content_cabin">' +
+            retVal[o].cabin +
+            "舱</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            retVal[o].arrAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            retVal[o].arrTime +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        }
+
+        airTip =
+          "<div class='item_box_tip'>" +
+          "<div class='item_box_tip_message'>" +
+          "<div class='message_title'>航程类型：</div>" +
+          "<div class='message_content message_air_type'>" +
+          (val.length > 1 ? "中转 +" + (val.length - 1) : "直达") +
+          (retVal.length > 0
+            ? "," + (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
+            : "") +
+          "</div>" +
+          "</div>" +
+          "<div class='item_box_tip_message'>" +
+          "<div class='message_title'>总航程时间：</div>" +
+          "<div class='message_content'>" +
+          Math.floor(Number(arrAirTime) / 60) +
+          "小时" +
+          Math.floor(Number(arrAirTime) % 60) +
+          "分钟" +
+          (retVal.length > 0
+            ? "," +
+              Math.floor(Number(retArrAirTime) / 60) +
+              "小时" +
+              Math.floor(Number(retArrAirTime) % 60) +
+              "分钟"
+            : "") +
+          "</div>" +
+          "</div>" +
+          "</div>";
+
+        data =
+          "<div class='item_message'>" +
+          airportDom +
+          airTimeDom +
+          "<div class='item_price'>" +
+          "<span>" +
+          airMessage.currency +
+          "</span>" +
+          " " +
+          airMessage.fareQuotes[0].price +
+          "</div>" +
+          "</div>" +
+          "<div class='item_air_detail'>" +
+          "<div class='detail_box'>" +
+          (retVal.length > 0 ? "<div class='ret_title'>去程：</div>" : "") +
+          "<div>" +
+          airDetail +
+          "</div>" +
+          "</div>" +
+          (retVal.length > 0
+            ? "<div class='detail_box ret_detail_box'>" +
+              "<div class='ret_title'>回程：</div>" +
+              "<div>" +
+              retAirDetail +
+              "</div>" +
+              "</div>"
+            : "") +
+          "</div>" +
+          airTip;
+
+        return data;
+      }
+
+      // 组装航班信息
+      $(".air_message").html(
+        getTicketDetail(
+          airMessage.fromSegments,
+          airMessage.retSegments ? airMessage.retSegments : []
+        )
+      );
+
+      // 组装乘客信息
+      var adtData = [];
+      var chdData = [];
+
+      for (let i = 0; i < passengerData.adultNumber; i++) {
+        adtData +=
+          '<div class="box_list">' +
+          '<div class="box_title">乘客 ' +
+          (i + 1) +
+          " - 成人</div>" +
+          '<div class="list_item" style="display: none">' +
+          '<div class="item_name">乘客类型：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-square pas_data">' +
+          '<option value="0">成人</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">性别：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-square pas_data">' +
+          '<option value="0">男</option>' +
+          '<option value="1">女</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">名(First)：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入名(First)" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">姓(Last)：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入姓(Last)" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">出生日期：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入出生日期" name="date" value="" class="ax-md pas_data" type="text" id="pas_birthday_'+i+'" onfocus="getBirthdayTimeDate('+i+')"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">国籍：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">证件类型：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-square pas_data">' +
+          '<option value="PP">护照</option>' +
+          '<option value="OT">其他</option>' +
+          '<option value="ID">身份证</option>' +
+          '<option value="GA">港澳通行证</option>' +
+          '<option value="TW">台湾通行证</option>' +
+          '<option value="TB">台胞证</option>' +
+          '<option value="HX">回乡证</option>' +
+          '<option value="HY">国际海员证</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">证件号码：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入证件号码" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">到期日期：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入证件到期日期" name="date" value="" class="ax-md pas_data" id="pas_cardExpired_'+i+'" onfocus="getCardExpiredTimeDate('+i+')" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          "</div>";
+      }
+
+      for (let i = 0; i < passengerData.childNumber; i++) {
+        chdData +=
+          '<div class="box_list">' +
+          '<div class="box_title">乘客 ' +
+          (passengerData.adultNumber + i + 1) +
+          " - 儿童</div>" +
+          '<div class="list_item" style="display: none">' +
+          '<div class="item_name">乘客类型：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-square pas_data">' +
+          '<option value="1">儿童</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">性别：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-square pas_data">' +
+          '<option value="0">男</option>' +
+          '<option value="1">女</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">名(First)：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入名(First)" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">姓(Last)：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入姓(Last)" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">出生日期：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入出生日期" value="" class="ax-md pas_data" type="text" id="pas_chd_birthday_'+i+'" onfocus="getCHDBirthdayTimeDate('+i+')"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">国籍：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">证件类型：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-square pas_data">' +
+          '<option value="PP">护照</option>' +
+          '<option value="OT">其他</option>' +
+          '<option value="ID">身份证</option>' +
+          '<option value="GA">港澳通行证</option>' +
+          '<option value="TW">台湾通行证</option>' +
+          '<option value="TB">台胞证</option>' +
+          '<option value="HX">回乡证</option>' +
+          '<option value="HY">国际海员证</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">证件号码：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入证件号码" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">到期日期：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入证件到期日期" value="" class="ax-md pas_data" type="text" id="pas_chd_cardExpired_'+i+'" onfocus="getCHDCardExpiredTimeDate('+i+')"/>' +
+          "</div>" +
+          "</div>" +
+          "</div>";
+      }
+
+      $(".passenger_box").html(adtData + chdData);
+
+      // 组装金额数据
+      var priceList = "";
+      var totalPrice = 0;
+      for (let i = 0; i < airMessage.fareQuotes.length; i++) {
+        priceList +=
+          '<div class="price_list_item">' +
+          (airMessage.fareQuotes[i].passengerType === 0 ? "成人" : "儿童") +
+          '<div class="price_tip">机票单价：<span>' +
+          airMessage.fareQuotes[i].price +
+          "</span> x" +
+          (airMessage.fareQuotes[i].passengerType === 0
+            ? passengerData.adultNumber
+            : passengerData.childNumber) +
+          "</div>" +
+          '<div class="price_tip">附加费用：<span>' +
+          airMessage.fareQuotes[i].tax +
+          "</span></div>" +
+          "</div>";
+
+        // 总金额计算
+        if (
+          passengerData.adultNumber > 0 &&
+          airMessage.fareQuotes[i].passengerType === 0
+        ) {
+          totalPrice += airMessage.fareQuotes[i].price * passengerData.adultNumber;
+          totalPrice += airMessage.fareQuotes[i].tax * passengerData.adultNumber;
+        }
+        if (
+          passengerData.childNumber > 0 &&
+          airMessage.fareQuotes[i].passengerType === 1
+        ) {
+          totalPrice += airMessage.fareQuotes[i].price * passengerData.childNumber;
+          totalPrice += airMessage.fareQuotes[i].tax * passengerData.childNumber;
+        }
+      }
+
+      $(".price_list").html(priceList);
+      $(".price_total p").html(totalPrice);
+      $(".price_total span").html(airMessage.currency);
+
+      // 成人乘客日期处理
+      function getBirthdayTimeDate(val) {
+        // 日期选择器
+        $("#pas_birthday_" + val)
+          .mobiscroll()
+          .calendar({
+            theme: "ax",
+            lang: "zh",
+            onBeforeShow: function (event, inst) {
+              //显示前的点击事件
+              $("#" + this.id).addClass("ax-focus"); //input焦点
+              //inst.settings.cssClass='ax-mask';//添加遮罩
+            },
+            onClose: function (event, inst) {
+              //关闭事件
+              $("#" + this.id).removeClass("ax-focus");
+            },
+            display: "bubble",
+            dateFormat: "yy-mm-dd",
+            max: new Date(new Date().getFullYear() - 12, new Date().getMonth(), new Date().getDate())
+          });
+      }
+      function getCardExpiredTimeDate(val){
+         // 日期选择器
+         $("#pas_cardExpired_" + val)
+          .mobiscroll()
+          .calendar({
+            theme: "ax",
+            lang: "zh",
+            onBeforeShow: function (event, inst) {
+              //显示前的点击事件
+              $("#" + this.id).addClass("ax-focus"); //input焦点
+              //inst.settings.cssClass='ax-mask';//添加遮罩
+            },
+            onClose: function (event, inst) {
+              //关闭事件
+              $("#" + this.id).removeClass("ax-focus");
+            },
+            display: "bubble",
+            dateFormat: "yy-mm-dd",
+            min: new Date()
+          });
+      };
+
+
+            // 儿童乘客日期处理
+      function getCHDBirthdayTimeDate(val) {
+        // 日期选择器
+        $("#pas_chd_birthday_" + val)
+          .mobiscroll()
+          .calendar({
+            theme: "ax",
+            lang: "zh",
+            onBeforeShow: function (event, inst) {
+              //显示前的点击事件
+              $("#" + this.id).addClass("ax-focus"); //input焦点
+              //inst.settings.cssClass='ax-mask';//添加遮罩
+            },
+            onClose: function (event, inst) {
+              //关闭事件
+              $("#" + this.id).removeClass("ax-focus");
+            },
+            display: "bubble",
+            dateFormat: "yy-mm-dd",
+            min: new Date(new Date().getFullYear() - 12, new Date().getMonth(), new Date().getDate()),
+            max: new Date(new Date().getFullYear() - 2, new Date().getMonth(), new Date().getDate() - 1)
+          });
+      }
+      function getCHDCardExpiredTimeDate(val){
+         // 日期选择器
+         $("#pas_chd_cardExpired_" + val)
+          .mobiscroll()
+          .calendar({
+            theme: "ax",
+            lang: "zh",
+            onBeforeShow: function (event, inst) {
+              //显示前的点击事件
+              $("#" + this.id).addClass("ax-focus"); //input焦点
+              //inst.settings.cssClass='ax-mask';//添加遮罩
+            },
+            onClose: function (event, inst) {
+              //关闭事件
+              $("#" + this.id).removeClass("ax-focus");
+            },
+            display: "bubble",
+            dateFormat: "yy-mm-dd",
+            min: new Date()
+          });
+      };
+
+
+
+      // 返回时间 年-月-日
+      function getNotTimeDate(val) {
+        var year = val.getFullYear();
+        var month = val.getMonth();
+        var date = val.getDate();
+
+        if (month < 10) {
+          month = "0" + month;
+        }
+        if (date < 10) {
+          date = "0" + date;
+        }
+
+        return new Date(year + "-" + month + "-" + date);
+      }
+
+      // 预定功能
+      $(function () {
+        $(".pay_btn").click(function () {
+          let passengerList = [];
+          // 提取乘客数据
+          $(".passenger_box .box_list").each(function () {
+            let passenger = [];
+            // $(this).find($('.list_item'))
+            $(this)
+              .find($(".list_item"))
+              .each(function () {
+                passenger.push($(this).find(".pas_data").val());
+              });
+
+            // 组装乘客数据
+            passengerList.push({
+              passengerType: Number(passenger[0]), //乘客类型 0:成人；1：儿童；2：婴儿
+              gender: Number(passenger[1]), //乘客性别 0:男性；1:女性
+              firstName: passenger[2], //first
+              lastName: passenger[3], //last
+              birthday: passenger[4], //出生日期
+              nationality: passenger[5], //国籍
+              cardIssuePlace: passenger[5], //证件发行国
+              cardType: passenger[6], // 证件类型 OT: 其他;ID: 身份证;PP: 护照;GA: 港澳通行证;TW: 台湾通行证;TB: 台胞证;HX: 回乡证;HY: 国际海员证;
+              cardNumber: passenger[7], //证件号码
+              cardExpired: passenger[8], //证件到期日期
+              airCode: null,
+              airMemberNo: null,
+              passengerAddress: null,
+              passengerMobile: null,
+            });
+          });
+
+          // 提取联系人信息
+          let contactData = {
+            name: $(".contact_input[name='contactName']").val(),
+            address: null,
+            postcode: null,
+            eMail: $(".contact_input[name='contactEmail']").val(),
+            mobile: $(".contact_input[name='contactPhone']").val(),
+          };
+
+          let data = {
+            sessionID: "20210817143319143",
+            config: "BA",
+            tripType: 2,
+            bookdata: null,
+            routing: airMessage,
+            passengers: passengerList,
+            auxServices: null,
+            contact: contactData,
+            remark: null,
+          };
+
+          console.log(data);
+          $("#loading").show();
+          fetch("http://192.168.0.35:6212/ba/order", {
+            method: "POST",
+            body: JSON.stringify(data),
+          })
+            .then(function (data) {
+              return data.json();
+            })
+            .then(function (data) {
+              console.log(data);
+              $("#loading").hide();
+              if (data.status === 0) {
+                window.open("/airdetails.html?pnr=" + data.pnrCode, "target");
+                $("#success_tip").addClass("ax-window-show");
+                $(".ax-tips-title").html("航班预定成功");
+                $(".ax-tips-des").html(data.message);
+                parent.window.backAirList();
+              } else {
+                $("#warning_tip").addClass("ax-window-show");
+                $(".ax-tips-title").html("获取数据失败");
+                $(".ax-tips-des").html(data.message);
+              }
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

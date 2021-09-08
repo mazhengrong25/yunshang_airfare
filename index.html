@@ -1,0 +1,381 @@
+<!--
+ * @Description: 首页
+ * @Author: wish.WuJunLong
+ * @Date: 2021-07-22 16:47:18
+ * @LastEditTime: 2021-09-07 17:50:33
+ * @LastEditors: wish.WuJunLong
+-->
+
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NDC白屏 - 云上航空</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/index.css" />
+
+    <link rel="stylesheet" href="plugins/ax.css" />
+    <link rel="stylesheet" href="plugins/mobiscroll.jquery.css" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.ttf" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.woff" />
+    <link
+      href="https://at.alicdn.com/t/font_1551254_rxrrzgz2kjc.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body class="ax-flex-col">
+    <header>
+      <div class="tab_header">
+        <a class="header_logo" href="/">
+          <img src="/img/logo.png" alt="logo" />
+        </a>
+        <div class="header_tab_box">
+          <p onclick="changeTab(this)" class="selected">机票查询</p>
+          <p onclick="changeTab(this)">操作日志</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="tab_main ax-flex-block">
+      <div id="loading">
+        <span class="ax-loading" style="width: 60px; height: 60px"
+          ><svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20" /></svg>
+        </span>
+      </div>
+      <!-- 机票查询 -->
+      <div class="tab_content air_message_content show">
+        <div class="search_hide_title">
+          <div class="menu_btn" onclick="showSearch()">
+            <img src="/img/menu_icon.png" alt="菜单按钮" />
+          </div>
+          <div class="search_hide_title_text">航班查询</div>
+        </div>
+        <!-- 搜索栏 -->
+        <div class="search_main">
+          <div class="search_main_title">
+            <h5>航班查询</h5>
+            <div class="menu_btn" onclick="showSearch()">
+              <img src="/img/menu_icon.png" alt="菜单按钮" />
+            </div>
+          </div>
+
+          <div class="search_input_box">
+            <div class="search_list">
+              <div class="list_item">
+                <div class="search_title">出发地</div>
+                <input
+                  type="text"
+                  id="startAddress"
+                  value="PVG"
+                  placeholder="请输入出发地三字码"
+                />
+              </div>
+              <div class="list_item">
+                <div class="search_title">到达地</div>
+                <input
+                  type="text"
+                  id="endAddress"
+                  value="LHR"
+                  placeholder="请输入到达地三字码"
+                />
+              </div>
+            </div>
+            <div class="list_item">
+              <div class="search_title">出发时间</div>
+              <input name="date" placeholder="选择日期" type="text" id="startTime" />
+            </div>
+            <div class="list_item">
+              <div class="search_title">到达时间</div>
+              <input name="date" placeholder="选择日期" type="text" id="endTime" />
+            </div>
+            <div class="search_list">
+              <div class="list_item">
+                <div class="search_title">成人</div>
+                <select id="adtNumber">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+              </div>
+              <div class="list_item">
+                <div class="search_title">儿童</div>
+                <select id="chdNumber">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+              </div>
+            </div>
+            <div class="search_list submit_btn">
+              <button
+                type="button"
+                class="ax-btn ax-primary ax-full ax-square search_submit_btn"
+              >
+                查询
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 机票列表 -->
+        <div id="TicketSearchIframe"></div>
+      </div>
+      <!-- 日志 -->
+      <div class="tab_content">日志</div>
+    </main>
+
+    <!-- 提示弹窗 -->
+    <div class="ax-window" data-mask="true" id="warning_tip">
+      <div class="ax-window-overlay"></div>
+      <div class="ax-window-contain">
+        <div class="ax-window-tips">
+          <div class="ax-tips-icon ax-result ax-warning">
+            <i class="ax-iconfont ax-icon-close-o"></i>
+          </div>
+          <div class="ax-tips-title"></div>
+          <div class="ax-tips-des"></div>
+          <div class="ax-tips-btn">
+            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+              关 闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer></footer>
+
+    <script src="plugins/jquery-1.10.2.min.js"></script>
+    <script src="plugins/ax.min.js"></script>
+    <script src="plugins/mobiscroll.jquery.min.js"></script>
+    <script>
+      var thisTImeDate =
+        new Date().getFullYear() +
+        "-" +
+        (new Date().getMonth() + 1 < 10
+          ? "0" + (new Date().getMonth() + 1)
+          : new Date().getMonth() + 1) +
+        "-" +
+        (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate());
+      $("#startTime").val(thisTImeDate);
+
+      console.log(thisTImeDate);
+
+      let airList; // 航班列表
+      // tab页切换
+      $(".search_hide_title").hide();
+      $(".air_reservation").hide();
+      $("#loading").hide();
+      // sessionStorage.clear()
+      var headerTabs = document
+          .getElementsByClassName("header_tab_box")[0]
+          .getElementsByTagName("p"),
+        contents = document
+          .getElementsByClassName("tab_main")[0]
+          .getElementsByClassName("tab_content");
+
+      function changeTab(tab) {
+        for (var i = 0; i < headerTabs.length; i++) {
+          if (headerTabs[i] === tab) {
+            headerTabs[i].className = "selected";
+            contents[i].className = "tab_content show";
+          } else {
+            headerTabs[i].className = "";
+            contents[i].className = "tab_content";
+          }
+        }
+      }
+
+      // 日期选择器
+      $("#startTime")
+        .mobiscroll()
+        .calendar({
+          theme: "ax",
+          lang: "zh",
+          onBeforeShow: function (event, inst) {
+            //显示前的点击事件
+            $("#" + this.id).addClass("ax-focus"); //input焦点
+            //inst.settings.cssClass='ax-mask';//添加遮罩
+          },
+          onClose: function (event, inst) {
+            //关闭事件
+            $("#" + this.id).removeClass("ax-focus");
+
+            getEndTime();
+            if (new Date($("#startTime").val()) > new Date($("#endTime").val())) {
+              $("#endTime").val("");
+            }
+          },
+          display: "bubble",
+          dateFormat: "yy-mm-dd",
+          min: thisTImeDate,
+        });
+
+      getEndTime();
+      function getEndTime() {
+        $("#endTime")
+          .mobiscroll()
+          .calendar({
+            theme: "ax",
+            lang: "zh",
+            onBeforeShow: function (event, inst) {
+              //显示前的点击事件
+              $("#" + this.id).addClass("ax-focus"); //input焦点
+              //inst.settings.cssClass='ax-mask';//添加遮罩
+            },
+            onClose: function (event, inst) {
+              //关闭事件
+              $("#" + this.id).removeClass("ax-focus");
+              if (new Date($("#startTime").val()) > new Date($("#endTime").val())) {
+                $("#endTime").val("");
+              }
+            },
+            display: "bubble",
+            buttons: [
+              {
+                text: "清空",
+                handler: "clear",
+              },
+              "set",
+            ],
+            dateFormat: "yy-mm-dd",
+            min: new Date(
+              new Date($("#startTime").val()).getFullYear(),
+              new Date($("#startTime").val()).getMonth(),
+              new Date($("#startTime").val()).getDate() + 1
+            ),
+          });
+      }
+
+      // 显示隐藏搜索栏
+      function showSearch() {
+        $(".search_main").toggle();
+        $(".search_hide_title").toggle();
+
+        $("#TicketSearchIframe").css({
+          width: $(".search_main").is(":visible") ? "75%" : "95%",
+        });
+        $(".air_reservation").css({
+          width: $(".search_main").is(":visible") ? "75%" : "95%",
+        });
+      }
+
+      // 查询航班按钮
+      $(function () {
+        $(".search_submit_btn").click(function () {
+          if (
+            !$("#startAddress").val() ||
+            !$("#endAddress").val() ||
+            !$("#startTime").val()
+          ) {
+            return (
+              $("#warning_tip").addClass("ax-window-show"),
+              $(".ax-tips-title").html("请完善航班查询条件"),
+              $(".ax-tips-des").html("")
+            );
+          }
+
+          $("#TicketSearchIframe").show();
+          $("#TicketSearchIframe").html(
+            '<iframe src="./ticketSearch.html" frameborder="0"></iframe>'
+          );
+
+          $(".air_reservation").remove();
+          $(".ticket_list .list_item").remove();
+          // getTicketData();
+
+          var ticketData = {
+            config: "BA",
+            tripType: $("#endTime").val() ? 2 : 1,
+            fromCity: $("#startAddress").val(),
+            toCity: $("#endAddress").val(),
+            fromDate: $("#startTime").val().replace(/\//g, "-"),
+            retDate: $("#endTime").val().replace(/\//g, "-") || null,
+            adultNumber: Number($("#adtNumber").val()),
+            childNumber: Number($("#chdNumber").val()),
+            currency: "CNY",
+            cabinlevel: "Y",
+            data: "",
+          };
+
+          sessionStorage.setItem("ticketData", JSON.stringify(ticketData));
+        });
+      });
+
+      // 跳转航班预定页面
+      function jumpTicketReservation() {
+        var checkAirNumber = sessionStorage.getItem("checkAir");
+
+        sessionStorage.removeItem("checkAir");
+        $("#loading").show();
+        var data = {
+          sessionID: "",
+          config: "BA",
+          tripType: 2, //行程类型
+          routing: JSON.parse(checkAirNumber),
+          adultNumber: Number($("#adtNumber").val()),
+          childNumber: Number($("#chdNumber").val()),
+          quoteType: 0,
+        };
+        fetch("http://192.168.0.35:6212/ba/verify", {
+          method: "POST",
+          body: JSON.stringify(data),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            $("#loading").hide();
+            if (data.status === 0) {
+              sessionStorage.setItem("airMessage", JSON.stringify(data.routing));
+              sessionStorage.setItem(
+                "passengerMessage",
+                JSON.stringify({
+                  adultNumber: Number($("#adtNumber").val()),
+                  childNumber: Number($("#chdNumber").val()),
+                })
+              );
+
+              $(".tab_content.show").append(
+                '<iframe class="air_reservation" src="/airReservation.html" frameborder="0"></iframe>'
+              );
+
+              $("#TicketSearchIframe").hide();
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $(".ax-tips-title").html("获取数据失败");
+              $(".ax-tips-des").html(data.message);
+            }
+          });
+      }
+
+      // 返回航班列表页
+      function backAirList() {
+        $(".air_reservation").remove();
+        $("#TicketSearchIframe").show();
+      }
+
+      // $(".tab_content.show").append(
+      //   '<iframe class="air_reservation" src="/airReservation.html" frameborder="0"></iframe>'
+      // );
+
+      // $("#TicketSearchIframe").hide();
+    </script>
+  </body>
+</html>

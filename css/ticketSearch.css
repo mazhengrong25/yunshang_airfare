@@ -1,0 +1,331 @@
+.ticket_main {
+}
+.ticket_main .ticket_box {
+}
+.ticket_main .main_header {
+  text-align: justify;
+  text-align-last: justify;
+  line-height: 0;
+}
+.ticket_main .main_header .main_title {
+  display: inline-block;
+  height: 40px;
+  width: 120px;
+  background: #ffffff;
+  text-align: center;
+  line-height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #0f1922;
+  text-align-last: center;
+  border-radius: 5px 5px 0px 0px;
+}
+.ticket_main .main_header .main_search_box {
+  display: inline-block;
+  margin-left: auto;
+  line-height: 39px;
+}
+
+/* 筛选弹窗内容 */
+#searchPopcon .search_box_title {
+  padding: 17px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0f1922;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #ebeff2;
+}
+#searchPopcon .search_box_title span {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background-color: #3abfc2;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.ticket_main .main_header .main_search_btn {
+  text-align: right;
+  height: 30px;
+  background: #3abfc2;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+.ticket_main .main_header .main_search_btn:hover {
+  background: rgba(58, 191, 194, 0.9);
+}
+
+.ticket_main .main_content_air {
+  padding: 32px 26px 30px;
+  background-color: #fff;
+  border-radius: 0 5px 5px 5px;
+  -webkit-border-radius: 0 5px 5px 5px;
+  -moz-border-radius: 0 5px 5px 5px;
+  -ms-border-radius: 0 5px 5px 5px;
+  -o-border-radius: 0 5px 5px 5px;
+}
+
+.ticket_main .main_content_air .ticket_title {
+  font-size: 12px;
+  font-weight: 400;
+  color: #0f1922;
+  padding-bottom: 23px;
+  border-bottom: 1px solid #a2aeb8;
+}
+
+.ticket_main .ticket_title .ticket_title_message {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0f1922;
+}
+
+.ticket_main .ticket_list {
+}
+
+.ticket_main .list_item {
+  border-bottom: 1px solid #d1d6d8;
+  /* padding: 24px 0 17px; */
+}
+
+.ticket_main .list_item .item_message {
+  padding-top: 24px;
+}
+.ticket_main .list_item .item_message .item_airport {
+  font-size: 14px;
+  font-weight: 400;
+  color: #0f1922;
+}
+.ticket_main .list_item .item_message > div {
+  display: inline-block;
+  width: 27%;
+}
+.ticket_main .list_item .item_message .item_price {
+  text-align: right;
+  font-size: 24px;
+  font-weight: bold;
+  color: #4dbd73;
+}
+.ticket_main .list_item .item_message .item_price span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #0f1922;
+  vertical-align: baseline;
+}
+.ticket_main .list_item .item_message .item_time {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #0f1922;
+  width: 45%;
+}
+.ticket_main .list_item .item_message .item_time span {
+  font-size: 12px;
+  vertical-align: top;
+  line-height: 12px;
+}
+
+/* 航段信息 */
+.ticket_main .list_item .item_air_detail {
+  position: relative;
+  transition: all 0.3s;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  cursor: default;
+  display: none;
+  padding: 20px 0;
+  border-top: 1px solid #ebeff2;
+  border-bottom: 1px solid #ebeff2;
+  margin-top: 22px;
+}
+.ticket_main .list_item .item_air_detail .detail_box > div {
+  display: inline-block;
+}
+.ticket_main .list_item .item_air_detail .detail_box .ret_title {
+  vertical-align: top;
+  margin-right: 80px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #0f1922;
+  padding-top: 34px;
+}
+.ticket_main .list_item .item_air_detail .ret_detail_box {
+  margin-top: 10px;
+  border-top: 1px dashed #ebeff2;
+  padding-top: 10px;
+}
+.ticket_main .list_item .item_air_detail .air_submit.ax-btn {
+  position: absolute;
+  top: 50%;
+  margin-top: -20px;
+  right: 20px;
+  width: 109px;
+  height: 40px;
+  background: #1d2b36;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 2px;
+}
+.ticket_main .list_item .item_air_detail .air_submit.ax-btn:hover {
+  box-shadow: 1px 1px 5px 0 rgb(29 43 54 / 50%);
+}
+.ticket_main .list_item .item_air_detail .item_box:not(:last-child) {
+  margin-bottom: 30px;
+}
+
+.ticket_main .list_item .item_air_detail .item_box .item_box_message {
+  display: inline-block;
+}
+
+.ticket_main .list_item .item_air_detail .item_box .item_box_message .message_title {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #79838b;
+}
+.ticket_main .list_item .item_air_detail .item_box .item_box_message .message_content {
+  text-align: center;
+}
+.ticket_main
+  .list_item
+  .item_air_detail
+  .item_box
+  .item_box_message.item_box_flighunumber {
+  margin-right: 100px;
+}
+.ticket_main
+  .list_item
+  .item_air_detail
+  .item_box
+  .item_box_message.item_box_flighunumber
+  .message_content {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0f1922;
+}
+.ticket_main .list_item .item_air_detail .item_box .item_box_message.item_box_detailtime {
+  margin: 0 30px;
+}
+
+.ticket_main
+  .list_item
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content.message_content_address {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0f1922;
+}
+.ticket_main
+  .list_item
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content.message_content_time {
+  font-size: 12px;
+  font-weight: 400;
+  color: #0f1922;
+}
+.ticket_main
+  .list_item
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content.message_content_date,
+.message_content.message_content_cabin {
+  font-size: 12px;
+  font-weight: 400;
+  color: #a2aeb8;
+}
+.ticket_main
+  .list_item
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content_line {
+  width: 88px;
+  height: 4px;
+  background: #79838b;
+}
+
+.ticket_main .list_item .item_box_tip {
+  padding: 14px 0;
+}
+.ticket_main .list_item .item_box_tip .item_box_tip_message {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.ticket_main .list_item .item_box_tip .item_box_tip_message .message_title {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #79838b;
+}
+.ticket_main .list_item .item_box_tip .item_box_tip_message .message_content {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #0f1922;
+}
+.ticket_main
+  .list_item
+  .item_box_tip
+  .item_box_tip_message
+  .message_content.message_air_type {
+  font-size: 12px;
+  font-weight: 400;
+  color: #3abfc2;
+  cursor: pointer;
+  line-height: 16px;
+}
+.ticket_main
+  .list_item
+  .item_box_tip.active
+  .item_box_tip_message
+  .message_content.message_air_type
+  img {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  vertical-align: middle;
+}
+.ticket_main
+  .list_item
+  .item_box_tip
+  .item_box_tip_message
+  .message_content.message_air_type
+  img {
+  width: 10px;
+  height: 10px;
+  object-fit: contain;
+  vertical-align: baseline;
+  margin-left: 5px;
+}
+/* 筛选框 */
+.search_airlist_box {
+  width: 18%;
+  display: inline-block;
+  margin-left: 1%;
+  vertical-align: top;
+  background-color: #f2f2f2;
+  padding: 10px;
+}
+.search_airlist_box_title {
+  /* font-size: 18px; */
+}
+.search_airlist_box_title span {
+  font-size: 20px;
+}
+.search_airlist_box .search_air_number {
+  text-align: right;
+  font-size: 24px;
+}

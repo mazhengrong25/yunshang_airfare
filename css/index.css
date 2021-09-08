@@ -1,0 +1,230 @@
+body {
+  min-width: 1360px;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+.tab_main {
+  position: relative;
+}
+#loading {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.3);
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 100vh;
+  z-index: 9999;
+}
+/* 头部tab */
+header {
+}
+header .tab_header {
+  background: #0070e2;
+  height: 56px;
+  background: #1d2b36;
+  padding: 0 20px;
+  text-align: center;
+  position: relative;
+}
+header .tab_header .header_logo {
+  position: absolute;
+  width: 130px;
+  height: 56px;
+  left: 20px;
+}
+header .tab_header .header_logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.header .tab_header .header_tab_box {
+  display: inline-block;
+}
+header .tab_header .header_tab_box p {
+  display: inline-block;
+  color: #a2aeb8;
+  height: 56px;
+  min-width: 68px;
+  line-height: 40px;
+  cursor: pointer;
+  position: relative;
+}
+header .tab_header .header_tab_box p.selected {
+  color: #fff;
+}
+header .tab_header .header_tab_box p:not(:last-child) {
+  margin-right: 56px;
+}
+
+header .tab_header .header_tab_box p.selected::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: #4dbd73;
+}
+
+/* 主体内容 */
+main {
+  padding: 28px;
+}
+main .tab_content {
+  display: none;
+}
+main .tab_content.show {
+  display: block;
+}
+
+main .air_message_content {
+  white-space: nowrap;
+}
+
+/* 搜索栏 */
+.search_hide_title {
+  display: inline-block;
+  vertical-align: top;
+  width: 40px;
+  height: 560px;
+  background: #1d2b36;
+  border-radius: 5px;
+  margin-right: 24px;
+  box-sizing: border-box;
+}
+.search_hide_title .menu_btn {
+  height: 77px;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  text-align: center;
+  line-height: 77px;
+}
+.search_hide_title .menu_btn img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+}
+.search_hide_title .search_hide_title_text {
+  padding: 73px 11px 0;
+  white-space: pre-wrap;
+  color: #fff;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+}
+.search_main {
+  width: 320px;
+  margin-right: 20px;
+  background: #1d2b36;
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 5px;
+}
+.search_main .search_main_title {
+  padding: 0 24px;
+  height: 77px;
+  line-height: 77px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+.search_main .search_main_title h5 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 2px;
+}
+.search_main .search_main_title .menu_btn {
+  cursor: pointer;
+  width: 77px;
+  height: 77px;
+  text-align: center;
+  line-height: 77px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.search_main .search_main_title .menu_btn img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.search_main .search_input_box {
+  padding: 27px 20px 32px;
+}
+
+.search_main .search_input_box .list_item:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.search_main .search_input_box .search_list .list_item {
+  display: inline-block;
+  width: 49%;
+}
+
+.search_main .search_list .list_item.number_item {
+  width: 29%;
+}
+.search_main .search_list .list_item.number_item:not(:last-child) {
+  margin-right: 5%;
+}
+.search_main .list_item input,
+.search_main .list_item select {
+  font-size: 16px;
+  font-weight: bold;
+  color: #0f1922;
+}
+.search_main .list_item input::placeholder,
+.search_main .list_item select::placeholder {
+  font-size: 12px;
+  font-weight: 400;
+  color: #a2aeb8;
+}
+.search_main .search_title {
+  font-size: 12px;
+  font-weight: 400;
+  color: #ffffff;
+  margin-bottom: 5px;
+}
+
+.search_main .submit_btn {
+  text-align: right;
+}
+.search_main .submit_btn button {
+  height: 56px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #ffffff;
+  border-radius: 5px;
+}
+
+/* 航班信息 */
+#TicketSearchIframe{
+  display: inline-block;
+  width: 75%;
+  height: 85vh;
+}
+#TicketSearchIframe iframe{
+  width: 100%;
+  height: 100%;
+}
+
+/* 预定页面 */
+.air_reservation {
+  display: inline-block;
+  width: 75%;
+  height: 86vh;
+  color: transparent;
+}

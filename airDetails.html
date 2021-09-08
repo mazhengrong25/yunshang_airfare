@@ -1,0 +1,1260 @@
+<!--
+ * @Description: 详情页
+ * @Author: wish.WuJunLong
+ * @Date: 2021-08-31 09:38:41
+ * @LastEditTime: 2021-09-07 16:19:41
+ * @LastEditors: wish.WuJunLong
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NDC白屏 - 订单详情</title>
+    <link rel="stylesheet" href="./css/airDetails.css" />
+    <link rel="stylesheet" href="./css/base.css" />
+
+    <link rel="stylesheet" href="plugins/ax.css" />
+    <link rel="stylesheet" href="plugins/mobiscroll.jquery.css" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.ttf" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.woff" />
+
+    <link
+      href="https://at.alicdn.com/t/font_1551254_rxrrzgz2kjc.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <div id="loading">
+      <span class="ax-loading" style="width: 60px; height: 60px"
+        ><svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20" /></svg>
+      </span>
+    </div>
+    <div class="air_details">
+      <div class="details_header">
+        <div class="details_title">订单详情</div>
+      </div>
+      <!-- 航班数据 -->
+      <div class="air_message"></div>
+
+      <!-- 乘客数据 -->
+      <div class="air_passenger">
+        <div class="passenger_header">乘客列表</div>
+      </div>
+
+      <!-- 金额明细 -->
+      <div class="air_price">
+        <div class="price_header">金额明细</div>
+        <div class="price_main"></div>
+      </div>
+
+      <!-- 操作栏 -->
+      <div class="details_option">
+        <div class="change_order_option">
+          <button
+            type="button"
+            class="ax-btn ax-warning"
+            onclick="orderChangeBtn('change')"
+          >
+            申请改期
+          </button>
+          <span class="line"></span>
+          <button
+            type="button"
+            class="ax-btn ax-danger"
+            onclick="orderChangeBtn('refund')"
+          >
+            申请退票
+          </button>
+          <span class="line"></span>
+          <button type="button" class="ax-btn" onclick="cancelOrderBtn()">
+            取消订单
+          </button>
+        </div>
+        <button type="button" class="ax-btn ax-success" id="paySubmit">订单支付</button>
+      </div>
+
+      <!-- 退改操作弹窗 -->
+      <div class="ax-window" data-mask="true" id="selectOrderMessage">
+        <div class="ax-window-overlay"></div>
+        <div class="ax-window-contain">
+          <span class="ax-window-close"><i class="ax-iconfont ax-icon-close"></i></span>
+          <div class="ax-window-title">选择需要操作的乘客</div>
+          <div class="ax-break-line"></div>
+          <div class="ax-window-content dialogContent"></div>
+          <div class="ax-break-line"></div>
+          <div class="ax-padding ax-window-operate ax-align-center">
+            <div class="ax-btns">
+              <button type="button" class="ax-btn ax-ignore ax-window-close">取消</button>
+              <button type="button" class="ax-btn ax-primary" onclick="verifySplit()">
+                确定
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 确认退票金额弹窗 -->
+      <div class="ax-window" data-mask="true" id="confirmRefundPrice">
+        <div class="ax-window-overlay"></div>
+        <div class="ax-window-contain">
+          <span class="ax-window-close"><i class="ax-iconfont ax-icon-close"></i></span>
+          <div class="ax-window-title">当前订单可退票金额</div>
+          <div class="ax-break-line"></div>
+          <div class="ax-window-content dialogContent"></div>
+          <div class="ax-break-line"></div>
+          <div class="ax-padding ax-window-operate ax-align-center">
+            <div class="ax-btns">
+              <button type="button" class="ax-btn ax-ignore ax-window-close">取消</button>
+              <button
+                type="button"
+                class="ax-btn ax-primary"
+                onclick="submitRefundOrder()"
+              >
+                确认退票
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 改签查询列表 -->
+      <div class="ax-window" data-mask="true" id="ChangeSearch">
+        <div class="ax-window-overlay"></div>
+        <div class="ax-window-contain">
+          <div class="ax-window-title">申请改期弹窗</div>
+          <div class="ax-break-line"></div>
+          <div id="openChangeTicketBox" onclick="showSearch()">
+            重新选择航段
+            <div class="menu_btn">
+              <img src="/img/menu_icon.png" alt="菜单按钮" />
+            </div>
+          </div>
+          <div class="changeListSearch">
+            <div class="selectChangeTicket">
+              <div class="airTitle newAirTitle">选择需要替换的原航班</div>
+              <div class="airDetailBox oldAirBox"></div>
+
+              <div class="search_list">
+                <div class="list_item">
+                  <div class="search_title">出发地</div>
+                  <span id="startAddress"></span>
+                </div>
+                <div class="list_item">
+                  <div class="search_title">到达地</div>
+                  <span id="endAddress"></span>
+                </div>
+                <div class="list_item">
+                  <div class="search_title">出发时间</div>
+                  <input name="date" placeholder="选择日期" type="text" id="startTime" />
+                </div>
+                <button
+                  type="button"
+                  class="ax-btn ax-primary"
+                  onclick="searchChangeAirList()"
+                >
+                  查询改期行程运价
+                </button>
+              </div>
+            </div>
+
+            <!-- 机票列表 -->
+            <div id="TicketSearch">
+              <div class="airTitle newAirTitle">新航班</div>
+              <div class="airDetailBox newAirBox"></div>
+            </div>
+          </div>
+
+          <div class="ax-padding ax-window-operate">
+            <div class="ax-btns">
+              <button type="button" class="ax-btn ax-ignore ax-window-close">取消</button>
+              <span class="change_air_price"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 提示弹窗 -->
+    <div class="ax-window" data-mask="true" id="warning_tip">
+      <div class="ax-window-overlay"></div>
+      <div class="ax-window-contain">
+        <div class="ax-window-tips">
+          <div class="ax-tips-icon ax-result ax-warning">
+            <i class="ax-iconfont ax-icon-close-o"></i>
+          </div>
+          <div class="ax-tips-title"></div>
+          <div class="ax-tips-des"></div>
+          <div class="ax-tips-btn">
+            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+              关 闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ax-window" data-mask="true" id="success_tip">
+      <div class="ax-window-overlay"></div>
+      <div class="ax-window-contain">
+        <div class="ax-window-tips">
+          <div class="ax-tips-icon ax-result ax-success">
+            <i class="ax-iconfont ax-icon-check-o"></i>
+          </div>
+          <div class="ax-tips-title"></div>
+          <div class="ax-tips-des"></div>
+          <div class="ax-tips-btn">
+            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+              关 闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="plugins/jquery-1.10.2.min.js"></script>
+    <script src="plugins/ax.min.js"></script>
+    <script src="plugins/mobiscroll.jquery.min.js"></script>
+    <script>
+      // 获取地址栏参数
+      function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+          return unescape(r[2]);
+        }
+        return null;
+      }
+
+      // 修改地址栏参数
+      function changeURLStatic(name, value) {
+        var url = location.href;
+        var reg = eval("/([\?|&]" + name + "=)[^&]*/gi");
+        value = value.toString().replace(/(^\s*)|(\s*$)/g, ""); //移除首尾空格
+        if (!value) {
+          var url2 = url.replace(reg, ""); //正则替换
+        } else {
+          if (url.match(reg)) {
+            var url2 = url.replace(reg, "$1" + value); //正则替换
+          } else {
+            var url2 = url + (url.indexOf("?") > -1 ? "&" : "?") + name + "=" + value; //没有参数添加参数
+          }
+        }
+        history.replaceState(null, null, url2); //替换地址栏
+      }
+
+      var pnrCode = getQueryString("pnr"); // 获取PNR
+
+      getDomData(); // 获取订单详情
+
+      // 获取订单详情数据
+      var airMessage; // 详情数据
+      var oneAirMessage = []; // 去程数据
+      var retAirMessage = []; // 返程数据
+
+      var airportDom, // 航程三字码
+        airTimeDom, // 航段时间
+        airDetail, // 航段详情
+        airTip, // 航段信息
+        passengerData; // 乘客数据
+
+      // 组装航班数据
+      function getTicketDetail(val, retVal, type, newAirIndex) {
+        var data;
+
+        // 航程三字码组装
+        airportDom =
+          "<div class='item_airport'>" +
+          val[0].depAirport +
+          " - " +
+          val[val.length - 1].arrAirport +
+          "（" +
+          val[0].depTime.split(" ")[0] +
+          "）" +
+          (retVal.length > 0 ? "-（" + retVal[0].depTime.split(" ")[0] + "）" : "") +
+          "</div>";
+
+        // 航班时间组装
+        var dateStart = new Date(val[0].depTime);
+        var dateEnd = new Date(val[val.length - 1].arrTime);
+        var difValue = parseInt(
+          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) / (1000 * 60 * 60 * 24)
+        );
+
+        airTimeDom =
+          "<div class='item_time'>" +
+          (dateStart.getHours() < 10
+            ? "0" + dateStart.getHours()
+            : dateStart.getHours()) +
+          ":" +
+          (dateStart.getMinutes() < 10
+            ? "0" + dateStart.getMinutes()
+            : dateStart.getMinutes()) +
+          " - " +
+          (dateEnd.getHours() < 10 ? "0" + dateEnd.getHours() : dateEnd.getHours()) +
+          ":" +
+          (dateEnd.getMinutes() < 10
+            ? "0" + dateEnd.getMinutes()
+            : dateEnd.getMinutes()) +
+          (difValue > 0 ? "<span>+" + difValue + "</span>" : "") +
+          (retVal.length > 0
+            ? " / " +
+              (new Date(retVal[0].depTime).getHours() < 10
+                ? "0" + new Date(retVal[0].depTime).getHours()
+                : new Date(retVal[0].depTime).getHours()) +
+              ":" +
+              (new Date(retVal[0].depTime).getMinutes() < 10
+                ? "0" + new Date(retVal[0].depTime).getMinutes()
+                : new Date(retVal[0].depTime).getMinutes()) +
+              " - " +
+              (new Date(retVal[retVal.length - 1].arrTime).getHours() < 10
+                ? "0" + new Date(retVal[retVal.length - 1].arrTime).getHours()
+                : new Date(retVal[retVal.length - 1].arrTime).getHours()) +
+              ":" +
+              (new Date(retVal[retVal.length - 1].arrTime).getMinutes() < 10
+                ? "0" + new Date(retVal[retVal.length - 1].arrTime).getMinutes()
+                : new Date(retVal[retVal.length - 1].arrTime).getMinutes()) +
+              (parseInt(
+                (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                  getNotTimeDate(new Date(retVal[0].depTime))) /
+                  (1000 * 60 * 60 * 24)
+              ) > 0
+                ? "<span>+" +
+                  parseInt(
+                    (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                      getNotTimeDate(new Date(retVal[0].depTime))) /
+                      (1000 * 60 * 60 * 24)
+                  ) +
+                  "</span>"
+                : "")
+            : "") +
+          "</div>";
+
+        // 单程
+        var arrAirTime = 0;
+        airDetail = [];
+        for (var o = 0; o < val.length; o++) {
+          arrAirTime += val[o].duration;
+          airDetail +=
+            '<div class="item_box">' +
+            '<div class="item_box_message item_box_flighunumber">' +
+            '<div class="message_title">航班号：</div>' +
+            '<div class="message_content">' +
+            val[o].flightNumber +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            val[o].depAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            val[o].depTime +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message item_box_detailtime">' +
+            '<div class="message_content message_content_date">' +
+            Math.floor(Number(val[o].duration) / 60) +
+            "H" +
+            Math.floor(Number(val[o].duration) % 60) +
+            "M" +
+            "</div>" +
+            '<div class="message_content_line"></div>' +
+            '<div class="message_content message_content_cabin">' +
+            val[o].cabin +
+            "舱</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            val[o].arrAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            val[o].arrTime +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        }
+
+        // 往返数据
+        var retArrAirTime = 0;
+        retAirDetail = [];
+        for (var o = 0; o < retVal.length; o++) {
+          retArrAirTime += retVal[o].duration;
+          retAirDetail +=
+            '<div class="item_box">' +
+            '<div class="item_box_message item_box_flighunumber">' +
+            '<div class="message_title">航班号：</div>' +
+            '<div class="message_content">' +
+            retVal[o].flightNumber +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            retVal[o].depAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            retVal[o].depTime +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message item_box_detailtime">' +
+            '<div class="message_content message_content_date">' +
+            Math.floor(Number(retVal[o].duration) / 60) +
+            "H" +
+            Math.floor(Number(retVal[o].duration) % 60) +
+            "M" +
+            "</div>" +
+            '<div class="message_content_line"></div>' +
+            '<div class="message_content message_content_cabin">' +
+            retVal[o].cabin +
+            "舱</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            retVal[o].arrAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            retVal[o].arrTime +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        }
+
+        airTip =
+          "<div class='item_box_tip'>" +
+          "<div class='item_box_tip_message'>" +
+          "<div class='message_title'>航程类型：</div>" +
+          "<div class='message_content message_air_type'>" +
+          (val.length > 1 ? "中转 +" + (val.length - 1) : "直达") +
+          (retVal.length > 0
+            ? "," + (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
+            : "") +
+          "</div>" +
+          "</div>" +
+          "<div class='item_box_tip_message'>" +
+          "<div class='message_title'>总航程时间：</div>" +
+          "<div class='message_content'>" +
+          Math.floor(Number(arrAirTime) / 60) +
+          "小时" +
+          Math.floor(Number(arrAirTime) % 60) +
+          "分钟" +
+          (retVal.length > 0
+            ? "," +
+              Math.floor(Number(retArrAirTime) / 60) +
+              "小时" +
+              Math.floor(Number(retArrAirTime) % 60) +
+              "分钟"
+            : "") +
+          "</div>" +
+          "</div>" +
+          "</div>";
+
+        data =
+          "<div class='item_message'>" +
+          airportDom +
+          airTimeDom +
+          "<div class='item_price'>" +
+          "<span>" +
+          (newAirIndex > -1
+            ? "改期费：" + newAirDataList[newAirIndex].routing.currency
+            : type
+            ? checkChangeTicket.currency
+            : airMessage.currency) +
+          "</span>" +
+          " " +
+          (newAirIndex > -1
+            ? newAirDataList[newAirIndex].routing.basisAmount
+            : type
+            ? checkChangeTicket.fareQuotes[0].price
+            : airMessage.fareQuotes[0].price) +
+          "</div>" +
+          "</div>" +
+          "<div class='item_air_detail'>" +
+          (newAirIndex > -1
+            ? "<button class='ax-btn ax-primary air_submit' onClick='selectNewAir(" +
+              newAirIndex +
+              ")'>确认改期</button>"
+            : "") +
+          "<div class='detail_box'>" +
+          (retVal.length > 0 ? "<div class='ret_title'>去程：</div>" : "") +
+          "<div>" +
+          airDetail +
+          "</div>" +
+          "</div>" +
+          (retVal.length > 0
+            ? "<div class='detail_box ret_detail_box'>" +
+              "<div class='ret_title'>回程：</div>" +
+              "<div>" +
+              retAirDetail +
+              "</div>" +
+              "</div>"
+            : "") +
+          "</div>" +
+          airTip;
+
+        return data;
+      }
+
+      // 组装页面数据
+      function getDomData() {
+        oneAirMessage = []; // 去程数据
+        retAirMessage = []; // 返程数据
+        var paramsData = {
+          sessionID: "",
+          config: "BA",
+          pnrCode: pnrCode, //pnr
+          otherCode: null,
+          remark: null,
+          controlType: 0, // 0：提取编码信息；405：取消编码
+        };
+        fetch("http://192.168.0.35:6212/ba/confirm", {
+          method: "POST",
+          body: JSON.stringify(paramsData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            $("#loading").hide();
+
+            if (data.status === 0) {
+              // 航班信息
+              airMessage = data;
+
+              for (let i = 0; i < airMessage.travelSegments.length; i++) {
+                if (airMessage.travelSegments[i].connectionType === 0) {
+                  oneAirMessage.push(airMessage.travelSegments[i]);
+                } else {
+                  retAirMessage.push(airMessage.travelSegments[i]);
+                }
+              }
+
+              console.log(oneAirMessage, retAirMessage);
+
+              // 组装航班信息
+              $(".air_message").html(getTicketDetail(oneAirMessage, retAirMessage));
+
+              // 组装乘客信息
+              var adtNumber = 0; // 成人数量
+              var chdNumber = 0; // 儿童数量
+              passengerData = airMessage.travelPassengers; // 乘客数据
+              var passengerList = ""; // 乘客数据dom
+              for (var i = 0; i < passengerData.length; i++) {
+                if (passengerData[i].passengerType === 0) {
+                  adtNumber += 1;
+                }
+                if (passengerData[i].passengerType === 1) {
+                  chdNumber += 1;
+                }
+                passengerList +=
+                  '<div class="passenger_box">' +
+                  '<div class="passenger_type" style="background: ' +
+                  (passengerData[i].passengerType === 0 ? "#4dbd73" : "#3b97e6") +
+                  '">' +
+                  (passengerData[i].passengerType === 0 ? "成" : "童") +
+                  "</div>" +
+                  '<div class="passenger_list">' +
+                  '<div class="list_name">名(First)：</div>' +
+                  '<div class="list_message">' +
+                  passengerData[i].firstName +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="passenger_list">' +
+                  '<div class="list_name">姓(Last)：</div>' +
+                  '<div class="list_message">' +
+                  passengerData[i].lastName +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="passenger_list">' +
+                  '<div class="list_name">国籍：</div>' +
+                  '<div class="list_message">' +
+                  (passengerData[i].nationality || "-") +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="passenger_list">' +
+                  '<div class="list_name">证件类型：</div>' +
+                  '<div class="list_message">' +
+                  (passengerData[i].cardType === "OT"
+                    ? "其他"
+                    : passengerData[i].cardType === "ID"
+                    ? "身份证"
+                    : passengerData[i].cardType === "PP"
+                    ? "护照"
+                    : passengerData[i].cardType === "GA"
+                    ? "港澳通行证"
+                    : passengerData[i].cardType === "TW"
+                    ? "台湾通行证"
+                    : passengerData[i].cardType === "TB"
+                    ? "台胞证"
+                    : passengerData[i].cardType === "HX"
+                    ? "回乡证"
+                    : passengerData[i].cardType === "HY"
+                    ? "国际海员证"
+                    : "-") +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="passenger_list">' +
+                  '<div class="list_name">证件号码：</div>' +
+                  '<div class="list_message">' +
+                  (passengerData[i].cardNumber || "-") +
+                  "</div>" +
+                  "</div>" +
+                  (airMessage.travelTickets
+                    ? '<div class="passenger_list">' +
+                      '<div class="list_name">票号：</div>' +
+                      '<div class="list_message">' +
+                      (airMessage.travelTickets[i].ticketNo || "-") +
+                      "</div>" +
+                      "</div>"
+                    : "") +
+                  "</div>";
+              }
+
+              $(".air_passenger").html(passengerList);
+
+              // 组装金额明细
+              var priceTotal = 0; // 总价
+              var priceData = airMessage.fareQuotes;
+              var priceList = ""; // 金额明细dom
+              for (var i = 0; i < priceData.length; i++) {
+                if (passengerData[i].passengerType === 0) {
+                  priceTotal += adtNumber * priceData[i].price;
+                  priceTotal += adtNumber * priceData[i].tax;
+                }
+                if (passengerData[i].passengerType === 1) {
+                  priceTotal += chdNumber * priceData[i].price;
+                  priceTotal += chdNumber * priceData[i].tax;
+                }
+                priceList +=
+                  '<div class="price_box">' +
+                  '<div class="price_title">' +
+                  (priceData[i].passengerType === 0 ? "成人" : "儿童") +
+                  "</div>" +
+                  '<div class="price_list">' +
+                  '<div class="list_item">票面价：</div>' +
+                  '<div class="list_message">' +
+                  '<p class="price">' +
+                  "<span>" +
+                  airMessage.currency +
+                  "</span>" +
+                  priceData[i].price +
+                  "</p>" +
+                  '<p class="number">x ' +
+                  (priceData[i].passengerType === 0 ? adtNumber : chdNumber) +
+                  "</p>" +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="price_list">' +
+                  '<div class="list_item">附加费用：</div>' +
+                  '<div class="list_message">' +
+                  '<p class="price">' +
+                  "<span>" +
+                  airMessage.currency +
+                  "</span>" +
+                  priceData[i].tax +
+                  "</p>" +
+                  '<p class="number">x ' +
+                  (priceData[i].passengerType === 0 ? adtNumber : chdNumber) +
+                  "</p>" +
+                  "</div>" +
+                  "</div>" +
+                  "</div>";
+              }
+
+              priceList +=
+                '<div class="price_total">总价：' +
+                "<p>" +
+                airMessage.currency +
+                "</p>" +
+                "<span>" +
+                priceTotal +
+                "</span>" +
+                "</div>";
+              $(".price_main").html(priceList);
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $("#warning_tip .ax-tips-title").html("获取数据失败");
+              $("#warning_tip .ax-tips-des").html(data.message);
+            }
+          })
+          .catch(function (e) {
+            console.log(e);
+          });
+      }
+
+      // 订单拆分
+      var orderSubmitType = "";
+      function orderChangeBtn(type) {
+        orderSubmitType = type;
+        $("#selectOrderMessage").addClass("ax-window-show");
+
+        // 组装乘客信息
+        var dialogPassenger = "";
+        for (let i = 0; i < passengerData.length; i++) {
+          dialogPassenger +=
+            '<label class="passenger_box ax-chera ax-lg">' +
+            '<input name="selectPassenger" value="' +
+            i +
+            '" type="checkbox">' +
+            "<span>" +
+            '<div class="passenger_type" style="background: ' +
+            (passengerData[i].passengerType === 0 ? "#4dbd73" : "#3b97e6") +
+            '">' +
+            (passengerData[i].passengerType === 0 ? "成" : "童") +
+            "</div>" +
+            '<div class="passenger_list">' +
+            '<div class="list_name">名(Last)：</div>' +
+            '<div class="list_message">' +
+            passengerData[i].lastName +
+            "</div>" +
+            "</div>" +
+            '<div class="passenger_list">' +
+            '<div class="list_name">姓(First)：</div>' +
+            '<div class="list_message">' +
+            passengerData[i].firstName +
+            "</div>" +
+            "</div>" +
+            '<div class="passenger_list">' +
+            '<div class="list_name">国籍：</div>' +
+            '<div class="list_message">' +
+            (passengerData[i].nationality || "-") +
+            "</div>" +
+            "</div>" +
+            '<div class="passenger_list">' +
+            '<div class="list_name">证件类型：</div>' +
+            '<div class="list_message">' +
+            (passengerData[i].cardType === "OT"
+              ? "其他"
+              : passengerData[i].cardType === "ID"
+              ? "身份证"
+              : passengerData[i].cardType === "PP"
+              ? "护照"
+              : passengerData[i].cardType === "GA"
+              ? "港澳通行证"
+              : passengerData[i].cardType === "TW"
+              ? "台湾通行证"
+              : passengerData[i].cardType === "TB"
+              ? "台胞证"
+              : passengerData[i].cardType === "HX"
+              ? "回乡证"
+              : passengerData[i].cardType === "HY"
+              ? "国际海员证"
+              : "-") +
+            "</div>" +
+            "</div>" +
+            '<div class="passenger_list">' +
+            '<div class="list_name">证件号码：</div>' +
+            '<div class="list_message">' +
+            (passengerData[i].cardNumber || "-") +
+            "</div>" +
+            "</div>" +
+            (airMessage.travelTickets
+              ? '<div class="passenger_list">' +
+                '<div class="list_name">票号：</div>' +
+                '<div class="list_message">' +
+                (airMessage.travelTickets[i].ticketNo || "-") +
+                "</div>" +
+                "</div>"
+              : "") +
+            "</span>" +
+            "</label>";
+        }
+
+        $("#selectOrderMessage .dialogContent").html(
+          '<div class="ax-form-group" id="selectPassenger">' + dialogPassenger + "</div>"
+        );
+      }
+
+      // 拆分验证
+      var selectList = [];
+      function verifySplit() {
+        selectList = [];
+        $('.passenger_box input[name="selectPassenger"]').each(function () {
+          if ($(this).is(":checked")) {
+            selectList.push(passengerData[Number($(this).val())]);
+          }
+        });
+
+        // 判断是否有选中乘客
+        if (selectList.length < 1) {
+          return (
+            $("#warning_tip").addClass("ax-window-show"),
+            $("#warning_tip.ax-tips-title").html("操作错误"),
+            $("#warning_tip .ax-tips-des").html("请选择至少一位乘客")
+          );
+        }
+
+        // 判断是否有儿童乘客
+        var passChdNumber = 0;
+        var passAdtNumber = 0;
+        for (let i = 0; i < selectList.length; i++) {
+          if (selectList[i].passengerType === 0) {
+            passChdNumber += 1;
+            passAdtNumber += 1;
+          }
+        }
+        if (passAdtNumber > 0 && passAdtNumber < 1) {
+          return (
+            $("#warning_tip").addClass("ax-window-show"),
+            $("#warning_tip .ax-tips-title").html("操作错误"),
+            $("#warning_tip .ax-tips-des").html("请选择至少一位成人乘客")
+          );
+        }
+
+        // 判断是否需要调用拆分接口
+        if (selectList.length === passengerData.length) {
+          // 无需拆分 - 进入下一步
+          if (orderSubmitType === "change") {
+            // 改签
+            getChangeSegments();
+          } else if (orderSubmitType === "refund") {
+            // 退票流程
+            getRefundPrice(); // 查询退票金额
+          }
+        } else {
+          $("#loading").show();
+          // 执行拆分功能
+          var splitData = {
+            sessionID: "", //会话ID
+            config: "BA", //配置
+            pnrCode: pnrCode, //编码
+            otherCode: null,
+            passengers: selectList,
+            data: airMessage.offerItemData, //订单详情中响应的data 原样传入
+          };
+          fetch("http://192.168.0.35:6212/ba/splitorder", {
+            method: "POST",
+            body: JSON.stringify(splitData),
+          })
+            .then(function (data) {
+              return data.json();
+            })
+            .then(function (data) {
+              $("#loading").hide();
+              if (data.status === 0) {
+                // 航班信息
+                // changeURLStatic("pnr", data.pnrCode);
+                // pnrCode = data.pnrCode;
+
+                $("#selectOrderMessage").removeClass("ax-window-show");
+                $("#success_tip").addClass("ax-window-show");
+                $("#success_tip .ax-tips-title").html("订单拆分成功");
+                $("#success_tip .ax-tips-des").html("已获取最新订单数据");
+
+                getDomData();
+                window.open("/airdetails.html?pnr=" + data.pnrCode, "target");
+              } else {
+                $("#warning_tip").addClass("ax-window-show");
+                $("#warning_tip .ax-tips-title").html("获取数据失败");
+                $("#warning_tip .ax-tips-des").html(data.message);
+              }
+            });
+        }
+
+        console.log(selectList);
+      }
+
+      // 查询退票费
+      var refundCurrency = ""; // 退票币种
+      var refundAmount = 0; // 退票总金额
+      function getRefundPrice() {
+        $("#loading").show();
+        var getRefundData = {
+          sessionID: "",
+          config: "BA",
+          pnrCode: pnrCode, //编码
+          data: airMessage.offerItemData, //订单详情响应/拆分订单详情响应中 @data 原样传入
+        };
+        fetch("http://192.168.0.35:6212/ba/refundprice", {
+          method: "POST",
+          body: JSON.stringify(getRefundData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            $("#loading").hide();
+            if (data.status === 0) {
+              $("#selectOrderMessage").removeClass("ax-window-show");
+              refundCurrency = data.currency;
+              refundAmount = data.totalRefundAmount;
+              // 组装退票金额明细
+              var adtNumber = 0; // 成人数量
+              var chdNumber = 0; // 儿童数量
+              passengerData = airMessage.travelPassengers; // 乘客数据
+              for (var i = 0; i < passengerData.length; i++) {
+                if (passengerData[i].passengerType === 0) {
+                  adtNumber += 1;
+                }
+                if (passengerData[i].passengerType === 1) {
+                  chdNumber += 1;
+                }
+              }
+
+              var priceList = ""; // 金额明细dom
+              for (var i = 0; i < data.refunds.length; i++) {
+                priceList +=
+                  '<div class="price_box">' +
+                  '<div class="price_title">' +
+                  (data.refunds[i].passengerType === 0 ? "成人" : "儿童") +
+                  "</div>" +
+                  '<div class="price_list">' +
+                  '<div class="list_item">罚金：</div>' +
+                  '<div class="list_message">' +
+                  '<p class="price">' +
+                  "<span>" +
+                  data.refunds[i].currency +
+                  "</span>" +
+                  data.refunds[i].penalty +
+                  "</p>" +
+                  '<p class="number">x ' +
+                  (data.refunds[i].passengerType === 0 ? adtNumber : chdNumber) +
+                  "</p>" +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="price_list">' +
+                  '<div class="list_item">退款：</div>' +
+                  '<div class="list_message">' +
+                  '<p class="price">' +
+                  "<span>" +
+                  data.refunds[i].currency +
+                  "</span>" +
+                  data.refunds[i].refund +
+                  "</p>" +
+                  '<p class="number">x ' +
+                  (data.refunds[i].passengerType === 0 ? adtNumber : chdNumber) +
+                  "</p>" +
+                  "</div>" +
+                  "</div>" +
+                  "</div>";
+              }
+              priceList +=
+                '<div class="price_total_box">订单总期望退票费：' +
+                "<span>" +
+                data.currency +
+                "</span>" +
+                "<p>" +
+                data.totalRefundAmount +
+                "</p>" +
+                "</div>";
+              $("#confirmRefundPrice .dialogContent").html(priceList);
+
+              $("#confirmRefundPrice").addClass("ax-window-show");
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $("#warning_tip .ax-tips-title").html("获取数据失败");
+              $("#warning_tip .ax-tips-des").html(data.message);
+            }
+          });
+      }
+
+      // 确认退票
+      function submitRefundOrder() {
+        $("#loading").show();
+        var refundData = {
+          sessionID: "",
+          config: "BA",
+          pnrCode: pnrCode,
+          currency: refundCurrency,
+          refundAmount: refundAmount,
+          data: airMessage.offerItemData,
+        };
+
+        fetch("http://192.168.0.35:6212/ba/refund", {
+          method: "POST",
+          body: JSON.stringify(refundData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            $("#loading").hide();
+            if (data.status === 0) {
+              $("#confirmRefundPrice").removeClass("ax-window-show");
+              $("#success_tip").addClass("ax-window-show");
+              $("#success_tip .ax-tips-title").html(data.message);
+              $("#success_tip .ax-tips-des").html(
+                "总退票金额：" + data.refund.currency + " " + data.refund.refund
+              );
+              getDomData();
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $("#warning_tip .ax-tips-title").html("获取数据失败");
+              $("#warning_tip .ax-tips-des").html(data.message);
+            }
+          });
+      }
+
+      // 打开改签查询新班次弹窗
+      var oldAirList; // 旧航班数据
+      function getChangeSegments() {
+        $("#openChangeTicketBox").hide(); // 重新查询按钮
+        $(".selectChangeTicket").show(); // 隐藏查询
+        $("#TicketSearch").hide(); // 隐藏新航班列表
+        // 第一步选择 航段
+        $("#ChangeSearch").addClass("ax-window-show");
+        $("#selectOrderMessage").removeClass("ax-window-show");
+
+        // 组装旧航段数据
+        oldAirList = [];
+        oldAirList.push(oneAirMessage);
+        if (retAirMessage.length > 0) {
+          oldAirList.push(retAirMessage);
+        }
+
+        console.log(oldAirList);
+        var dialogAirMessage = "";
+
+        for (let i = 0; i < oldAirList.length; i++) {
+          dialogAirMessage +=
+            '<label class="old_air_list ax-chera ax-lg" onclick="changeLodAir(' +
+            i +
+            ')">' +
+            '<input name="selectOldAir" value="' +
+            i +
+            '" type="radio">' +
+            "<span>" +
+            (oldAirList.length > 1
+              ? '<div class="old_air_item">' +
+                '<div class="list_message">' +
+                (i < 1 ? "去程" : i >= 1 ? "回程" : "") +
+                "</div>" +
+                "</div>"
+              : "") +
+            '<div class="old_air_item">' +
+            '<div class="list_message">' +
+            oldAirList[i][0].depAirport +
+            " - " +
+            oldAirList[i][oldAirList[i].length - 1].arrAirport +
+            "</div>" +
+            "</div>" +
+            '<div class="old_air_item">' +
+            '<div class="list_message">' +
+            oldAirList[i][0].depTime +
+            " - " +
+            oldAirList[i][oldAirList[i].length - 1].arrTime +
+            "</div>" +
+            "</div>" +
+            "</span>" +
+            "</label>";
+        }
+
+        $(".airDetailBox.oldAirBox").html(
+          '<div class="ax-form-group" id="selectOldAirMessage">' +
+            dialogAirMessage +
+            "</div>"
+        );
+      }
+
+      // 选择旧航班
+      function changeLodAir(val) {
+        var selectAirTime = oldAirList[val];
+        var notSelectAirTime = [];
+        $('.old_air_list input[name="selectOldAir"]').each(function () {
+          if (!$(this).is(":checked")) {
+            notSelectAirTime = oldAirList[$(this).val()];
+          }
+        });
+
+        $("#startAddress").html(selectAirTime[0].depAirport);
+        $("#endAddress").html(selectAirTime[selectAirTime.length - 1].arrAirport);
+
+        $("#startTime").val(selectAirTime[0].depTime.split(" ")[0]);
+        // 日期选择器
+        $("#startTime")
+          .mobiscroll()
+          .calendar({
+            theme: "ax",
+            lang: "zh",
+            invalid: [new Date(), new Date()],
+            onBeforeShow: function (event, inst) {
+              //显示前的点击事件
+              $("#" + this.id).addClass("ax-focus"); //input焦点
+              //inst.settings.cssClass='ax-mask';//添加遮罩
+            },
+            onClose: function (event, inst) {
+              //关闭事件
+              $("#" + this.id).removeClass("ax-focus");
+            },
+            display: "bubble",
+            dateFormat: "yy-mm-dd",
+            min: selectAirTime[0].depTime.split(" ")[0],
+            max:
+              notSelectAirTime.length > 0
+                ? new Date(selectAirTime[0].depTime.split(" ")[0]) <
+                  new Date(notSelectAirTime[0].depTime.split(" ")[0])
+                  ? notSelectAirTime[0].depTime.split(" ")[0]
+                  : "2050-01-01"
+                : "2050-01-01",
+          });
+      }
+
+      // 查询改期运价
+      var newAirDataList = [];
+      function searchChangeAirList() {
+        var notSelectAir = [];
+        var selectAir = [];
+        $('.old_air_list input[name="selectOldAir"]').each(function () {
+          if ($(this).is(":checked")) {
+            console.log($(this).val());
+            selectAir = oldAirList[Number($(this).val())];
+          } else {
+            notSelectAir = oldAirList[Number($(this).val())];
+          }
+        });
+
+        // 判断是否有选中航段
+        if (selectAir.length < 1) {
+          return (
+            $("#warning_tip").addClass("ax-window-show"),
+            $("#warning_tip.ax-tips-title").html("操作错误"),
+            $("#warning_tip .ax-tips-des").html("请选择至少一个航段")
+          );
+        }
+
+        console.log(selectAir, notSelectAir);
+
+        var notAirCode = []; // 未选择航班code
+        for (var i = 0; i < notSelectAir.length; i++) {
+          notAirCode.push(notSelectAir[i].marriageGrp);
+        }
+
+        $("#loading").show();
+        var paramsData = {
+          sessionID: "",
+          config: airMessage.validatingCarrier,
+          pnrCode: pnrCode, //编码
+          segments: [
+            {
+              fromCity: selectAir[0].depAirport, //出发城市
+              toCity: selectAir[selectAir.length - 1].arrAirport, //到达城市
+              fromDate: $("#startTime").val(), //出发日期
+              cabinLevel: "Y",
+            },
+          ],
+          retainSegments: notAirCode,
+          passengers: selectList,
+          data: airMessage.offerItemData,
+        };
+        fetch("http://192.168.0.35:6212/ba/reshopping", {
+          method: "POST",
+          body: JSON.stringify(paramsData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            $("#loading").hide();
+            if (data.status === 0) {
+              $("#openChangeTicketBox").show(); // 重新查询按钮
+              $("#TicketSearch").show(); // 新航班列表
+              $(".selectChangeTicket").hide(); // 隐藏查询
+              newAirDataList = data.routings;
+              var newAirList = "";
+              for (var i = 0; i < newAirDataList.length; i++) {
+                newAirList +=
+                  "<div class='air_message'>" +
+                  getTicketDetail(newAirDataList[i].routing.fromSegments, [], false, i) +
+                  "</div>";
+              }
+
+              $(".airDetailBox.newAirBox").html(newAirList);
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $("#warning_tip .ax-tips-title").html("获取数据失败");
+              $("#warning_tip .ax-tips-des").html(data.message);
+            }
+          });
+      }
+
+      // 获取改签选中航班
+      var checkChangeTicket; // 改签选中航班数据
+      function jumpTicketReservation() {
+        checkChangeTicket = JSON.parse(sessionStorage.getItem("checkAir"));
+        console.log(checkChangeTicket);
+        sessionStorage.removeItem("checkAir");
+
+        $("#openChangeTicketBox").show(); // 显示 展开列表按钮
+        $(".changeListSearch").hide(); // 收起列表
+        $(".selectChangeTicket").show(); // 显示航班选择
+
+        // 新航班信息
+        // 航程三字码组装
+
+        $(".airDetailBox.newAirBox").html(
+          "<div class='air_message'>" +
+            getTicketDetail(checkChangeTicket.fromSegments, [], true) +
+            "</div>"
+        );
+      }
+
+      // 确认改期
+      function selectNewAir(val) {
+        console.log(val);
+        $("#loading").show();
+        var paramsData = {
+          sessionID: "",
+          config: airMessage.validatingCarrier,
+          pnrCode: pnrCode,
+          otherCode: null,
+          routing: newAirDataList[val],
+          passengers: selectList,
+          data: airMessage.offerItemData,
+        };
+
+        fetch("http://192.168.0.35:6212/ba/change", {
+          method: "POST",
+          body: JSON.stringify(paramsData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            $("#loading").hide();
+            if (data.status === 0) {
+              $("#ChangeSearch").removeClass("ax-window-show");
+              $("#success_tip").addClass("ax-window-show");
+              $("#success_tip .ax-tips-title").html("改期成功");
+              $("#success_tip .ax-tips-des").html("已获取最新订单数据");
+
+              getDomData();
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $("#warning_tip .ax-tips-title").html("获取数据失败");
+              $("#warning_tip .ax-tips-des").html(data.message);
+            }
+          });
+      }
+
+      // 显示查询列表
+      function showSearch() {
+        $("#openChangeTicketBox").hide(); // 重新查询按钮
+        $(".selectChangeTicket").show(); // 隐藏查询
+        $("#TicketSearch").hide(); // 隐藏新航班列表
+      }
+
+      // $("#loading").hide();
+      // $("#TicketSearchIframe").hide();
+      // $("#ChangeSearch").addClass("ax-window-show");
+
+      // 取消订单
+      function cancelOrderBtn() {}
+
+      // 返回时间 年-月-日
+      function getNotTimeDate(val) {
+        var year = val.getFullYear();
+        var month = val.getMonth();
+        var date = val.getDate();
+
+        if (month < 10) {
+          month = "0" + month;
+        }
+        if (date < 10) {
+          date = "0" + date;
+        }
+
+        return new Date(year + "-" + month + "-" + date);
+      }
+    </script>
+  </body>
+</html>

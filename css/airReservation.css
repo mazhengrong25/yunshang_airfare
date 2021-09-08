@@ -1,0 +1,347 @@
+.air_header {
+  text-align: justify;
+  text-align-last: justify;
+  line-height: 0;
+}
+.air_header .air_title {
+  display: inline-block;
+  height: 40px;
+  width: 120px;
+  background: #ffffff;
+  text-align: center;
+  line-height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #0f1922;
+  text-align-last: center;
+  border-radius: 5px 5px 0px 0px;
+}
+.air_header .air_back_btn {
+  display: inline-block;
+  margin-left: auto;
+  text-align: right;
+  height: 30px;
+  line-height: 30px;
+  background: #3abfc2;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+.air_message {
+  padding: 10px;
+  margin-bottom: 20px;
+}
+.air_message .message_list {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.air_message .message_list:not(:last-child) {
+  margin-right: 30px;
+}
+
+.air_reservation .air_message {
+  background-color: #fff;
+}
+.air_reservation .air_message .item_message {
+  padding-top: 24px;
+}
+.air_reservation .air_message .item_message .item_airport {
+  font-size: 14px;
+  font-weight: 400;
+  color: #0f1922;
+}
+.air_reservation .air_message .item_message > div {
+  display: inline-block;
+  width: 27%;
+}
+.air_reservation .air_message .item_message .item_price {
+  text-align: right;
+  font-size: 24px;
+  font-weight: bold;
+  color: #4dbd73;
+}
+.air_reservation .air_message .item_message .item_price span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #0f1922;
+  vertical-align: baseline;
+}
+.air_reservation .air_message .item_message .item_time {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #0f1922;
+  width: 45%;
+}
+.air_reservation .air_message .item_message .item_time span {
+  font-size: 12px;
+  vertical-align: top;
+  line-height: 12px;
+}
+
+/* 航段信息 */
+.air_reservation .air_message .item_air_detail {
+  position: relative;
+  padding: 20px 0;
+  border-top: 1px solid #ebeff2;
+  border-bottom: 1px solid #ebeff2;
+  margin-top: 22px;
+}
+.air_reservation .air_message .item_air_detail .detail_box > div {
+  display: inline-block;
+}
+.air_reservation .air_message .item_air_detail .detail_box .ret_title {
+  vertical-align: top;
+  margin-right: 80px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #0f1922;
+  padding-top: 34px;
+}
+.air_reservation .air_message .item_air_detail .ret_detail_box {
+  margin-top: 10px;
+  border-top: 1px dashed #ebeff2;
+  padding-top: 10px;
+}
+.air_reservation .air_message .item_air_detail .air_submit.ax-btn {
+  position: absolute;
+  top: 50%;
+  margin-top: -20px;
+  right: 20px;
+  width: 109px;
+  height: 40px;
+  background: #1d2b36;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 2px;
+}
+.air_reservation .air_message .item_air_detail .air_submit.ax-btn:hover {
+  box-shadow: 1px 1px 5px 0 rgb(29 43 54 / 50%);
+}
+.air_reservation .air_message .item_air_detail .item_box:not(:last-child) {
+  margin-bottom: 30px;
+}
+
+.air_reservation .air_message .item_air_detail .item_box .item_box_message {
+  display: inline-block;
+}
+
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_title {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #79838b;
+}
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content {
+  text-align: center;
+}
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message.item_box_flighunumber {
+  margin-right: 100px;
+}
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message.item_box_flighunumber
+  .message_content {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #0f1922;
+}
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message.item_box_detailtime {
+  margin: 0 30px;
+}
+
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content.message_content_address {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0f1922;
+}
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content.message_content_time {
+  font-size: 12px;
+  font-weight: 400;
+  color: #0f1922;
+}
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content.message_content_date,
+.message_content.message_content_cabin {
+  font-size: 12px;
+  font-weight: 400;
+  color: #a2aeb8;
+}
+.air_reservation
+  .air_message
+  .item_air_detail
+  .item_box
+  .item_box_message
+  .message_content_line {
+  width: 88px;
+  height: 4px;
+  background: #79838b;
+}
+
+.air_reservation .air_message .item_box_tip {
+  padding: 14px 0;
+}
+.air_reservation .air_message .item_box_tip .item_box_tip_message {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+.air_reservation .air_message .item_box_tip .item_box_tip_message .message_title {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #79838b;
+}
+.air_reservation .air_message .item_box_tip .item_box_tip_message .message_content {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #0f1922;
+}
+.air_reservation
+  .air_message
+  .item_box_tip
+  .item_box_tip_message
+  .message_content.message_air_type {
+  font-size: 12px;
+  font-weight: 400;
+  color: #3abfc2;
+  line-height: 16px;
+}
+
+/* 乘客数据 */
+.passenger_box {
+  background: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+.passenger_box .box_list {
+  margin-bottom: 10px;
+  padding-top: 10px;
+  border-bottom: 1px solid #ebeff2;
+}
+.passenger_box .box_list .box_title {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.passenger_box .box_list .list_item {
+  display: inline-block;
+  margin-bottom: 20px;
+  line-height: 38px;
+}
+.passenger_box .box_list .list_item:not(:last-child) {
+  margin-right: 30px;
+}
+.passenger_box .box_list .list_item .item_name {
+  display: inline-block;
+  min-width: 70px;
+  text-align: right;
+}
+.passenger_box .box_list .list_item .item_input {
+  display: inline-block;
+  width: 180px;
+}
+
+/* 联系人 */
+.contact_box {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+}
+.contact_box .contact_title {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.contact_box .box_list {
+  display: inline-block;
+  line-height: 38px;
+  margin-right: 20px;
+}
+.contact_box .box_list .list_title {
+  display: inline-block;
+}
+.contact_box .box_list .list_input {
+  display: inline-block;
+}
+
+/* 金额计算 */
+.price_box {
+  background: #dfeaf0;
+  padding: 10px;
+  text-align: right;
+}
+.price_box > div {
+  margin-bottom: 10px;
+}
+.price_box .price_tip {
+  color: #222;
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #79838b;
+}
+.price_box .price_tip span {
+  font-size: 18px;
+  color: #333;
+}
+.price_box .price_total {
+  font-size: 14px;
+  vertical-align: baseline;
+  margin: 10px 0;
+  color: #000;
+  padding: 10px 0;
+}
+.price_box .price_total p {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 0;
+  font-size: 48px;
+  color: #ff0000;
+}
+.price_box .price_total span {
+  font-size: 14px;
+  vertical-align: baseline;
+  color: #000;
+}
+
+.price_box .pay_btn {
+  width: 180px;
+}

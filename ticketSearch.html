@@ -1,0 +1,435 @@
+<!--
+ * @Description: 航班查询列表
+ * @Author: wish.WuJunLong
+ * @Date: 2021-09-06 09:22:07
+ * @LastEditTime: 2021-09-07 17:48:43
+ * @LastEditors: wish.WuJunLong
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/ticketSearch.css" />
+
+    <link rel="stylesheet" href="plugins/ax.css" />
+    <link rel="stylesheet" href="plugins/mobiscroll.jquery.css" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.ttf" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.woff" />
+    <link
+      href="https://at.alicdn.com/t/font_1551254_rxrrzgz2kjc.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body>
+    <div id="loading">
+      <span class="ax-loading" style="width: 60px; height: 60px"
+        ><svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20" /></svg>
+      </span>
+    </div>
+    <div class="ticket_main">
+      <div class="ticket_box">
+        <div class="main_header">
+          <div class="main_title">机票列表</div>
+          <div class="main_search_box">
+            <div class="ax-popup-hide" id="searchPopcon">
+              <div class="search_box_title"><span></span>筛选项</div>
+            </div>
+            <button class="main_search_btn ax-primary ax-btn">Screening</button>
+          </div>
+        </div>
+        <div class="main_content_air">
+          <div class="ticket_title">
+            航段信息：
+            <div class="ticket_title_message"></div>
+          </div>
+          <div class="ticket_list">
+            <div class="list_skeleton"></div>
+            <div id="notAirList" class="ax-empty">
+              <div class="ax-icon">
+                <span class="ax-iconfont ax-icon-empty"></span>
+              </div>
+              <div class="ax-title">没有内容</div>
+            </div>
+          </div>
+
+          <ul class="ax-backtop">
+            <li class="ax-item ax-totop"></li>
+            <li class="ax-item ax-totop">
+              <a href="###" class="ax-iconfont ax-icon-up"></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 提示弹窗 -->
+    <div class="ax-window" id="warning_tip">
+      <div class="ax-window-overlay"></div>
+      <div class="ax-window-contain">
+        <div class="ax-window-tips">
+          <div class="ax-tips-icon ax-result ax-warning">
+            <i class="ax-iconfont ax-icon-close-o"></i>
+          </div>
+          <div class="ax-tips-title"></div>
+          <div class="ax-tips-des"></div>
+          <div class="ax-tips-btn">
+            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+              关 闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="plugins/jquery-1.10.2.min.js"></script>
+    <script src="plugins/ax.min.js"></script>
+    <script src="plugins/mobiscroll.jquery.min.js"></script>
+    <script>
+      getTicketData();
+
+      // 组装航班数据
+      function getTicketDetail(message ,i) {
+        var val = message.fromSegments
+        var retVal = message.retSegments?message.retSegments:[]
+        var data;
+
+        // 航程三字码组装
+        airportDom =
+          "<div class='item_airport'>" +
+          val[0].depAirport +
+          " - " +
+          val[val.length - 1].arrAirport +
+          
+          (retVal.length > 0 ? "往返" : "") +
+          "</div>";
+
+        // 航班时间组装
+        var dateStart = new Date(val[0].depTime);
+        var dateEnd = new Date(val[val.length - 1].arrTime);
+        var difValue = parseInt(
+          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) / (1000 * 60 * 60 * 24)
+        );
+
+        airTimeDom =
+          "<div class='item_time'>" +
+          (dateStart.getHours() < 10
+            ? "0" + dateStart.getHours()
+            : dateStart.getHours()) +
+          ":" +
+          (dateStart.getMinutes() < 10
+            ? "0" + dateStart.getMinutes()
+            : dateStart.getMinutes()) +
+          " - " +
+          (dateEnd.getHours() < 10 ? "0" + dateEnd.getHours() : dateEnd.getHours()) +
+          ":" +
+          (dateEnd.getMinutes() < 10
+            ? "0" + dateEnd.getMinutes()
+            : dateEnd.getMinutes()) +
+          (difValue > 0 ? "<span>+" + difValue + "</span>" : "") +
+          (retVal.length > 0
+            ? " / " +
+              (new Date(retVal[0].depTime).getHours() < 10
+                ? "0" + new Date(retVal[0].depTime).getHours()
+                : new Date(retVal[0].depTime).getHours()) +
+              ":" +
+              (new Date(retVal[0].depTime).getMinutes() < 10
+                ? "0" + new Date(retVal[0].depTime).getMinutes()
+                : new Date(retVal[0].depTime).getMinutes()) +
+              " - " +
+              (new Date(retVal[retVal.length - 1].arrTime).getHours() < 10
+                ? "0" + new Date(retVal[retVal.length - 1].arrTime).getHours()
+                : new Date(retVal[retVal.length - 1].arrTime).getHours()) +
+              ":" +
+              (new Date(retVal[retVal.length - 1].arrTime).getMinutes() < 10
+                ? "0" + new Date(retVal[retVal.length - 1].arrTime).getMinutes()
+                : new Date(retVal[retVal.length - 1].arrTime).getMinutes()) +
+              (parseInt(
+                (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                  getNotTimeDate(new Date(retVal[0].depTime))) /
+                  (1000 * 60 * 60 * 24)
+              ) > 0
+                ? "<span>+" +
+                  parseInt(
+                    (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                      getNotTimeDate(new Date(retVal[0].depTime))) /
+                      (1000 * 60 * 60 * 24)
+                  ) +
+                  "</span>"
+                : "")
+            : "") +
+          "</div>";
+
+        // 单程
+        var arrAirTime = 0;
+        airDetail = [];
+        for (var o = 0; o < val.length; o++) {
+          arrAirTime += val[o].duration;
+          airDetail +=
+            '<div class="item_box">' +
+            '<div class="item_box_message item_box_flighunumber">' +
+            '<div class="message_title">航班号：</div>' +
+            '<div class="message_content">' +
+            val[o].flightNumber +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            val[o].depAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            val[o].depTime +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message item_box_detailtime">' +
+            '<div class="message_content message_content_date">' +
+            Math.floor(Number(val[o].duration) / 60) +
+            "H" +
+            Math.floor(Number(val[o].duration) % 60) +
+            "M" +
+            "</div>" +
+            '<div class="message_content_line"></div>' +
+            '<div class="message_content message_content_cabin">' +
+            val[o].cabin +
+            "舱</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            val[o].arrAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            val[o].arrTime +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        }
+
+        // 往返数据
+        var retArrAirTime = 0;
+        retAirDetail = [];
+        for (var o = 0; o < retVal.length; o++) {
+          retArrAirTime += retVal[o].duration;
+          retAirDetail +=
+            '<div class="item_box">' +
+            '<div class="item_box_message item_box_flighunumber">' +
+            '<div class="message_title">航班号：</div>' +
+            '<div class="message_content">' +
+            retVal[o].flightNumber +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            retVal[o].depAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            retVal[o].depTime +
+            "</div>" +
+            "</div>" +
+            '<div class="item_box_message item_box_detailtime">' +
+            '<div class="message_content message_content_date">' +
+            Math.floor(Number(retVal[o].duration) / 60) +
+            "H" +
+            Math.floor(Number(retVal[o].duration) % 60) +
+            "M" +
+            "</div>" +
+            '<div class="message_content_line"></div>' +
+            '<div class="message_content message_content_cabin">' +
+            retVal[o].cabin +
+            "舱</div>" +
+            "</div>" +
+            '<div class="item_box_message">' +
+            '<div class="message_content message_content_address">' +
+            retVal[o].arrAirport +
+            "</div>" +
+            '<div class="message_content message_content_time">' +
+            retVal[o].arrTime +
+            "</div>" +
+            "</div>" +
+            "</div>";
+        }
+
+        airTip =
+          "<div class='item_box_tip'>" +
+          "<div class='item_box_tip_message'>" +
+          "<div class='message_title'>航程类型：</div>" +
+          "<div class='message_content message_air_type' onclick='selectAir(" +
+                  i +
+                  ")'>" +
+          (val.length > 1 ? "中转 +" + (val.length - 1) : "直达") +
+          (retVal.length > 0
+            ? "," + (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
+            : "") +
+            "<img src='/img/air_type_btn.png' alt='航段按钮' />" +
+          "</div>" +
+          "</div>" +
+          "<div class='item_box_tip_message'>" +
+          "<div class='message_title'>总航程时间：</div>" +
+          "<div class='message_content'>" +
+          Math.floor(Number(arrAirTime) / 60) +
+          "小时" +
+          Math.floor(Number(arrAirTime) % 60) +
+          "分钟" +
+          (retVal.length > 0
+            ? "," +
+              Math.floor(Number(retArrAirTime) / 60) +
+              "小时" +
+              Math.floor(Number(retArrAirTime) % 60) +
+              "分钟"
+            : "") +
+          "</div>" +
+          "</div>" +
+          "</div>";
+
+        data =
+        "<div class='list_item ax-lazy'>" +
+          "<div class='item_message'>" +
+          airportDom +
+          airTimeDom +
+          "<div class='item_price'>" +
+          "<span>" +
+            message.currency +
+          "</span>" +
+          " " +
+          message.fareQuotes[0].price +
+          "</div>" +
+          "</div>" +
+          "<div class='item_air_detail'>" +
+            "<button class='ax-btn ax-primary air_submit' onClick='jumpNextPage(" +
+                  i +
+                  ")'>预定</button>" +
+          "<div class='detail_box'>" +
+          (retVal.length > 0 ? "<div class='ret_title'>去程：</div>" : "") +
+          "<div>" +
+          airDetail +
+          "</div>" +
+          "</div>" +
+          (retVal.length > 0
+            ? "<div class='detail_box ret_detail_box'>" +
+              "<div class='ret_title'>回程：</div>" +
+              "<div>" +
+              retAirDetail +
+              "</div>" +
+              "</div>"
+            : "") +
+          "</div>" +
+          airTip+
+         "</div>";;
+
+        return data;
+      }
+
+      // 获取航班列表
+      var searchData
+      function getTicketData() {
+        $("#loading").show();
+
+        searchData = JSON.parse(sessionStorage.getItem("ticketData"));
+
+        // 显示航班列表
+        $(".ticket_title_message").text(
+          searchData.fromCity +
+            " - " +
+            searchData.toCity +
+            " （" +
+            searchData.fromDate +
+            "）" +
+            (searchData.retDate? ' - （' + searchData.retDate + '）'  :'')
+        );
+
+        fetch("http://192.168.0.35:6212/ba/search", {
+          method: "POST",
+          body: JSON.stringify(searchData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            sessionStorage.removeItem("ticketData");
+
+            $("#loading").hide();
+            console.log(data);
+
+            airList = data.routings;
+
+            if (data.status === 0) {
+              if (airList.length > 0) {
+                $("#notAirList").hide();
+              }
+              // 数据总数
+              $(".search_air_number").text(airList.length + "/" + airList.length);
+
+              var listDom = $(".ticket_list");
+
+              for (var i = 0; i < airList.length; i++) {
+               
+
+                listDom.append(getTicketDetail(airList[i],i));
+              }
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $(".ax-tips-title").html("获取数据失败");
+              $(".ax-tips-des").html(data.message);
+            }
+          });
+      }
+
+      // 航班列表筛选
+      $(".main_search_box").axPopup({
+        url: "#searchPopcon",
+        placement: "bottom-left",
+        trigger: "click",
+        width: 230,
+        height: 200,
+        closeable: false,
+        animation: "fade",
+        arrow: false,
+        multi: false,
+      });
+
+      // 返回时间 年-月-日
+      function getNotTimeDate(val) {
+        var year = val.getFullYear();
+        var month = val.getMonth();
+        var date = val.getDate();
+
+        if (month < 10) {
+          month = "0" + month;
+        }
+        if (date < 10) {
+          date = "0" + date;
+        }
+
+        return new Date(year + "-" + month + "-" + date);
+      }
+
+      // 选中航班列表
+      function selectAir(val) {
+        // $(".ticket_list .list_item").children(".item_air_detail").hide();
+        let children = $(".ticket_list .list_item").children(".item_air_detail")[val];
+        $(children).toggle();
+        if ($(children).is(":visible")) {
+          $($(".ticket_list .list_item").children(".item_box_tip")[val]).addClass(
+            "active"
+          );
+        } else {
+          $($(".ticket_list .list_item").children(".item_box_tip")[val]).removeClass(
+            "active"
+          );
+        }
+        console.log();
+      }
+
+      // 跳转预定页面
+      function jumpNextPage(val) {
+        sessionStorage.setItem("checkAir", JSON.stringify(airList[val]));
+        parent.window.jumpTicketReservation();
+      }
+    </script>
+  </body>
+</html>
