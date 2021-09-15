@@ -2,7 +2,7 @@
  * @Description: 预定页面
  * @Author: wish.WuJunLong
  * @Date: 2021-08-03 15:57:24
- * @LastEditTime: 2021-09-14 18:27:26
+ * @LastEditTime: 2021-09-15 12:01:35
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -805,8 +805,7 @@
                 window.open(
                   "/airdetails.html?pnr=" +
                     data.pnrCode +
-                    "&o=" +
-                    airMessage.otherCode +
+                    (data.otherCode ? "&o=" + data.otherCode : "") +
                     "&t=" +
                     airMessage.validatingCarrier,
                   "target"
