@@ -2,7 +2,7 @@
  * @Description: 详情页
  * @Author: wish.WuJunLong
  * @Date: 2021-08-31 09:38:41
- * @LastEditTime: 2021-09-07 16:19:41
+ * @LastEditTime: 2021-09-15 09:33:53
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -10,7 +10,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NDC白屏 - 订单详情</title>
     <link rel="stylesheet" href="./css/airDetails.css" />
@@ -56,25 +56,33 @@
         <div class="change_order_option">
           <button
             type="button"
-            class="ax-btn ax-warning"
+            class="ax-btn ax-ripple ax-warning"
             onclick="orderChangeBtn('change')"
+            id="orderChangeBtn"
           >
             申请改期
           </button>
-          <span class="line"></span>
+
           <button
             type="button"
-            class="ax-btn ax-danger"
+            class="ax-btn ax-ripple ax-danger"
             onclick="orderChangeBtn('refund')"
+            id="orderRefundBtn"
           >
             申请退票
           </button>
-          <span class="line"></span>
-          <button type="button" class="ax-btn" onclick="cancelOrderBtn()">
+          <button
+            type="button"
+            class="ax-btn ax-ripple"
+            onclick="cancelOrderBtn()"
+            id="orderCancelBtn"
+          >
             取消订单
           </button>
         </div>
-        <button type="button" class="ax-btn ax-success" id="paySubmit">订单支付</button>
+        <button type="button" class="ax-btn ax-ripple ax-success" id="paySubmit">
+          订单出票
+        </button>
       </div>
 
       <!-- 退改操作弹窗 -->
@@ -88,8 +96,14 @@
           <div class="ax-break-line"></div>
           <div class="ax-padding ax-window-operate ax-align-center">
             <div class="ax-btns">
-              <button type="button" class="ax-btn ax-ignore ax-window-close">取消</button>
-              <button type="button" class="ax-btn ax-primary" onclick="verifySplit()">
+              <button type="button" class="ax-btn ax-ripple ax-ignore ax-window-close">
+                取消
+              </button>
+              <button
+                type="button"
+                class="ax-btn ax-ripple ax-primary"
+                onclick="verifySplit()"
+              >
                 确定
               </button>
             </div>
@@ -108,10 +122,12 @@
           <div class="ax-break-line"></div>
           <div class="ax-padding ax-window-operate ax-align-center">
             <div class="ax-btns">
-              <button type="button" class="ax-btn ax-ignore ax-window-close">取消</button>
+              <button type="button" class="ax-btn ax-ripple ax-ignore ax-window-close">
+                取消
+              </button>
               <button
                 type="button"
-                class="ax-btn ax-primary"
+                class="ax-btn ax-ripple ax-primary"
                 onclick="submitRefundOrder()"
               >
                 确认退票
@@ -153,7 +169,7 @@
                 </div>
                 <button
                   type="button"
-                  class="ax-btn ax-primary"
+                  class="ax-btn ax-ripple ax-primary"
                   onclick="searchChangeAirList()"
                 >
                   查询改期行程运价
@@ -170,8 +186,40 @@
 
           <div class="ax-padding ax-window-operate">
             <div class="ax-btns">
-              <button type="button" class="ax-btn ax-ignore ax-window-close">取消</button>
+              <button type="button" class="ax-btn ax-ripple ax-ignore ax-window-close">
+                取消
+              </button>
               <span class="change_air_price"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 取消订单弹窗 -->
+    <div class="ax-window" data-mask="true" id="closeOrderTip">
+      <div class="ax-window-overlay"></div>
+      <div class="ax-window-contain">
+        <a href="###" class="ax-window-close"
+          ><i class="ax-iconfont ax-icon-close"></i
+        ></a>
+        <div class="ax-window-content">
+          <div class="ax-window-tips">
+            <div class="ax-tips-icon ax-result ax-warning">
+              <i class="ax-iconfont ax-icon-warning-o"></i>
+            </div>
+            <div class="ax-tips-title">重要操作！</div>
+            <div class="ax-tips-des">
+              当前操作将取消当前订单，请确认无误后点击确认按钮！
+            </div>
+            <div class="ax-tips-btn">
+              <button class="ax-btn ax-ripple ax-long ax-window-close">关闭</button>
+              <button
+                class="ax-btn ax-ripple ax-longer ax-primary"
+                onclick="closeOrderSubmit()"
+              >
+                确认
+              </button>
             </div>
           </div>
         </div>
@@ -189,7 +237,10 @@
           <div class="ax-tips-title"></div>
           <div class="ax-tips-des"></div>
           <div class="ax-tips-btn">
-            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+            <button
+              type="button"
+              class="ax-btn ax-ripple ax-longer ax-primary ax-window-close"
+            >
               关 闭
             </button>
           </div>
@@ -206,7 +257,10 @@
           <div class="ax-tips-title"></div>
           <div class="ax-tips-des"></div>
           <div class="ax-tips-btn">
-            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+            <button
+              type="button"
+              class="ax-btn ax-ripple ax-longer ax-primary ax-window-close"
+            >
               关 闭
             </button>
           </div>
@@ -217,6 +271,8 @@
     <script src="plugins/jquery-1.10.2.min.js"></script>
     <script src="plugins/ax.min.js"></script>
     <script src="plugins/mobiscroll.jquery.min.js"></script>
+
+    <script src="js/config.js"></script>
     <script>
       // 获取地址栏参数
       function getQueryString(name) {
@@ -246,6 +302,8 @@
       }
 
       var pnrCode = getQueryString("pnr"); // 获取PNR
+      var otherCode = getQueryString("o"); // 获取otheroce
+      var configType = getQueryString("t"); // 获取渠道
 
       getDomData(); // 获取订单详情
 
@@ -471,7 +529,7 @@
           "</div>" +
           "<div class='item_air_detail'>" +
           (newAirIndex > -1
-            ? "<button class='ax-btn ax-primary air_submit' onClick='selectNewAir(" +
+            ? "<button class='ax-btn ax-ripple ax-primary air_submit' onClick='selectNewAir(" +
               newAirIndex +
               ")'>确认改期</button>"
             : "") +
@@ -496,18 +554,18 @@
       }
 
       // 组装页面数据
-      function getDomData() {
+      function getDomData(val) {
         oneAirMessage = []; // 去程数据
         retAirMessage = []; // 返程数据
         var paramsData = {
           sessionID: "",
-          config: "BA",
+          config: configType.toUpperCase(),
           pnrCode: pnrCode, //pnr
-          otherCode: null,
+          otherCode: otherCode,
           remark: null,
           controlType: 0, // 0：提取编码信息；405：取消编码
         };
-        fetch("http://192.168.0.35:6212/ba/confirm", {
+        fetch(config.airConfig[configType.toUpperCase()] + "/confirm", {
           method: "POST",
           body: JSON.stringify(paramsData),
         })
@@ -530,6 +588,20 @@
               }
 
               console.log(oneAirMessage, retAirMessage);
+
+              // 判断页面状态按钮显示
+              $("#orderCancelBtn").hide();
+              $("#paySubmit").hide();
+              $("#orderChangeBtn").hide();
+              $("#orderRefundBtn").hide();
+              if (airMessage.remark === "T-A") {
+                // 未出票状态
+                $("#orderCancelBtn").show();
+                $("#paySubmit").show();
+              } else {
+                $("#orderChangeBtn").show();
+                $("#orderRefundBtn").show();
+              }
 
               // 组装航班信息
               $(".air_message").html(getTicketDetail(oneAirMessage, retAirMessage));
@@ -678,13 +750,19 @@
             }
           })
           .catch(function (e) {
-            console.log(e);
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
           });
       }
 
       // 订单拆分
       var orderSubmitType = "";
       function orderChangeBtn(type) {
+        if (airMessage.remark === "T-A") {
+          return false;
+        }
         orderSubmitType = type;
         $("#selectOrderMessage").addClass("ax-window-show");
 
@@ -816,13 +894,13 @@
           // 执行拆分功能
           var splitData = {
             sessionID: "", //会话ID
-            config: "BA", //配置
+            config: airMessage.validatingCarrier, //配置
             pnrCode: pnrCode, //编码
-            otherCode: null,
+            otherCode: otherCode,
             passengers: selectList,
             data: airMessage.offerItemData, //订单详情中响应的data 原样传入
           };
-          fetch("http://192.168.0.35:6212/ba/splitorder", {
+          fetch(config.airConfig[airMessage.validatingCarrier] + "/splitorder", {
             method: "POST",
             body: JSON.stringify(splitData),
           })
@@ -848,6 +926,12 @@
                 $("#warning_tip .ax-tips-title").html("获取数据失败");
                 $("#warning_tip .ax-tips-des").html(data.message);
               }
+            })
+            .catch(function (e) {
+              $("#loading").hide();
+              $("#warning_tip").addClass("ax-window-show");
+              $(".ax-tips-title").html("访问错误");
+              $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
             });
         }
 
@@ -861,11 +945,12 @@
         $("#loading").show();
         var getRefundData = {
           sessionID: "",
-          config: "BA",
+          config: airMessage.validatingCarrier,
           pnrCode: pnrCode, //编码
+          otherCode: otherCode,
           data: airMessage.offerItemData, //订单详情响应/拆分订单详情响应中 @data 原样传入
         };
-        fetch("http://192.168.0.35:6212/ba/refundprice", {
+        fetch(config.airConfig[airMessage.validatingCarrier] + "/refundprice", {
           method: "POST",
           body: JSON.stringify(getRefundData),
         })
@@ -945,6 +1030,12 @@
               $("#warning_tip .ax-tips-title").html("获取数据失败");
               $("#warning_tip .ax-tips-des").html(data.message);
             }
+          })
+          .catch(function (e) {
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
           });
       }
 
@@ -953,14 +1044,15 @@
         $("#loading").show();
         var refundData = {
           sessionID: "",
-          config: "BA",
+          config: airMessage.validatingCarrier,
           pnrCode: pnrCode,
           currency: refundCurrency,
           refundAmount: refundAmount,
           data: airMessage.offerItemData,
+          otherCode: otherCode,
         };
 
-        fetch("http://192.168.0.35:6212/ba/refund", {
+        fetch(config.airConfig[airMessage.validatingCarrier] + "/refund", {
           method: "POST",
           body: JSON.stringify(refundData),
         })
@@ -982,6 +1074,12 @@
               $("#warning_tip .ax-tips-title").html("获取数据失败");
               $("#warning_tip .ax-tips-des").html(data.message);
             }
+          })
+          .catch(function (e) {
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
           });
       }
 
@@ -1067,6 +1165,7 @@
             theme: "ax",
             lang: "zh",
             invalid: [new Date(), new Date()],
+            touchUi: false,
             onBeforeShow: function (event, inst) {
               //显示前的点击事件
               $("#" + this.id).addClass("ax-focus"); //input焦点
@@ -1078,7 +1177,7 @@
             },
             display: "bubble",
             dateFormat: "yy-mm-dd",
-            min: selectAirTime[0].depTime.split(" ")[0],
+            min: selectAirTime[0].depTime,
             max:
               notSelectAirTime.length > 0
                 ? new Date(selectAirTime[0].depTime.split(" ")[0]) <
@@ -1135,8 +1234,9 @@
           retainSegments: notAirCode,
           passengers: selectList,
           data: airMessage.offerItemData,
+          otherCode: otherCode,
         };
-        fetch("http://192.168.0.35:6212/ba/reshopping", {
+        fetch(config.airConfig[airMessage.validatingCarrier] + "/reshopping", {
           method: "POST",
           body: JSON.stringify(paramsData),
         })
@@ -1164,6 +1264,12 @@
               $("#warning_tip .ax-tips-title").html("获取数据失败");
               $("#warning_tip .ax-tips-des").html(data.message);
             }
+          })
+          .catch(function (e) {
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
           });
       }
 
@@ -1196,13 +1302,13 @@
           sessionID: "",
           config: airMessage.validatingCarrier,
           pnrCode: pnrCode,
-          otherCode: null,
+          otherCode: otherCode,
           routing: newAirDataList[val],
           passengers: selectList,
           data: airMessage.offerItemData,
         };
 
-        fetch("http://192.168.0.35:6212/ba/change", {
+        fetch(config.airConfig[airMessage.validatingCarrier] + "/change", {
           method: "POST",
           body: JSON.stringify(paramsData),
         })
@@ -1223,6 +1329,12 @@
               $("#warning_tip .ax-tips-title").html("获取数据失败");
               $("#warning_tip .ax-tips-des").html(data.message);
             }
+          })
+          .catch(function (e) {
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
           });
       }
 
@@ -1237,8 +1349,97 @@
       // $("#TicketSearchIframe").hide();
       // $("#ChangeSearch").addClass("ax-window-show");
 
-      // 取消订单
-      function cancelOrderBtn() {}
+      // 打开取消订单确认框
+      function cancelOrderBtn() {
+        if (airMessage.remark !== "T-A") {
+          return false;
+        }
+        $("#closeOrderTip").addClass("ax-window-show");
+      }
+      // 取消订单操作
+      function closeOrderSubmit() {
+        $("#loading").show();
+        var paramsData = {
+          sessionID: "",
+          config: airMessage.validatingCarrier,
+          pnrCode: pnrCode, //pnr
+          otherCode: otherCode,
+          remark: null,
+          controlType: 405, // 0：提取编码信息；405：取消编码
+        };
+        fetch(config.airConfig[airMessage.validatingCarrier] + "/confirm", {
+          method: "POST",
+          body: JSON.stringify(paramsData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            $("#loading").hide();
+            $("#closeOrderTip").removeClass("ax-window-show");
+            if (data.status === 0) {
+              $("#success_tip").addClass("ax-window-show");
+              $("#success_tip .ax-tips-title").html("取消订单成功");
+              $("#success_tip .ax-tips-des").html("已获取最新订单数据");
+              getDomData();
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $("#warning_tip .ax-tips-title").html("取消失败");
+              $("#warning_tip .ax-tips-des").html(data.message);
+            }
+          })
+          .catch(function (e) {
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
+          });
+      }
+
+      // 订单支付
+      $("#paySubmit").click(function () {
+        if (airMessage.remark !== "T-A") {
+          return false;
+        }
+        $("#loading").show();
+        var submitData = {
+          sessionID: airMessage.sessionID, //会话ID
+          config: airMessage.validatingCarrier, //配置
+          queueType: 22, //放Q执行类型 21：强制直接放Q:22：校验价格成功后再出票
+          fareQuotes: airMessage.fareQuotes,
+          pnrCode: pnrCode, //pnr编码
+          otherCode: otherCode,
+        };
+
+        fetch(config.airConfig.queueplace, {
+          method: "POST",
+          body: JSON.stringify(submitData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            console.log(data);
+            $("#loading").hide();
+            if (data.status === 0) {
+              $("#selectOrderMessage").removeClass("ax-window-show");
+              $("#success_tip").addClass("ax-window-show");
+              $("#success_tip .ax-tips-title").html("订单出票成功");
+              $("#success_tip .ax-tips-des").html("已获取最新订单数据");
+              getDomData();
+            } else {
+              $("#warning_tip").addClass("ax-window-show");
+              $("#warning_tip .ax-tips-title").html("出票失败");
+              $("#warning_tip .ax-tips-des").html(data.message);
+            }
+          })
+          .catch(function (e) {
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
+          });
+      });
 
       // 返回时间 年-月-日
       function getNotTimeDate(val) {

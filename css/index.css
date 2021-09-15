@@ -162,16 +162,47 @@ main .air_message_content {
 }
 
 .search_main .search_input_box {
-  padding: 27px 20px 32px;
+  padding: 15px 20px 32px;
+}
+
+.search_main .search_input_box .list_item.switch_ticket_type {
+  margin-bottom: 10px !important;
+  background: #fff;
+  border-radius: 3px;
+  padding: 3px;
+  -webkit-border-radius: 3;
+  -moz-border-radius: 3;
+  -ms-border-radius: 3;
+  -o-border-radius: 3;
+}
+.search_main .search_input_box .list_item.switch_ticket_type span {
+  display: inline-block;
+  width: 49%;
+  padding: 4px 0;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+}
+.search_main .search_input_box .list_item.switch_ticket_type span.active {
+  background-color: #4dbd73;
+  color: #fff;
 }
 
 .search_main .search_input_box .list_item:not(:last-child) {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .search_main .search_input_box .search_list .list_item {
   display: inline-block;
   width: 49%;
+}
+
+.search_main .search_input_box .list_item.ret_item{
+  display: none;
 }
 
 .search_main .search_list .list_item.number_item {
@@ -201,6 +232,7 @@ main .air_message_content {
 
 .search_main .submit_btn {
   text-align: right;
+  margin-top: 25px;
 }
 .search_main .submit_btn button {
   height: 56px;
@@ -211,12 +243,12 @@ main .air_message_content {
 }
 
 /* 航班信息 */
-#TicketSearchIframe{
+#TicketSearchIframe {
   display: inline-block;
   width: 75%;
   height: 85vh;
 }
-#TicketSearchIframe iframe{
+#TicketSearchIframe iframe {
   width: 100%;
   height: 100%;
 }

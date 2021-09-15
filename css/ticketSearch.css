@@ -86,15 +86,23 @@
 .ticket_main .list_item {
   border-bottom: 1px solid #d1d6d8;
   /* padding: 24px 0 17px; */
+
 }
 
 .ticket_main .list_item .item_message {
   padding-top: 24px;
+  cursor: pointer;
+
 }
 .ticket_main .list_item .item_message .item_airport {
   font-size: 14px;
   font-weight: 400;
   color: #0f1922;
+}
+.ticket_main .list_item .item_message .item_airport .airport_carrier{
+  margin-right: 20px;
+  font-weight: bold;
+  font-size: 16px;
 }
 .ticket_main .list_item .item_message > div {
   display: inline-block;
@@ -105,6 +113,14 @@
   font-size: 24px;
   font-weight: bold;
   color: #4dbd73;
+}
+.ticket_main .list_item .item_message .item_price p{
+  padding: 0;
+  display: inline-block;
+  border-bottom: 1px dashed transparent;
+}
+.ticket_main .list_item .item_message .item_price p:hover{
+  border-bottom: 1px dashed #999;
 }
 .ticket_main .list_item .item_message .item_price span {
   font-size: 14px;
@@ -256,6 +272,8 @@
 
 .ticket_main .list_item .item_box_tip {
   padding: 14px 0;
+  cursor: pointer;
+
 }
 .ticket_main .list_item .item_box_tip .item_box_tip_message {
   display: inline-block;
@@ -282,7 +300,6 @@
   font-size: 12px;
   font-weight: 400;
   color: #3abfc2;
-  cursor: pointer;
   line-height: 16px;
 }
 .ticket_main

@@ -274,7 +274,10 @@ body {
   text-align: right;
   font-size: 12px;
   font-weight: 400;
+}
+.air_passenger .passenger_box .passenger_list .list_name{
   color: #79838b;
+  
 }
 .passenger_box .passenger_list .list_message {
   min-width: 100px;
@@ -378,8 +381,13 @@ body {
   background-color: rgb(190, 190, 190);
   margin: 9px 5px;
 }
+.details_option button{
+  display: none;
+}
 .details_option #paySubmit {
   width: 200px;
+  text-align: center;
+  text-align-last: center;
 }
 
 /* 改期退票选择弹窗 */

@@ -2,7 +2,7 @@
  * @Description: 首页
  * @Author: wish.WuJunLong
  * @Date: 2021-07-22 16:47:18
- * @LastEditTime: 2021-09-07 17:50:33
+ * @LastEditTime: 2021-09-14 17:06:49
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -10,7 +10,7 @@
 <html lang="zh">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NDC白屏 - 云上航空</title>
     <link rel="stylesheet" href="css/base.css" />
@@ -63,6 +63,10 @@
           </div>
 
           <div class="search_input_box">
+            <div class="list_item switch_ticket_type">
+              <span class="active" onclick="switchTicketType(0)">单程</span>
+              <span onclick="switchTicketType(1)">往返</span>
+            </div>
             <div class="search_list">
               <div class="list_item">
                 <div class="search_title">出发地</div>
@@ -87,7 +91,7 @@
               <div class="search_title">出发时间</div>
               <input name="date" placeholder="选择日期" type="text" id="startTime" />
             </div>
-            <div class="list_item">
+            <div class="list_item ret_item">
               <div class="search_title">到达时间</div>
               <input name="date" placeholder="选择日期" type="text" id="endTime" />
             </div>
@@ -122,10 +126,17 @@
                 </select>
               </div>
             </div>
+            <div class="list_item">
+              <div class="search_title">渠道</div>
+              <select id="configType">
+                <!-- <option value="BA">BA</option>
+                <option value="SQ">SQ</option> -->
+              </select>
+            </div>
             <div class="search_list submit_btn">
               <button
                 type="button"
-                class="ax-btn ax-primary ax-full ax-square search_submit_btn"
+                class="ax-btn ax-ripple ax-primary ax-full ax-square search_submit_btn"
               >
                 查询
               </button>
@@ -151,7 +162,10 @@
           <div class="ax-tips-title"></div>
           <div class="ax-tips-des"></div>
           <div class="ax-tips-btn">
-            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+            <button
+              type="button"
+              class="ax-btn ax-ripple ax-longer ax-primary ax-window-close"
+            >
               关 闭
             </button>
           </div>
@@ -164,7 +178,23 @@
     <script src="plugins/jquery-1.10.2.min.js"></script>
     <script src="plugins/ax.min.js"></script>
     <script src="plugins/mobiscroll.jquery.min.js"></script>
+
+    <script src="js/config.js"></script>
     <script>
+      // 渠道选择列表
+      $(function () {
+        var configType = "";
+        for (var i = 0; i < config.airConfig.configTypeList.length; i++) {
+          configType +=
+            "<option value='" +
+            config.airConfig.configTypeList[i] +
+            "'>" +
+            config.airConfig.configTypeList[i] +
+            "</option>";
+        }
+        $("#configType").html(configType);
+      });
+
       var thisTImeDate =
         new Date().getFullYear() +
         "-" +
@@ -202,12 +232,28 @@
         }
       }
 
+      // 切换往返单程
+      var switchTicket = 0;
+      function switchTicketType(val) {
+        switchTicket = val;
+        if (val === 0) {
+          $(".ret_item").hide();
+        } else {
+          $(".ret_item").show();
+        }
+        $("#endTime").val("");
+        var switchBtn = $(".switch_ticket_type span");
+        $(switchBtn).removeClass();
+        $(switchBtn[val]).addClass("active");
+      }
+
       // 日期选择器
       $("#startTime")
         .mobiscroll()
         .calendar({
           theme: "ax",
           lang: "zh",
+          touchUi: false,
           onBeforeShow: function (event, inst) {
             //显示前的点击事件
             $("#" + this.id).addClass("ax-focus"); //input焦点
@@ -234,6 +280,7 @@
           .calendar({
             theme: "ax",
             lang: "zh",
+            touchUi: false,
             onBeforeShow: function (event, inst) {
               //显示前的点击事件
               $("#" + this.id).addClass("ax-focus"); //input焦点
@@ -247,13 +294,13 @@
               }
             },
             display: "bubble",
-            buttons: [
-              {
-                text: "清空",
-                handler: "clear",
-              },
-              "set",
-            ],
+            // buttons: [
+            //   {
+            //     text: "清空",
+            //     handler: "clear",
+            //   },
+            //   "set",
+            // ],
             dateFormat: "yy-mm-dd",
             min: new Date(
               new Date($("#startTime").val()).getFullYear(),
@@ -282,7 +329,8 @@
           if (
             !$("#startAddress").val() ||
             !$("#endAddress").val() ||
-            !$("#startTime").val()
+            !$("#startTime").val() ||
+            (switchTicket === 1 && !$("#endTime").val())
           ) {
             return (
               $("#warning_tip").addClass("ax-window-show"),
@@ -301,7 +349,7 @@
           // getTicketData();
 
           var ticketData = {
-            config: "BA",
+            config: $("#configType").val(),
             tripType: $("#endTime").val() ? 2 : 1,
             fromCity: $("#startAddress").val(),
             toCity: $("#endAddress").val(),
@@ -326,14 +374,14 @@
         $("#loading").show();
         var data = {
           sessionID: "",
-          config: "BA",
+          config: $("#configType").val(),
           tripType: 2, //行程类型
           routing: JSON.parse(checkAirNumber),
           adultNumber: Number($("#adtNumber").val()),
           childNumber: Number($("#chdNumber").val()),
           quoteType: 0,
         };
-        fetch("http://192.168.0.35:6212/ba/verify", {
+        fetch(config.airConfig[$("#configType").val()] + "/verify", {
           method: "POST",
           body: JSON.stringify(data),
         })
@@ -362,6 +410,12 @@
               $(".ax-tips-title").html("获取数据失败");
               $(".ax-tips-des").html(data.message);
             }
+          })
+          .catch(function (e) {
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
           });
       }
 

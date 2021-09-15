@@ -2,7 +2,7 @@
  * @Description: 航班查询列表
  * @Author: wish.WuJunLong
  * @Date: 2021-09-06 09:22:07
- * @LastEditTime: 2021-09-07 17:48:43
+ * @LastEditTime: 2021-09-14 17:07:36
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -10,7 +10,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
@@ -19,6 +19,13 @@
 
     <link rel="stylesheet" href="plugins/ax.css" />
     <link rel="stylesheet" href="plugins/mobiscroll.jquery.css" />
+    <!-- <link rel="stylesheet" href="plugins/jquery.qtip.css" /> -->
+    <link
+      href="https://src.axui.cn/src/plugins/qtip2/jquery.qtip.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
     <link rel="stylesheet" href="plugins/icons_mobiscroll.ttf" />
     <link rel="stylesheet" href="plugins/icons_mobiscroll.woff" />
     <link
@@ -41,7 +48,7 @@
             <div class="ax-popup-hide" id="searchPopcon">
               <div class="search_box_title"><span></span>筛选项</div>
             </div>
-            <button class="main_search_btn ax-primary ax-btn">Screening</button>
+            <!-- <button class="main_search_btn ax-primary ax-btn ax-ripple">Screening</button> -->
           </div>
         </div>
         <div class="main_content_air">
@@ -80,7 +87,10 @@
           <div class="ax-tips-title"></div>
           <div class="ax-tips-des"></div>
           <div class="ax-tips-btn">
-            <button type="button" class="ax-btn ax-longer ax-primary ax-window-close">
+            <button
+              type="button"
+              class="ax-btn ax-ripple ax-longer ax-primary ax-window-close"
+            >
               关 闭
             </button>
           </div>
@@ -91,22 +101,32 @@
     <script src="plugins/jquery-1.10.2.min.js"></script>
     <script src="plugins/ax.min.js"></script>
     <script src="plugins/mobiscroll.jquery.min.js"></script>
+
+    <script src="js/config.js"></script>
+    <script
+      src="https://src.axui.cn/src/plugins/qtip2/jquery.qtip.min.js"
+      type="text/javascript"
+    ></script>
+
     <script>
       getTicketData();
 
       // 组装航班数据
-      function getTicketDetail(message ,i) {
-        var val = message.fromSegments
-        var retVal = message.retSegments?message.retSegments:[]
+      function getTicketDetail(message, i) {
+        var val = message.fromSegments;
+        var retVal = message.retSegments ? message.retSegments : [];
         var data;
 
         // 航程三字码组装
         airportDom =
           "<div class='item_airport'>" +
-          val[0].depAirport +
-          " - " +
-          val[val.length - 1].arrAirport +
-          
+          "<span class='airport_carrier'>" +
+          val[0].carrier +
+          "</span>" +
+          val[0].flightNumber +
+          // val[0].depAirport +
+          // " - " +
+          // val[val.length - 1].arrAirport +
           (retVal.length > 0 ? "往返" : "") +
           "</div>";
 
@@ -255,17 +275,17 @@
         }
 
         airTip =
-          "<div class='item_box_tip'>" +
+          "<div class='item_box_tip' onclick='selectAir(" +
+          i +
+          ")'>" +
           "<div class='item_box_tip_message'>" +
           "<div class='message_title'>航程类型：</div>" +
-          "<div class='message_content message_air_type' onclick='selectAir(" +
-                  i +
-                  ")'>" +
+          "<div class='message_content message_air_type' >" +
           (val.length > 1 ? "中转 +" + (val.length - 1) : "直达") +
           (retVal.length > 0
             ? "," + (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
             : "") +
-            "<img src='/img/air_type_btn.png' alt='航段按钮' />" +
+          "<img src='/img/air_type_btn.png' alt='航段按钮' />" +
           "</div>" +
           "</div>" +
           "<div class='item_box_tip_message'>" +
@@ -287,22 +307,28 @@
           "</div>";
 
         data =
-        "<div class='list_item ax-lazy'>" +
-          "<div class='item_message'>" +
+          "<div class='list_item ax-lazy' >" +
+          "<div class='item_message' onclick='selectAir(" +
+          i +
+          ")'>" +
           airportDom +
           airTimeDom +
-          "<div class='item_price'>" +
+          "<div class='item_price' >" +
+          "<p id='priceTool" +
+          i +
+          "'>" +
           "<span>" +
-            message.currency +
+          message.currency +
           "</span>" +
           " " +
-          message.fareQuotes[0].price +
+          message.basisAmount +
+          "</p>" +
           "</div>" +
           "</div>" +
           "<div class='item_air_detail'>" +
-            "<button class='ax-btn ax-primary air_submit' onClick='jumpNextPage(" +
-                  i +
-                  ")'>预定</button>" +
+          "<button class='ax-btn ax-ripple ax-primary air_submit' onClick='jumpNextPage(" +
+          i +
+          ")'>预定</button>" +
           "<div class='detail_box'>" +
           (retVal.length > 0 ? "<div class='ret_title'>去程：</div>" : "") +
           "<div>" +
@@ -318,14 +344,13 @@
               "</div>"
             : "") +
           "</div>" +
-          airTip+
-         "</div>";;
-
+          airTip +
+          "</div>";
         return data;
       }
 
       // 获取航班列表
-      var searchData
+      var searchData;
       function getTicketData() {
         $("#loading").show();
 
@@ -339,10 +364,10 @@
             " （" +
             searchData.fromDate +
             "）" +
-            (searchData.retDate? ' - （' + searchData.retDate + '）'  :'')
+            (searchData.retDate ? " - （" + searchData.retDate + "）" : "")
         );
 
-        fetch("http://192.168.0.35:6212/ba/search", {
+        fetch(config.airConfig[searchData.config] + "/search", {
           method: "POST",
           body: JSON.stringify(searchData),
         })
@@ -367,15 +392,19 @@
               var listDom = $(".ticket_list");
 
               for (var i = 0; i < airList.length; i++) {
-               
-
-                listDom.append(getTicketDetail(airList[i],i));
+                listDom.append(getTicketDetail(airList[i], i));
               }
             } else {
               $("#warning_tip").addClass("ax-window-show");
               $(".ax-tips-title").html("获取数据失败");
               $(".ax-tips-des").html(data.message);
             }
+          })
+          .catch(function (e) {
+            $("#loading").hide();
+            $("#warning_tip").addClass("ax-window-show");
+            $(".ax-tips-title").html("访问错误");
+            $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
           });
       }
 
@@ -429,6 +458,13 @@
       function jumpNextPage(val) {
         sessionStorage.setItem("checkAir", JSON.stringify(airList[val]));
         parent.window.jumpTicketReservation();
+        return false;
+      }
+
+      function stopBubble(e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        // W3C
+        else window.event.cancelBubble = true; // Old IE
       }
     </script>
   </body>
