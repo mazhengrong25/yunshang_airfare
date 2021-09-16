@@ -2,7 +2,7 @@
  * @Description: 预定页面
  * @Author: wish.WuJunLong
  * @Date: 2021-08-03 15:57:24
- * @LastEditTime: 2021-09-15 12:01:35
+ * @LastEditTime: 2021-09-16 11:18:50
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -802,14 +802,18 @@
               console.log(data);
               $("#loading").hide();
               if (data.status === 0) {
-                window.open(
+                var newTab = window.open();
+                newTab.opener = null;
+                newTab.location =
                   "/airdetails.html?pnr=" +
-                    data.pnrCode +
-                    (data.otherCode ? "&o=" + data.otherCode : "") +
-                    "&t=" +
-                    airMessage.validatingCarrier,
-                  "target"
-                );
+                  data.pnrCode +
+                  "&o=" +
+                  airMessage.validatingCarrier +
+                  "_" +
+                  data.pnrCode +
+                  "&t=" +
+                  airMessage.validatingCarrier;
+
                 $("#success_tip").addClass("ax-window-show");
                 $(".ax-tips-title").html("航班预定成功");
                 $(".ax-tips-des").html(data.message);

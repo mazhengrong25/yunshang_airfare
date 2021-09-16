@@ -1,0 +1,120 @@
+<!--
+ * @Description: 编码查询页面
+ * @Author: wish.WuJunLong
+ * @Date: 2021-09-16 10:02:51
+ * @LastEditTime: 2021-09-16 11:22:40
+ * @LastEditors: wish.WuJunLong
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NDC白屏 - 编码查询</title>
+    <link rel="stylesheet" href="./css/ticketCode.css" />
+    <link rel="stylesheet" href="./css/base.css" />
+
+    <link rel="stylesheet" href="plugins/ax.css" />
+    <link rel="stylesheet" href="plugins/mobiscroll.jquery.css" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.ttf" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.woff" />
+
+    <link
+      href="https://at.alicdn.com/t/font_1551254_rxrrzgz2kjc.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body class="body">
+    <div class="code_search">
+      <div class="search_list">
+        <div class="search_title">渠道</div>
+        <select id="configType"></select>
+      </div>
+      <div class="search_list">
+        <div class="search_title">PNR</div>
+        <input type="text" id="searchPnr" />
+      </div>
+      <div class="search_list">
+        <button type="button" class="ax-btn ax-long ax-primary submitSearchPnr">
+          查 找
+        </button>
+      </div>
+    </div>
+
+    <div id="pnrDetail"></div>
+
+    <!-- 提示弹窗 -->
+    <div class="ax-window" data-mask="true" id="warning_tip">
+      <div class="ax-window-overlay"></div>
+      <div class="ax-window-contain">
+        <div class="ax-window-tips">
+          <div class="ax-tips-icon ax-result ax-warning">
+            <i class="ax-iconfont ax-icon-close-o"></i>
+          </div>
+          <div class="ax-tips-title"></div>
+          <div class="ax-tips-des"></div>
+          <div class="ax-tips-btn">
+            <button
+              type="button"
+              class="ax-btn ax-ripple ax-longer ax-primary ax-window-close"
+            >
+              关 闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="plugins/jquery-1.10.2.min.js"></script>
+    <script src="plugins/ax.min.js"></script>
+    <script src="plugins/mobiscroll.jquery.min.js"></script>
+
+    <script src="js/config.js"></script>
+
+    <script>
+      // 渠道选择列表
+      $(function () {
+        var configType = "";
+        for (var i = 0; i < config.airConfig.configTypeList.length; i++) {
+          configType +=
+            "<option value='" +
+            config.airConfig.configTypeList[i] +
+            "'>" +
+            config.airConfig.configTypeList[i] +
+            "</option>";
+        }
+        $("#configType").html(configType);
+      });
+
+      $(".submitSearchPnr").click(function () {
+        console.log($("#searchPnr").val());
+        if (!$("#searchPnr").val()) {
+          return (
+            $("#warning_tip").addClass("ax-window-show"),
+            $("#warning_tip .ax-tips-title").html("请输入PNR编码")
+          );
+        }
+
+        // 组装详情地址
+        var detailUrl =
+          "/airdetails.html?pnr=" +
+          $("#searchPnr").val() +
+          "&o=" +
+          $("#configType").val() +
+          "_" +
+          $("#searchPnr").val() +
+          "&t=" +
+          $("#configType").val() +
+          "&type=search";
+
+        $("#pnrDetail").html(
+          '<iframe id="pnrDetailIframe" width="100%" height="100%" src="' + detailUrl + '" frameborder="0"></iframe>'
+        );
+
+        console.log($('iframe').contents().height() + 'is the height')
+      });
+    </script>
+  </body>
+</html>

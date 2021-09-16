@@ -1,5 +1,5 @@
 body {
-  min-width: 1360px;
+  min-width: 1200px;
   max-width: 1920px;
   margin: 0 auto;
 }
@@ -20,57 +20,6 @@ body {
   line-height: 100vh;
   z-index: 9999;
 }
-/* 头部tab */
-header {
-}
-header .tab_header {
-  background: #0070e2;
-  height: 56px;
-  background: #1d2b36;
-  padding: 0 20px;
-  text-align: center;
-  position: relative;
-}
-header .tab_header .header_logo {
-  position: absolute;
-  width: 130px;
-  height: 56px;
-  left: 20px;
-}
-header .tab_header .header_logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.header .tab_header .header_tab_box {
-  display: inline-block;
-}
-header .tab_header .header_tab_box p {
-  display: inline-block;
-  color: #a2aeb8;
-  height: 56px;
-  min-width: 68px;
-  line-height: 40px;
-  cursor: pointer;
-  position: relative;
-}
-header .tab_header .header_tab_box p.selected {
-  color: #fff;
-}
-header .tab_header .header_tab_box p:not(:last-child) {
-  margin-right: 56px;
-}
-
-header .tab_header .header_tab_box p.selected::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: #4dbd73;
-}
-
 /* 主体内容 */
 main {
   padding: 28px;

@@ -33,3 +33,55 @@ p {
 select {
   background-color: #fff !important;
 }
+
+
+/* 头部tab */
+header {
+}
+header .tab_header {
+  background: #0070e2;
+  height: 56px;
+  background: #1d2b36;
+  padding: 0 20px;
+  text-align: center;
+  position: relative;
+}
+header .tab_header .header_logo {
+  position: absolute;
+  width: 130px;
+  height: 56px;
+  left: 20px;
+}
+header .tab_header .header_logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.header .tab_header .header_tab_box {
+  display: inline-block;
+}
+header .tab_header .header_tab_box a {
+  display: inline-block;
+  color: #a2aeb8;
+  height: 56px;
+  min-width: 68px;
+  line-height: 56px;
+  cursor: pointer;
+  position: relative;
+}
+header .tab_header .header_tab_box a.selected {
+  color: #fff;
+}
+header .tab_header .header_tab_box a:not(:last-child) {
+  margin-right: 56px;
+}
+
+header .tab_header .header_tab_box a.selected::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: #4dbd73;
+}

@@ -2,7 +2,7 @@
  * @Description: 首页
  * @Author: wish.WuJunLong
  * @Date: 2021-07-22 16:47:18
- * @LastEditTime: 2021-09-14 17:06:49
+ * @LastEditTime: 2021-09-16 10:35:48
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -26,19 +26,7 @@
       type="text/css"
     />
   </head>
-  <body class="ax-flex-col">
-    <header>
-      <div class="tab_header">
-        <a class="header_logo" href="/">
-          <img src="/img/logo.png" alt="logo" />
-        </a>
-        <div class="header_tab_box">
-          <p onclick="changeTab(this)" class="selected">机票查询</p>
-          <p onclick="changeTab(this)">操作日志</p>
-        </div>
-      </div>
-    </header>
-
+  <body class="ax-flex-col body">
     <main class="tab_main ax-flex-block">
       <div id="loading">
         <span class="ax-loading" style="width: 60px; height: 60px"
@@ -128,10 +116,7 @@
             </div>
             <div class="list_item">
               <div class="search_title">渠道</div>
-              <select id="configType">
-                <!-- <option value="BA">BA</option>
-                <option value="SQ">SQ</option> -->
-              </select>
+              <select id="configType"></select>
             </div>
             <div class="search_list submit_btn">
               <button

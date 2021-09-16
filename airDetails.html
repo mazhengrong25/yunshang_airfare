@@ -2,7 +2,7 @@
  * @Description: 详情页
  * @Author: wish.WuJunLong
  * @Date: 2021-08-31 09:38:41
- * @LastEditTime: 2021-09-15 11:59:55
+ * @LastEditTime: 2021-09-16 11:19:11
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -27,7 +27,7 @@
       type="text/css"
     />
   </head>
-  <body>
+  <body class="body">
     <div id="loading">
       <span class="ax-loading" style="width: 60px; height: 60px"
         ><svg viewBox="25 25 50 50"><circle cx="50" cy="50" r="20" /></svg>
@@ -281,7 +281,7 @@
         if (r != null) {
           return unescape(r[2]);
         }
-        return '';
+        return "";
       }
 
       // 修改地址栏参数
@@ -302,8 +302,14 @@
       }
 
       var pnrCode = getQueryString("pnr"); // 获取PNR
-      var otherCode = getQueryString("o")?getQueryString("o"):''; // 获取otheroce
+      var otherCode = getQueryString("o"); // 获取otheroce
       var configType = getQueryString("t"); // 获取渠道
+      var pageType = getQueryString("type");
+
+      console.log(pageType);
+      if (pageType) {
+        $("header").remove();
+      }
 
       getDomData(); // 获取订单详情
 
@@ -913,14 +919,15 @@
               if (data.status === 0) {
                 // 航班信息
 
-                window.open(
+                var newTab = window.open();
+                newTab.opener = null;
+                newTab.location =
                   "/airdetails.html?pnr=" +
-                    data.pnrCode +
-                    (data.otherCode ? "&o=" + data.otherCode : "") +
-                    "&t=" +
-                    configType,
-                  "target"
-                );
+                  data.pnrCode +
+                  (data.otherCode ? "&o=" + data.otherCode : "") +
+                  "&t=" +
+                  configType;
+
                 getDomData();
 
                 $("#selectOrderMessage").removeClass("ax-window-show");
