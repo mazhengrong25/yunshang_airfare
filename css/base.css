@@ -85,3 +85,8 @@ header .tab_header .header_tab_box a.selected::after {
   height: 5px;
   background: #4dbd73;
 }
+
+
+.jump_orderDetail_btn{
+  color: #4dbd73;
+}

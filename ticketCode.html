@@ -2,7 +2,7 @@
  * @Description: 编码查询页面
  * @Author: wish.WuJunLong
  * @Date: 2021-09-16 10:02:51
- * @LastEditTime: 2021-09-16 11:22:40
+ * @LastEditTime: 2021-09-17 17:08:46
  * @LastEditors: wish.WuJunLong
 -->
 <!DOCTYPE html>
@@ -89,7 +89,6 @@
       });
 
       $(".submitSearchPnr").click(function () {
-        console.log($("#searchPnr").val());
         if (!$("#searchPnr").val()) {
           return (
             $("#warning_tip").addClass("ax-window-show"),
@@ -112,8 +111,6 @@
         $("#pnrDetail").html(
           '<iframe id="pnrDetailIframe" width="100%" height="100%" src="' + detailUrl + '" frameborder="0"></iframe>'
         );
-
-        console.log($('iframe').contents().height() + 'is the height')
       });
     </script>
   </body>

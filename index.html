@@ -2,7 +2,7 @@
  * @Description: 首页
  * @Author: wish.WuJunLong
  * @Date: 2021-07-22 16:47:18
- * @LastEditTime: 2021-09-17 15:15:13
+ * @LastEditTime: 2021-09-17 16:55:44
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -63,6 +63,8 @@
                   id="startAddress"
                   value="PVG"
                   placeholder="请输入出发地三字码"
+                  onkeyup="toUpperCase(this)"
+                  style="text-transform:uppercase"
                 />
               </div>
               <div class="list_item">
@@ -72,6 +74,8 @@
                   id="endAddress"
                   value="LHR"
                   placeholder="请输入到达地三字码"
+                  onkeyup="toUpperCase(this)"
+                  style="text-transform:uppercase"
                 />
               </div>
             </div>
@@ -166,6 +170,9 @@
 
     <script src="js/config.js"></script>
     <script>
+      function toUpperCase(obj) {
+        obj.value = obj.value.toUpperCase();
+      }
       // 渠道选择列表
       $(function () {
         var configType = "";

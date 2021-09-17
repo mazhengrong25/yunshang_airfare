@@ -2,7 +2,7 @@
  * @Description: 预定页面
  * @Author: wish.WuJunLong
  * @Date: 2021-08-03 15:57:24
- * @LastEditTime: 2021-09-17 15:15:11
+ * @LastEditTime: 2021-09-17 17:42:02
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -136,7 +136,7 @@
           <div class="ax-tips-btn">
             <button
               type="button"
-              class="ax-btn ax-ripple ax-longer ax-primary ax-window-close"
+              class="success_tip_btn ax-btn ax-ripple ax-longer ax-primary ax-window-close"
             >
               关 闭
             </button>
@@ -448,7 +448,7 @@
           '<div class="list_item">' +
           '<div class="item_name">国籍：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text"/>' +
+          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
@@ -533,7 +533,7 @@
           '<div class="list_item">' +
           '<div class="item_name">国籍：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text"/>' +
+          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
@@ -571,6 +571,10 @@
       }
 
       $(".passenger_box").html(adtData + chdData);
+
+      function toUpperCase(obj) {
+        obj.value = obj.value.toUpperCase();
+      }
 
       // 组装金额数据
       var priceList = "";
@@ -613,7 +617,7 @@
       }
 
       $(".price_list").html(priceList);
-      $(".price_total p").html(totalPrice);
+      $(".price_total p").html(totalPrice.toFixed(2));
       $(".price_total span").html(airMessage.currency);
 
       // 成人乘客日期处理
@@ -737,6 +741,11 @@
         return new Date(year + "-" + month + "-" + date);
       }
 
+
+      $(".success_tip_btn").click(function (){
+        parent.window.backAirList();
+      })
+
       // 预定功能
       $(function () {
         $(".pay_btn").click(function () {
@@ -804,9 +813,7 @@
               console.log(data);
               $("#loading").hide();
               if (data.status === 0) {
-                var newTab = window.open();
-                newTab.opener = null;
-                newTab.location =
+                var newPageUrl =
                   "/airdetails.html?pnr=" +
                   data.pnrCode +
                   "&o=" +
@@ -816,10 +823,24 @@
                   "&t=" +
                   airMessage.validatingCarrier;
 
+                var aLabel = document.createElement("a");
+                //设置链接
+                aLabel.setAttribute("href", newPageUrl);
+                //新窗口打开链接
+                aLabel.setAttribute("target", "_blank");
+                //设置标签ID
+                aLabel.setAttribute("id", "reportpoint");
+                // 防止反复添加
+                if (document.getElementById("reportpoint")) {
+                  document.body.removeChild(document.getElementById("reportpoint"));
+                }
+                document.body.appendChild(aLabel);
+                aLabel.click();
+                console.log("打开链接:", newPageUrl);
+
                 $("#success_tip").addClass("ax-window-show");
-                $(".ax-tips-title").html("航班预定成功");
-                $(".ax-tips-des").html(data.message);
-                parent.window.backAirList();
+                $(".ax-tips-title").html("航班预定成功！");
+                $(".ax-tips-des").html("<a class='jump_orderDetail_btn' href="+newPageUrl+" target='_blank'>前往订单详情页<a/>");
               } else {
                 $("#warning_tip").addClass("ax-window-show");
                 $(".ax-tips-title").html("获取数据失败");
