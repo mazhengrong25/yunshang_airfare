@@ -2,7 +2,7 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-09-16 10:03:11
+ * @LastEditTime: 2021-09-16 16:59:13
  * @LastEditors: wish.WuJunLong
  */
 var config = (function ($) {
@@ -11,7 +11,7 @@ var config = (function ($) {
     SQ: "http://192.168.0.35:6210/sq", // SQ接口地址
     queueplace: "http://192.168.0.35:6303/YATP_19/queueplace", // 出票地址
     configTypeList: ["BA", "SQ"], // 渠道选择列表
-    header: [
+    header: [ // 导航栏地址
       { name: "机票查询", url: "/" },
       { name: "编码查询", url: "/ticketCode.html" },
       { name: "操作日志", url: "#" },
