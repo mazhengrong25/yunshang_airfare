@@ -2,7 +2,7 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-09-16 16:59:13
+ * @LastEditTime: 2021-09-18 11:52:33
  * @LastEditors: wish.WuJunLong
  */
 var config = (function ($) {
@@ -38,6 +38,7 @@ $(".body").prepend(
     '<div class="tab_header">' +
     '<a class="header_logo" href="/">' +
     '<img src="/img/logo.png" alt="logo" />' +
+    "<span>测试版</span>"+
     "</a>" +
     '<div class="header_tab_box">' +
     headerUrl +
