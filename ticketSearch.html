@@ -2,7 +2,7 @@
  * @Description: 航班查询列表
  * @Author: wish.WuJunLong
  * @Date: 2021-09-06 09:22:07
- * @LastEditTime: 2021-09-16 09:56:05
+ * @LastEditTime: 2021-10-12 10:25:40
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -307,7 +307,7 @@
           "</div>";
 
         data =
-          "<div class='list_item ax-lazy' >" +
+          "<div class='list_item ax-lazy'>" +
           "<div class='item_message' onclick='selectAir(" +
           i +
           ")'>" +
@@ -366,6 +366,8 @@
             "）" +
             (searchData.retDate ? " - （" + searchData.retDate + "）" : "")
         );
+
+        console.log(config)
 
         fetch(config.airConfig[searchData.config] + "/search", {
           method: "POST",
