@@ -2,24 +2,24 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-10-12 10:49:19
+ * @LastEditTime: 2021-10-12 11:02:20
  * @LastEditors: wish.WuJunLong
  */
 var baseUrl;
 getObjectType();
 function getObjectType() {
   if (localStorage.getItem("objectType") === "正式版") {
-    baseUrl = "http://192.168.0.15:6210";
+    baseUrl = "http://192.168.0.15";
   } else {
-    baseUrl = "http://192.168.0.35:6212";
+    baseUrl = "http://192.168.0.35";
   }
 }
 
 var config = (function ($) {
   $.airConfig = {
-    BA: baseUrl + "/ba", // BA接口地址
-    SQ: baseUrl + "/sq", // SQ接口地址
-    queueplace: baseUrl + "/YATP_19/queueplace", // 出票地址
+    BA: baseUrl + ":6212/ba", // BA接口地址
+    SQ: baseUrl + ":6210/sq", // SQ接口地址
+    queueplace: baseUrl + ":6303/YATP_19/queueplace", // 出票地址
     configTypeList: ["BA", "SQ"], // 渠道选择列表
     header: [
       // 导航栏地址
