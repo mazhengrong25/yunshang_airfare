@@ -2,7 +2,7 @@
  * @Description: 航班查询列表
  * @Author: wish.WuJunLong
  * @Date: 2021-09-06 09:22:07
- * @LastEditTime: 2021-10-12 10:25:40
+ * @LastEditTime: 2021-10-12 10:49:59
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -366,8 +366,6 @@
             "）" +
             (searchData.retDate ? " - （" + searchData.retDate + "）" : "")
         );
-
-        console.log(config)
 
         fetch(config.airConfig[searchData.config] + "/search", {
           method: "POST",

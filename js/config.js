@@ -2,17 +2,18 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-10-12 10:28:37
+ * @LastEditTime: 2021-10-12 10:49:19
  * @LastEditors: wish.WuJunLong
  */
 var baseUrl;
-
-if (localStorage.getItem("objectType") === "正式版") {
-  baseUrl = "http://192.168.0.15:6210";
-} else {
-  baseUrl = "http://192.168.0.35:6212";
+getObjectType();
+function getObjectType() {
+  if (localStorage.getItem("objectType") === "正式版") {
+    baseUrl = "http://192.168.0.15:6210";
+  } else {
+    baseUrl = "http://192.168.0.35:6212";
+  }
 }
-console.log(localStorage.getItem("objectType"), baseUrl);
 
 var config = (function ($) {
   $.airConfig = {
@@ -69,11 +70,6 @@ if (localStorage.getItem("objectType")) {
 $("#selectObjectType").on("change", function () {
   localStorage.setItem("objectType", $("#selectObjectType").val());
 
-  if ($("#selectObjectType").val() === "正式版") {
-    baseUrl = "http://192.168.0.15";
-  } else {
-    baseUrl = "http://192.168.0.35:6212";
-  }
-  console.log($("#selectObjectType").val(), baseUrl);
+  getObjectType();
   location.reload();
 });
