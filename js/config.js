@@ -2,7 +2,7 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-10-12 11:02:20
+ * @LastEditTime: 2021-10-12 11:32:02
  * @LastEditors: wish.WuJunLong
  */
 var baseUrl;
