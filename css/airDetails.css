@@ -266,9 +266,9 @@ body {
   margin-right: 10px;
   color: #fff;
 }
-.passenger_box .passenger_list {
+/* .passenger_box .passenger_list {
   margin-right: 20px;
-}
+} */
 .passenger_box .passenger_list .list_name {
   min-width: 50px;
   text-align: right;
