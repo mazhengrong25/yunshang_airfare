@@ -2,7 +2,7 @@
  * @Description: 详情页
  * @Author: wish.WuJunLong
  * @Date: 2021-08-31 09:38:41
- * @LastEditTime: 2021-10-19 15:54:28
+ * @LastEditTime: 2021-10-20 11:15:33
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -650,8 +650,14 @@
                   "</div>" +
                   "</div>" +
                   '<div class="passenger_list">' +
+                  '<div class="list_name">性别：</div>' +
+                  '<div class="list_message" style="min-width: 30px;">' +
+                  (passengerData[i].gender === 0?'男':'女') +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="passenger_list">' +
                   '<div class="list_name">国籍：</div>' +
-                  '<div class="list_message">' +
+                  '<div class="list_message" style="min-width: 50px;">' +
                   (passengerData[i].nationality || "-") +
                   "</div>" +
                   "</div>" +
@@ -681,6 +687,12 @@
                   '<div class="list_name">证件号码：</div>' +
                   '<div class="list_message">' +
                   (passengerData[i].cardNumber || "-") +
+                  "</div>" +
+                  "</div>" +
+                  '<div class="passenger_list">' +
+                  '<div class="list_name">证件发行国：</div>' +
+                  '<div class="list_message" style="min-width: 50px;">' +
+                  (passengerData[i].cardIssuePlace || "-") +
                   "</div>" +
                   "</div>" +
                   (airMessage.travelTickets
