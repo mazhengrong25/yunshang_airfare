@@ -2,7 +2,7 @@
  * @Description: 详情页
  * @Author: wish.WuJunLong
  * @Date: 2021-08-31 09:38:41
- * @LastEditTime: 2021-10-20 11:15:33
+ * @LastEditTime: 2021-11-01 10:05:02
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -70,6 +70,14 @@
             id="orderRefundBtn"
           >
             申请退票
+          </button>
+          <button
+            type="button"
+            class="ax-btn ax-ripple ax-ripple"
+            onclick="cancelOrderBtn('abolition')"
+            id="orderAbolitionBtn"
+          >
+            申请废票
           </button>
           <button
             type="button"
@@ -322,7 +330,8 @@
         airTimeDom, // 航段时间
         airDetail, // 航段详情
         airTip, // 航段信息
-        passengerData; // 乘客数据
+        passengerData, // 乘客数据
+        abolitionType;  // 已出票订单废票状态
 
       // 组装航班数据
       function getTicketDetail(val, retVal, type, newAirIndex) {
@@ -606,6 +615,7 @@
               $("#paySubmit").hide();
               $("#orderChangeBtn").hide();
               $("#orderRefundBtn").hide();
+              $("#orderAbolitionBtn").hide()
               if (airMessage.remark === "T-A") {
                 // 未出票状态
                 $("#orderCancelBtn").show();
@@ -613,6 +623,7 @@
               } else {
                 $("#orderChangeBtn").show();
                 $("#orderRefundBtn").show();
+                $("#orderAbolitionBtn").show();
               }
 
               // 组装航班信息
@@ -1404,10 +1415,12 @@
       // $("#ChangeSearch").addClass("ax-window-show");
 
       // 打开取消订单确认框
-      function cancelOrderBtn() {
-        if (airMessage.remark !== "T-A") {
+      function cancelOrderBtn(type) {
+        console.log(airMessage)
+        if (!type && airMessage.remark !== "T-A") {
           return false;
         }
+        abolitionType = type?type: false;
         $("#closeOrderTip").addClass("ax-window-show");
       }
       // 取消订单操作
@@ -1419,7 +1432,7 @@
           pnrCode: pnrCode, //pnr
           otherCode: otherCode,
           remark: null,
-          controlType: 405, // 0：提取编码信息；405：取消编码
+          controlType: abolitionType?406:405, // 0：提取编码信息；405：取消编码; 406 已出票订单废票
         };
         fetch(config.airConfig[airMessage.validatingCarrier] + "/confirm", {
           method: "POST",
@@ -1433,12 +1446,12 @@
             $("#closeOrderTip").removeClass("ax-window-show");
             if (data.status === 0) {
               $("#success_tip").addClass("ax-window-show");
-              $("#success_tip .ax-tips-title").html("取消订单成功");
+              $("#success_tip .ax-tips-title").html(abolitionType?"废票成功":"取消订单成功");
               $("#success_tip .ax-tips-des").html("已获取最新订单数据");
               getDomData();
             } else {
               $("#warning_tip").addClass("ax-window-show");
-              $("#warning_tip .ax-tips-title").html("取消失败");
+              $("#warning_tip .ax-tips-title").html(abolitionType?"废票失败":"取消失败");
               $("#warning_tip .ax-tips-des").html(data.message);
             }
           })
