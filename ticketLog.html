@@ -1,0 +1,242 @@
+<!--
+ * @Description: 操作日志页面
+ * @Author: wish.WuJunLong
+ * @Date: 2021-09-16 10:02:51
+ * @LastEditTime: 2021-11-18 17:23:00
+ * @LastEditors: mzr
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NDC白屏 - 操作日志</title>
+    <link rel="stylesheet" href="./css/ticketLog.css" />
+    <link rel="stylesheet" href="./css/base.css" />
+
+    <link rel="stylesheet" href="plugins/ax.css" />
+    <link rel="stylesheet" href="plugins/mobiscroll.jquery.css" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.ttf" />
+    <link rel="stylesheet" href="plugins/icons_mobiscroll.woff" />
+
+    <link
+      href="https://at.alicdn.com/t/font_1551254_rxrrzgz2kjc.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+  <body class="body">
+    <div class="log_search">
+      <div class="search_list">
+        <div class="search_title">渠道</div>
+        <select class="ax-select" id="configType"></select>
+      </div>
+      <div class="search_list">
+        <div class="search_title">ID</div>
+        <input type="text" id="searchId" />
+      </div>
+      <div class="search_list">
+        <div class="search_title">姓名</div>
+        <input type="text" id="searchName" />
+      </div>
+      <div class="search_list">
+        <div class="search_title">PNR</div>
+        <input type="text" id="searchPnr" />
+      </div>
+      <div class="search_list">
+        <div class="search_title">航班号</div>
+        <input type="text" id="flightNum" />
+      </div>
+      <div class="search_list">
+        <div class="search_title">票号</div>
+        <input type="text" id="ticketNo" />
+      </div>
+      <div class="search_list">
+        <button
+          type="button"
+          onclick="getLogList()"
+          class="ax-btn ax-long ax-primary submitSearchPnr"
+        >
+          查 找
+        </button>
+      </div>
+    </div>
+    <div class="logList">
+      <div id="loading">
+        <span class="ax-loading" style="width: 60px; height: 60px"
+          ><svg viewBox="25 25 50 50">
+            <circle cx="50" cy="50" r="20" />
+          </svg>
+        </span>
+      </div>
+      <table class="ax-table ax-hover ax-align-left" id="table">
+        <thead class="table_thead">
+          <tr>
+            <th>票号</th>
+            <th>PNR编码</th>
+            <th>操作时间</th>
+            <th>操作类型</th>
+            <th>操作结果</th>
+            <th>行程信息</th>
+            <th>信息摘要</th>
+          </tr>
+        </thead>
+        <tbody class="table_tbody"></tbody>
+      </table>
+    </div>
+
+    <script src="plugins/jquery-1.10.2.min.js"></script>
+    <script src="plugins/ax.min.js"></script>
+    <script src="plugins/mobiscroll.jquery.min.js"></script>
+
+    <script src="js/config.js"></script>
+
+    <script>
+      // 渠道选择列表
+      $(function () {
+        var configType = "";
+        for (var i = 0; i < config.airConfig.configTypeList.length; i++) {
+          configType +=
+            "<option value='" +
+            config.airConfig.configTypeList[i] +
+            "'>" +
+            config.airConfig.configTypeList[i] +
+            "</option>";
+        }
+        $("#configType").html(configType);
+      });
+
+      // 获取操作日志列表
+      function getLogList() {
+        $("#loading").show();
+        $(".logList").show();
+        var paramsData = {
+          sessionID: $("#searchId").val(),
+          config: $("#configType").val(),
+          pnrCode: $("#searchPnr").val(),
+          ticketNo: $("#ticketNo").val(),
+          passengerName: $("#searchName").val(),
+          flightNumber: $("#flightNum").val(),
+        };
+        fetch(config.airConfig[$("#configType").val()] + "/logs", {
+          method: "POST",
+          body: JSON.stringify(paramsData),
+        })
+          .then(function (data) {
+            return data.json();
+          })
+          .then(function (data) {
+            $("#loading").hide();
+            if (data.status === 0 && data.logs.length > 0) {
+              // 赋值
+              var tableMessage = data.logs;
+              // 添加数据到表格
+              var tbody = [];
+              for (var data of tableMessage) {
+                var ticketNos = data["ticketNos"];
+                var pnrCode = data["pnrCode"];
+                var upTime = data["upTime"];
+                var actionType = data["actionType"];
+                var actionStatus = data["actionStatus"];
+                var segments = data["segments"];
+                var summary = data["summary"];
+
+                tbody.push(`<tr>
+                  <td>${ticketNos ? ticketNos : "-"}</td>
+                  <td>${pnrCode ? pnrCode : "-"}</td>
+                  <td>${upTime}</td>
+                  <td>
+                    ${
+                      actionType === 0
+                        ? "生单"
+                        : actionType === 1
+                        ? "出票"
+                        : actionType === 2
+                        ? "拆分订单"
+                        : actionType === 3
+                        ? "改期"
+                        : actionType === 4
+                        ? "退票"
+                        : actionType === 5
+                        ? "取消编码"
+                        : actionType === 6
+                        ? "废票"
+                        : "-"
+                    }
+                  </td>
+                  <td>${
+                    actionStatus === 0
+                      ? "成功"
+                      : actionStatus === 1
+                      ? "网络错误"
+                      : actionStatus === 2
+                      ? "非法IP"
+                      : actionStatus === 3
+                      ? "操作失败"
+                      : actionStatus === 4
+                      ? "请求参数错误"
+                      : actionStatus === 5
+                      ? "程序异常"
+                      : actionStatus === 6
+                      ? "白名单"
+                      : actionStatus === 7
+                      ? "航司过滤"
+                      : actionStatus === 8
+                      ? "配置未找到"
+                      : actionStatus === 9
+                      ? "访问超时"
+                      : actionStatus === 10
+                      ? "访问频繁"
+                      : actionStatus === 11
+                      ? "店铺已关闭"
+                      : actionStatus === 12
+                      ? "国籍限制"
+                      : actionStatus === 13
+                      ? "匹配错误"
+                      : actionStatus === 14
+                      ? "身份错误"
+                      : actionStatus === 19
+                      ? "价格变动"
+                      : actionStatus === 20
+                      ? "无座"
+                      : actionStatus === 21
+                      ? "不可预定"
+                      : actionStatus === 22
+                      ? "可销售日期错误"
+                      : actionStatus === 23
+                      ? "暂不支持此航程类型"
+                      : actionStatus === 24
+                      ? "汇率获取失败"
+                      : actionStatus === 25
+                      ? "小团价"
+                      : actionStatus === 26
+                      ? "编码已取消"
+                      : actionStatus === 27
+                      ? "编码已出票"
+                      : actionStatus === 28
+                      ? "队列执行完毕"
+                      : actionStatus === 30
+                      ? "方法为实现"
+                      : actionStatus === 96
+                      ? "没有航班"
+                      : actionStatus === 97
+                      ? "暂不支持此方法"
+                      : actionStatus === 98
+                      ? "返回数据格式错误"
+                      : actionStatus === 99
+                      ? "未设置"
+                      : ""
+                  }</td>
+                  <td>${segments ? segments : "-"}</td>
+                  <td>${summary}</td>
+                  </tr>`);
+              }
+
+              $("#table .table_tbody").html(tbody);
+            }
+          });
+      }
+    </script>
+  </body>
+</html>

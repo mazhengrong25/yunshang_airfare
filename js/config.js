@@ -2,8 +2,8 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-11-18 09:26:32
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-11-18 10:01:15
+ * @LastEditors: mzr
  */
 var baseUrl = 'http://192.168.0.35:6601';
 // getObjectType();
@@ -28,7 +28,7 @@ var config = (function ($) {
       // 导航栏地址
       { name: "机票查询", url: "/" },
       { name: "编码查询", url: "/ticketCode.html" },
-      { name: "操作日志", url: "#" },
+      { name: "操作日志", url: "/ticketLog.html" },
     ],
   };
   return $;
@@ -48,21 +48,21 @@ for (var i = 0; i < config.airConfig.header.length; i++) {
 }
 $(".body").prepend(
   "<header>" +
-    '<div class="tab_header">' +
-    '<div class="header_logo_box">' +
-    '<a class="header_logo" href="/">' +
-    '<img src="/img/logo.png" alt="logo" />' +
-    "</a>" +
-    // '<select class="ax-select" id="selectObjectType">' +
-    // '<option value="测试版">测试版</option>' +
-    // '<option value="正式版">正式版</option>' +
-    // "</select>" +
-    "</div>" +
-    '<div class="header_tab_box">' +
-    headerUrl +
-    "</div>" +
-    "</div>" +
-    "</header>"
+  '<div class="tab_header">' +
+  '<div class="header_logo_box">' +
+  '<a class="header_logo" href="/">' +
+  '<img src="/img/logo.png" alt="logo" />' +
+  "</a>" +
+  // '<select class="ax-select" id="selectObjectType">' +
+  // '<option value="测试版">测试版</option>' +
+  // '<option value="正式版">正式版</option>' +
+  // "</select>" +
+  "</div>" +
+  '<div class="header_tab_box">' +
+  headerUrl +
+  "</div>" +
+  "</div>" +
+  "</header>"
 );
 
 // if (localStorage.getItem("objectType")) {
