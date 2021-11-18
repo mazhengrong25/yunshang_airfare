@@ -2,24 +2,27 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-10-12 11:32:02
+ * @LastEditTime: 2021-11-18 09:26:32
  * @LastEditors: wish.WuJunLong
  */
-var baseUrl;
-getObjectType();
+var baseUrl = 'http://192.168.0.35:6601';
+// getObjectType();
 function getObjectType() {
-  if (localStorage.getItem("objectType") === "正式版") {
-    baseUrl = "http://192.168.0.15";
-  } else {
-    baseUrl = "http://192.168.0.35";
-  }
+  // if (localStorage.getItem("objectType") === "正式版") {
+  //   baseUrl = "http://192.168.0.15";
+  // } else {
+  //   baseUrl = "http://192.168.0.35";
+  // }
 }
 
 var config = (function ($) {
   $.airConfig = {
-    BA: baseUrl + ":6212/ba", // BA接口地址
-    SQ: baseUrl + ":6210/sq", // SQ接口地址
-    queueplace: baseUrl + ":6303/YATP_19/queueplace", // 出票地址
+    // BA: baseUrl + ":6212/ba", // BA接口地址
+    // SQ: baseUrl + ":6210/sq", // SQ接口地址
+    // queueplace: baseUrl + ":6303/YATP_19/queueplace", // 出票地址
+    BA: baseUrl + "/ba", // BA接口地址
+    SQ: baseUrl + "/sq", // SQ接口地址
+    queueplace: baseUrl + "/YATP_19/queueplace", // 出票地址
     configTypeList: ["BA", "SQ"], // 渠道选择列表
     header: [
       // 导航栏地址
@@ -49,12 +52,11 @@ $(".body").prepend(
     '<div class="header_logo_box">' +
     '<a class="header_logo" href="/">' +
     '<img src="/img/logo.png" alt="logo" />' +
-    // "<span>测试版</span>"+
     "</a>" +
-    '<select class="ax-select" id="selectObjectType">' +
-    '<option value="测试版">测试版</option>' +
-    '<option value="正式版">正式版</option>' +
-    "</select>" +
+    // '<select class="ax-select" id="selectObjectType">' +
+    // '<option value="测试版">测试版</option>' +
+    // '<option value="正式版">正式版</option>' +
+    // "</select>" +
     "</div>" +
     '<div class="header_tab_box">' +
     headerUrl +
@@ -63,13 +65,13 @@ $(".body").prepend(
     "</header>"
 );
 
-if (localStorage.getItem("objectType")) {
-  $("#selectObjectType").val(localStorage.getItem("objectType"));
-}
+// if (localStorage.getItem("objectType")) {
+//   $("#selectObjectType").val(localStorage.getItem("objectType"));
+// }
 
-$("#selectObjectType").on("change", function () {
-  localStorage.setItem("objectType", $("#selectObjectType").val());
+// $("#selectObjectType").on("change", function () {
+//   localStorage.setItem("objectType", $("#selectObjectType").val());
 
-  getObjectType();
-  location.reload();
-});
+//   getObjectType();
+//   location.reload();
+// });
