@@ -28,7 +28,7 @@ body {
 }
 /* 航班信息 */
 .air_message {
-  padding: 10px;
+  padding: 10px 25px;
   margin-bottom: 20px;
 }
 .air_message .message_list {
@@ -235,7 +235,7 @@ body {
 
 /* 乘客信息 */
 .air_passenger {
-  padding: 10px;
+  padding: 10px 25px;
   background-color: #fff;
   margin-bottom: 20px;
 }
@@ -285,7 +285,7 @@ body {
 
 /* 金额明细 */
 .air_price {
-  padding: 10px;
+  padding: 10px 25px 30px;
   background: #fff;
 }
 .air_price .price_header {

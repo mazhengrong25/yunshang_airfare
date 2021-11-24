@@ -2,8 +2,8 @@
  * @Description: 航班查询列表
  * @Author: wish.WuJunLong
  * @Date: 2021-09-06 09:22:07
- * @LastEditTime: 2021-10-12 10:49:59
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-11-23 15:11:01
+ * @LastEditors: mzr
 -->
 
 <!DOCTYPE html>
@@ -134,7 +134,8 @@
         var dateStart = new Date(val[0].depTime);
         var dateEnd = new Date(val[val.length - 1].arrTime);
         var difValue = parseInt(
-          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) / (1000 * 60 * 60 * 24)
+          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) /
+            (1000 * 60 * 60 * 24)
         );
 
         airTimeDom =
@@ -147,7 +148,9 @@
             ? "0" + dateStart.getMinutes()
             : dateStart.getMinutes()) +
           " - " +
-          (dateEnd.getHours() < 10 ? "0" + dateEnd.getHours() : dateEnd.getHours()) +
+          (dateEnd.getHours() < 10
+            ? "0" + dateEnd.getHours()
+            : dateEnd.getHours()) +
           ":" +
           (dateEnd.getMinutes() < 10
             ? "0" + dateEnd.getMinutes()
@@ -177,7 +180,9 @@
               ) > 0
                 ? "<span>+" +
                   parseInt(
-                    (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                    (getNotTimeDate(
+                      new Date(retVal[retVal.length - 1].arrTime)
+                    ) -
                       getNotTimeDate(new Date(retVal[0].depTime))) /
                       (1000 * 60 * 60 * 24)
                   ) +
@@ -283,7 +288,8 @@
           "<div class='message_content message_air_type' >" +
           (val.length > 1 ? "中转 +" + (val.length - 1) : "直达") +
           (retVal.length > 0
-            ? "," + (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
+            ? "," +
+              (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
             : "") +
           "<img src='/img/air_type_btn.png' alt='航段按钮' />" +
           "</div>" +
@@ -387,7 +393,9 @@
                 $("#notAirList").hide();
               }
               // 数据总数
-              $(".search_air_number").text(airList.length + "/" + airList.length);
+              $(".search_air_number").text(
+                airList.length + "/" + airList.length
+              );
 
               var listDom = $(".ticket_list");
 
@@ -440,16 +448,18 @@
       // 选中航班列表
       function selectAir(val) {
         // $(".ticket_list .list_item").children(".item_air_detail").hide();
-        let children = $(".ticket_list .list_item").children(".item_air_detail")[val];
+        let children = $(".ticket_list .list_item").children(
+          ".item_air_detail"
+        )[val];
         $(children).toggle();
         if ($(children).is(":visible")) {
-          $($(".ticket_list .list_item").children(".item_box_tip")[val]).addClass(
-            "active"
-          );
+          $(
+            $(".ticket_list .list_item").children(".item_box_tip")[val]
+          ).addClass("active");
         } else {
-          $($(".ticket_list .list_item").children(".item_box_tip")[val]).removeClass(
-            "active"
-          );
+          $(
+            $(".ticket_list .list_item").children(".item_box_tip")[val]
+          ).removeClass("active");
         }
         console.log();
       }

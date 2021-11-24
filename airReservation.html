@@ -2,8 +2,8 @@
  * @Description: 预定页面
  * @Author: wish.WuJunLong
  * @Date: 2021-08-03 15:57:24
- * @LastEditTime: 2021-10-20 10:58:45
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-11-24 14:19:23
+ * @LastEditors: mzr
 -->
 
 <!DOCTYPE html>
@@ -36,7 +36,8 @@
     <div class="air_reservation">
       <div class="air_header">
         <div class="air_title">机票预定</div>
-        <button class="air_back_btn ax-primary ax-btn ax-ripple">返 回</button>
+        <!-- <button class="air_back_btn ax-primary ax-btn ax-ripple">返回</button> -->
+        <button class="air_back_btn">返回</button>
       </div>
       <div class="air_message"></div>
 
@@ -95,7 +96,10 @@
           </div>
         </div>
 
-        <button type="button" class="pay_btn ax-btn ax-ripple ax-primary ax-square">
+        <button
+          type="button"
+          class="pay_btn ax-btn ax-ripple ax-primary ax-square"
+        >
           预 定
         </button>
       </div>
@@ -136,7 +140,10 @@
           <div class="ax-tips-btn">
             <button
               type="button"
-              class="success_tip_btn ax-btn ax-ripple ax-longer ax-primary ax-window-close"
+              class="
+                success_tip_btn
+                ax-btn ax-ripple ax-longer ax-primary ax-window-close
+              "
             >
               关 闭
             </button>
@@ -166,7 +173,9 @@
       sessionStorage.removeItem("airMessage");
       console.log(airMessage);
       // 乘客信息
-      var passengerData = JSON.parse(sessionStorage.getItem("passengerMessage"));
+      var passengerData = JSON.parse(
+        sessionStorage.getItem("passengerMessage")
+      );
       sessionStorage.removeItem("passengerMessage");
 
       // 组装航班数据
@@ -186,7 +195,8 @@
         var dateStart = new Date(val[0].depTime);
         var dateEnd = new Date(val[val.length - 1].arrTime);
         var difValue = parseInt(
-          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) / (1000 * 60 * 60 * 24)
+          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) /
+            (1000 * 60 * 60 * 24)
         );
 
         airTimeDom =
@@ -199,7 +209,9 @@
             ? "0" + dateStart.getMinutes()
             : dateStart.getMinutes()) +
           " - " +
-          (dateEnd.getHours() < 10 ? "0" + dateEnd.getHours() : dateEnd.getHours()) +
+          (dateEnd.getHours() < 10
+            ? "0" + dateEnd.getHours()
+            : dateEnd.getHours()) +
           ":" +
           (dateEnd.getMinutes() < 10
             ? "0" + dateEnd.getMinutes()
@@ -229,7 +241,9 @@
               ) > 0
                 ? "<span>+" +
                   parseInt(
-                    (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                    (getNotTimeDate(
+                      new Date(retVal[retVal.length - 1].arrTime)
+                    ) -
                       getNotTimeDate(new Date(retVal[0].depTime))) /
                       (1000 * 60 * 60 * 24)
                   ) +
@@ -333,7 +347,8 @@
           "<div class='message_content message_air_type'>" +
           (val.length > 1 ? "中转 +" + (val.length - 1) : "直达") +
           (retVal.length > 0
-            ? "," + (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
+            ? "," +
+              (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
             : "") +
           "</div>" +
           "</div>" +
@@ -610,15 +625,19 @@
           passengerData.adultNumber > 0 &&
           airMessage.fareQuotes[i].passengerType === 0
         ) {
-          totalPrice += airMessage.fareQuotes[i].price * passengerData.adultNumber;
-          totalPrice += airMessage.fareQuotes[i].tax * passengerData.adultNumber;
+          totalPrice +=
+            airMessage.fareQuotes[i].price * passengerData.adultNumber;
+          totalPrice +=
+            airMessage.fareQuotes[i].tax * passengerData.adultNumber;
         }
         if (
           passengerData.childNumber > 0 &&
           airMessage.fareQuotes[i].passengerType === 1
         ) {
-          totalPrice += airMessage.fareQuotes[i].price * passengerData.childNumber;
-          totalPrice += airMessage.fareQuotes[i].tax * passengerData.childNumber;
+          totalPrice +=
+            airMessage.fareQuotes[i].price * passengerData.childNumber;
+          totalPrice +=
+            airMessage.fareQuotes[i].tax * passengerData.childNumber;
         }
       }
 
@@ -747,10 +766,9 @@
         return new Date(year + "-" + month + "-" + date);
       }
 
-
-      $(".success_tip_btn").click(function (){
+      $(".success_tip_btn").click(function () {
         parent.window.backAirList();
-      })
+      });
 
       // 预定功能
       $(function () {
@@ -839,7 +857,9 @@
                 aLabel.setAttribute("id", "reportpoint");
                 // 防止反复添加
                 if (document.getElementById("reportpoint")) {
-                  document.body.removeChild(document.getElementById("reportpoint"));
+                  document.body.removeChild(
+                    document.getElementById("reportpoint")
+                  );
                 }
                 document.body.appendChild(aLabel);
                 aLabel.click();
@@ -847,7 +867,11 @@
 
                 $("#success_tip").addClass("ax-window-show");
                 $(".ax-tips-title").html("航班预定成功！");
-                $(".ax-tips-des").html("<a class='jump_orderDetail_btn' href="+newPageUrl+" target='_blank'>前往订单详情页<a/>");
+                $(".ax-tips-des").html(
+                  "<a class='jump_orderDetail_btn' href=" +
+                    newPageUrl +
+                    " target='_blank'>前往订单详情页<a/>"
+                );
               } else {
                 $("#warning_tip").addClass("ax-window-show");
                 $(".ax-tips-title").html("获取数据失败");
@@ -858,7 +882,9 @@
               $("#loading").hide();
               $("#warning_tip").addClass("ax-window-show");
               $(".ax-tips-title").html("访问错误");
-              $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
+              $(".ax-tips-des").html(
+                "数据获取失败，请检查网络连接或联系管理员"
+              );
             });
         });
       });

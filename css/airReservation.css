@@ -22,12 +22,16 @@
   text-align: right;
   height: 30px;
   line-height: 30px;
-  background: #3abfc2;
+  width: 110px;
+  background-color: #3ABFC2;
   border-radius: 5px;
   text-transform: uppercase;
 }
+.air_header .air_back_btn :hover {
+  
+}
 .air_message {
-  padding: 10px;
+  padding: 10px 25px;
   margin-bottom: 20px;
 }
 .air_message .message_list {
@@ -249,7 +253,7 @@
 /* 乘客数据 */
 .passenger_box {
   background: #fff;
-  padding: 10px;
+  padding: 10px 25px;
   margin-bottom: 20px;
 }
 .passenger_box .box_list {
@@ -282,7 +286,7 @@
 /* 联系人 */
 .contact_box {
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 10px 25px 30px;
   background-color: #fff;
 }
 .contact_box .contact_title {
@@ -304,7 +308,7 @@
 /* 金额计算 */
 .price_box {
   background: #fff;
-  padding: 10px;
+  padding: 10px 25px 30px;
   text-align: right;
 }
 .price_box > div {
