@@ -2,24 +2,24 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-11-18 10:01:15
- * @LastEditors: mzr
+ * @LastEditTime: 2021-11-24 09:30:53
+ * @LastEditors: wish.WuJunLong
  */
-var baseUrl = 'http://192.168.0.35:6601';
-// getObjectType();
-function getObjectType() {
-  // if (localStorage.getItem("objectType") === "正式版") {
-  //   baseUrl = "http://192.168.0.15";
-  // } else {
-  //   baseUrl = "http://192.168.0.35";
-  // }
+
+var isTest = true; // true测试 false正式
+
+var baseUrl;
+
+if (isTest) {
+  // 测试地址
+  baseUrl = "http://192.168.0.35:6601";
+} else {
+  // 正式地址
+  baseUrl = "http://192.168.0.15:6601";
 }
 
 var config = (function ($) {
   $.airConfig = {
-    // BA: baseUrl + ":6212/ba", // BA接口地址
-    // SQ: baseUrl + ":6210/sq", // SQ接口地址
-    // queueplace: baseUrl + ":6303/YATP_19/queueplace", // 出票地址
     BA: baseUrl + "/ba", // BA接口地址
     SQ: baseUrl + "/sq", // SQ接口地址
     queueplace: baseUrl + "/YATP_19/queueplace", // 出票地址
@@ -48,30 +48,16 @@ for (var i = 0; i < config.airConfig.header.length; i++) {
 }
 $(".body").prepend(
   "<header>" +
-  '<div class="tab_header">' +
-  '<div class="header_logo_box">' +
-  '<a class="header_logo" href="/">' +
-  '<img src="/img/logo.png" alt="logo" />' +
-  "</a>" +
-  // '<select class="ax-select" id="selectObjectType">' +
-  // '<option value="测试版">测试版</option>' +
-  // '<option value="正式版">正式版</option>' +
-  // "</select>" +
-  "</div>" +
-  '<div class="header_tab_box">' +
-  headerUrl +
-  "</div>" +
-  "</div>" +
-  "</header>"
+    '<div class="tab_header">' +
+    '<div class="header_logo_box">' +
+    '<a class="header_logo" href="/">' +
+    '<img src="/img/logo.png" alt="logo" />' +
+    "</a>" +
+    (isTest ? "测试版" : "正式版") +
+    "</div>" +
+    '<div class="header_tab_box">' +
+    headerUrl +
+    "</div>" +
+    "</div>" +
+    "</header>"
 );
-
-// if (localStorage.getItem("objectType")) {
-//   $("#selectObjectType").val(localStorage.getItem("objectType"));
-// }
-
-// $("#selectObjectType").on("change", function () {
-//   localStorage.setItem("objectType", $("#selectObjectType").val());
-
-//   getObjectType();
-//   location.reload();
-// });

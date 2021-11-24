@@ -271,8 +271,17 @@
 }
 .passenger_box .box_list .list_item .item_name {
   display: inline-block;
-  min-width: 70px;
+  min-width: 80px;
   text-align: right;
+}
+.passenger_box .box_list .list_item .item_name .from_required {
+  color: red;
+  margin-right: 2px;
+}
+.passenger_box .box_list .list_item .item_name .is_from_required {
+  color: red;
+  margin-right: 2px;
+  display: none;
 }
 .passenger_box .box_list .list_item .item_input {
   display: inline-block;
@@ -310,14 +319,16 @@
 .price_box > div {
   margin-bottom: 10px;
 }
-.price_box .price_main{
+.price_box .price_main {
   text-align: justify;
   text-align-last: justify;
 }
-.price_box .price_list{
+.price_box .price_list {
   display: inline-block;
+  text-align-last: left;
+  text-align: left;
 }
-.price_box .price_list .price_list_item{
+.price_box .price_list .price_list_item {
   text-align: left;
   font-size: 16px;
   font-weight: bold;

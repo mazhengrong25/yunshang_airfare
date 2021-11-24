@@ -2,7 +2,7 @@
  * @Description: 详情页
  * @Author: wish.WuJunLong
  * @Date: 2021-08-31 09:38:41
- * @LastEditTime: 2021-11-01 10:05:02
+ * @LastEditTime: 2021-11-22 09:44:05
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -632,6 +632,7 @@
               // 组装乘客信息
               var adtNumber = 0; // 成人数量
               var chdNumber = 0; // 儿童数量
+              var infNumber = 0; // 婴儿数量
               passengerData = airMessage.travelPassengers; // 乘客数据
               var passengerList = ""; // 乘客数据dom
               for (var i = 0; i < passengerData.length; i++) {
@@ -641,12 +642,15 @@
                 if (passengerData[i].passengerType === 1) {
                   chdNumber += 1;
                 }
+                if (passengerData[i].passengerType === 2) {
+                  infNumber += 1;
+                }
                 passengerList +=
                   '<div class="passenger_box">' +
                   '<div class="passenger_type" style="background: ' +
-                  (passengerData[i].passengerType === 0 ? "#4dbd73" : "#3b97e6") +
+                  (passengerData[i].passengerType === 0 ? "#4dbd73" : passengerData[i].passengerType === 1 ? "#3b97e6" : "#FF87CA") +
                   '">' +
-                  (passengerData[i].passengerType === 0 ? "成" : "童") +
+                  (passengerData[i].passengerType === 0 ? "成" : passengerData[i].passengerType === 1 ? "童" : "婴") +
                   "</div>" +
                   '<div class="passenger_list">' +
                   '<div class="list_name">名(First)：</div>' +
@@ -732,10 +736,14 @@
                   priceTotal += chdNumber * priceData[i].price;
                   priceTotal += chdNumber * priceData[i].tax;
                 }
+                if (passengerData[i].passengerType === 2) {
+                  priceTotal += infNumber * priceData[i].price;
+                  priceTotal += infNumber * priceData[i].tax;
+                }
                 priceList +=
                   '<div class="price_box">' +
                   '<div class="price_title">' +
-                  (priceData[i].passengerType === 0 ? "成人" : "儿童") +
+                  (priceData[i].passengerType === 0 ? "成人" : priceData[i].passengerType === 1 ? "儿童" : "婴儿") +
                   "</div>" +
                   '<div class="price_list">' +
                   '<div class="list_item">票面价：</div>' +
@@ -747,7 +755,7 @@
                   priceData[i].price +
                   "</p>" +
                   '<p class="number">x ' +
-                  (priceData[i].passengerType === 0 ? adtNumber : chdNumber) +
+                  (priceData[i].passengerType === 0 ? adtNumber : priceData[i].passengerType === 0 ? chdNumber : infNumber) +
                   "</p>" +
                   "</div>" +
                   "</div>" +
@@ -761,7 +769,7 @@
                   priceData[i].tax +
                   "</p>" +
                   '<p class="number">x ' +
-                  (priceData[i].passengerType === 0 ? adtNumber : chdNumber) +
+                    (priceData[i].passengerType === 0 ? adtNumber : priceData[i].passengerType === 0 ? chdNumber : infNumber) +
                   "</p>" +
                   "</div>" +
                   "</div>" +
@@ -908,9 +916,11 @@
         // 判断是否有儿童乘客
         var passChdNumber = 0;
         var passAdtNumber = 0;
+        var passInfNumber = 0;
         for (let i = 0; i < selectList.length; i++) {
           if (selectList[i].passengerType === 0) {
             passChdNumber += 1;
+            passInfNumber += 1;
             passAdtNumber += 1;
           }
         }
@@ -1031,6 +1041,7 @@
               // 组装退票金额明细
               var adtNumber = 0; // 成人数量
               var chdNumber = 0; // 儿童数量
+              var infNumber = 0; // 儿童数量
               passengerData = airMessage.travelPassengers; // 乘客数据
               for (var i = 0; i < passengerData.length; i++) {
                 if (passengerData[i].passengerType === 0) {
@@ -1038,6 +1049,9 @@
                 }
                 if (passengerData[i].passengerType === 1) {
                   chdNumber += 1;
+                }
+                if (passengerData[i].passengerType === 2) {
+                  infNumber += 1;
                 }
               }
 
@@ -1058,7 +1072,7 @@
                   data.refunds[i].penalty +
                   "</p>" +
                   '<p class="number">x ' +
-                  (data.refunds[i].passengerType === 0 ? adtNumber : chdNumber) +
+                  (data.refunds[i].passengerType === 0 ? adtNumber : data.refunds[i].passengerType === 1 ? chdNumber : infNumber) +
                   "</p>" +
                   "</div>" +
                   "</div>" +
@@ -1072,7 +1086,7 @@
                   data.refunds[i].refund +
                   "</p>" +
                   '<p class="number">x ' +
-                  (data.refunds[i].passengerType === 0 ? adtNumber : chdNumber) +
+                    (data.refunds[i].passengerType === 0 ? adtNumber : data.refunds[i].passengerType === 1 ? chdNumber : infNumber) +
                   "</p>" +
                   "</div>" +
                   "</div>" +

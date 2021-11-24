@@ -2,7 +2,7 @@
  * @Description: 预定页面
  * @Author: wish.WuJunLong
  * @Date: 2021-08-03 15:57:24
- * @LastEditTime: 2021-10-20 10:58:45
+ * @LastEditTime: 2021-11-22 13:43:49
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -399,6 +399,7 @@
       // 组装乘客信息
       var adtData = [];
       var chdData = [];
+      var infData = [];
 
       for (let i = 0; i < passengerData.adultNumber; i++) {
         adtData +=
@@ -415,7 +416,7 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">性别：</div>' +
+          '<div class="item_name"><span class="from_required">*</span>性别：</div>' +
           '<div class="item_input">' +
           '<select class="ax-select ax-square pas_data">' +
           '<option value="0">男</option>' +
@@ -424,13 +425,13 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">名(First)：</div>' +
+          '<div class="item_name"><span class="from_required">*</span>名(First)：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入名(First)" value="" class="ax-md pas_data" type="text"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">姓(Last)：</div>' +
+          '<div class="item_name"><span class="from_required">*</span>姓(Last)：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入姓(Last)" value="" class="ax-md pas_data" type="text"/>' +
           "</div>" +
@@ -446,13 +447,13 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">国籍：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">证件类型：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件类型：</div>' +
           '<div class="item_input">' +
           '<select class="ax-select ax-square pas_data">' +
           '<option value="PP">护照</option>' +
@@ -467,13 +468,13 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">证件号码：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件号码：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入证件号码" value="" class="ax-md pas_data" type="text"/>' +
+          '<input placeholder="输入证件号码" onblur="passengerCardStatus('+0+','+i+')" value="" class="ax-md pas_data passenger_number" type="text"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">到期日期：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入证件到期日期" name="date" value="" class="ax-md pas_data" id="pas_cardExpired_' +
           i +
@@ -483,7 +484,7 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">证件发行国：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件发行国：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入证件发行国" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
           "</div>" +
@@ -506,7 +507,7 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">性别：</div>' +
+          '<div class="item_name"><span class="from_required">*</span>性别：</div>' +
           '<div class="item_input">' +
           '<select class="ax-select ax-square pas_data">' +
           '<option value="0">男</option>' +
@@ -515,13 +516,13 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">名(First)：</div>' +
+          '<div class="item_name"><span class="from_required">*</span>名(First)：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入名(First)" value="" class="ax-md pas_data" type="text"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">姓(Last)：</div>' +
+          '<div class="item_name"><span class="from_required">*</span>姓(Last)：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入姓(Last)" value="" class="ax-md pas_data" type="text"/>' +
           "</div>" +
@@ -535,15 +536,15 @@
           i +
           ')"/>' +
           "</div>" +
-          "</div>" +
+          "</div>" + 
           '<div class="list_item">' +
-          '<div class="item_name">国籍：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">证件类型：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件类型：</div>' +
           '<div class="item_input">' +
           '<select class="ax-select ax-square pas_data">' +
           '<option value="PP">护照</option>' +
@@ -558,13 +559,13 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">证件号码：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件号码：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入证件号码" value="" class="ax-md pas_data" type="text"/>' +
+          '<input placeholder="输入证件号码" value="" onblur="passengerCardStatus('+1+','+i+')" class="ax-md pas_data passenger_number" type="text"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">到期日期：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入证件到期日期" value="" class="ax-md pas_data" type="text" id="pas_chd_cardExpired_' +
           i +
@@ -576,10 +577,123 @@
           "</div>";
       }
 
-      $(".passenger_box").html(adtData + chdData);
+      for (let i = 0; i < passengerData.infantNumber; i++) {
+        infData +=
+          '<div class="box_list">' +
+          '<div class="box_title">乘客 ' +
+          (passengerData.childNumber + passengerData.adultNumber + i + 1) +
+          " - 婴儿</div>" +
+          '<div class="list_item" style="display: none">' +
+          '<div class="item_name">乘客类型：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-select ax-square pas_data">' +
+          '<option value="2">婴儿</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="from_required">*</span>性别：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-select ax-square pas_data">' +
+          '<option value="0">男</option>' +
+          '<option value="1">女</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="from_required">*</span>名(First)：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入名(First)" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="from_required">*</span>姓(Last)：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入姓(Last)" value="" class="ax-md pas_data" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name">出生日期：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入出生日期" value="" class="ax-md pas_data" type="text" id="pas_chd_birthday_' +
+          i +
+          '" onfocus="getCHDBirthdayTimeDate(' +
+          i +
+          ')"/>' +
+          "</div>" +
+          "</div>" + 
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件类型：</div>' +
+          '<div class="item_input">' +
+          '<select class="ax-select ax-square pas_data">' +
+          '<option value="PP">护照</option>' +
+          '<option value="OT">其他</option>' +
+          '<option value="ID">身份证</option>' +
+          '<option value="GA">港澳通行证</option>' +
+          '<option value="TW">台湾通行证</option>' +
+          '<option value="TB">台胞证</option>' +
+          '<option value="HX">回乡证</option>' +
+          '<option value="HY">国际海员证</option>' +
+          "</select>" +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件号码：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入证件号码" value="" onblur="passengerCardStatus('+2+','+i+')" class="ax-md pas_data passenger_number" type="text"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入证件到期日期" value="" class="ax-md pas_data" type="text" id="pas_chd_cardExpired_' +
+          i +
+          '" onfocus="getCHDCardExpiredTimeDate(' +
+          i +
+          ')"/>' +
+          "</div>" +
+          "</div>" +
+          "</div>";
+      }
+
+
+      $(".passenger_box").html(adtData + chdData + infData);
 
       function toUpperCase(obj) {
         obj.value = obj.value.toUpperCase();
+      }
+
+      // 证件号码移出回调 type 0 成人 1 儿童  val 下标
+      function passengerCardStatus(type,index){
+        let cardNumber  // 证件号码输入框值
+        let newIndex  // 当前乘客列表表单下标
+
+        // 根据输入框类型组装下标
+        if(type === 0){
+          newIndex = index
+        }else if(type === 1){
+          newIndex = index + passengerData.adultNumber
+        }else if(type === 2){
+          newIndex = index + passengerData.adultNumber + passengerData.childNumber
+        }
+
+        cardNumber = $($("input.passenger_number")[newIndex]).val()
+          for (let i = 0; i < $(".passenger_box .box_list")[newIndex].childNodes.length; i++) {
+            let item = $(".passenger_box .box_list")[newIndex].childNodes[i]
+            if(cardNumber !== ""){
+              $(item).find(".is_from_required").show()
+            }else {
+              $(item).find(".is_from_required").hide()
+            }
+          }
+
+
       }
 
       // 组装金额数据
@@ -588,20 +702,24 @@
       for (let i = 0; i < airMessage.fareQuotes.length; i++) {
         priceList +=
           '<div class="price_list_item">' +
-          (airMessage.fareQuotes[i].passengerType === 0 ? "成人" : "儿童") +
+          (airMessage.fareQuotes[i].passengerType === 0 ? "成人" : airMessage.fareQuotes[i].passengerType === 1 ? "儿童" : "婴儿") +
           '<div class="price_tip">机票单价：<span>' +
           airMessage.fareQuotes[i].price +
           "</span> x" +
           (airMessage.fareQuotes[i].passengerType === 0
             ? passengerData.adultNumber
-            : passengerData.childNumber) +
+            :airMessage.fareQuotes[i].passengerType === 1
+            ? passengerData.childNumber
+            : passengerData.infantNumber) +
           "</div>" +
           '<div class="price_tip">附加费用：<span>' +
           airMessage.fareQuotes[i].tax +
           "</span> x" +
           (airMessage.fareQuotes[i].passengerType === 0
             ? passengerData.adultNumber
-            : passengerData.childNumber) +
+            : airMessage.fareQuotes[i].passengerType === 1
+            ? passengerData.childNumber
+            : passengerData.infantNumber) +
           "</div>" +
           "</div>";
 
@@ -619,6 +737,13 @@
         ) {
           totalPrice += airMessage.fareQuotes[i].price * passengerData.childNumber;
           totalPrice += airMessage.fareQuotes[i].tax * passengerData.childNumber;
+        }
+        if (
+          passengerData.infantNumber > 0 &&
+          airMessage.fareQuotes[i].passengerType === 2
+        ) {
+          totalPrice += airMessage.fareQuotes[i].price * passengerData.infantNumber;
+          totalPrice += airMessage.fareQuotes[i].tax * passengerData.infantNumber;
         }
       }
 
