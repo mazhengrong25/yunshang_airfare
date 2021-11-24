@@ -145,6 +145,11 @@ main .air_message_content {
   margin-bottom: 15px;
 }
 
+.search_main .search_input_box .search_list_three .list_item{
+  display: inline-block;
+  width: 33%;
+}
+
 .search_main .search_input_box .search_list .list_item {
   display: inline-block;
   width: 49%;
@@ -153,7 +158,12 @@ main .air_message_content {
 .search_main .search_input_box .list_item.ret_item{
   display: none;
 }
-
+.search_main .list_item .international{
+  color: #fff;
+}
+.search_main .list_item .international::before{
+  border-color: #fff;
+}
 .search_main .search_list .list_item.number_item {
   width: 29%;
 }
@@ -165,6 +175,9 @@ main .air_message_content {
   font-size: 16px;
   font-weight: bold;
   color: #0f1922;
+}
+.search_main .list_item .select-box-disabled .select-single{
+  cursor: no-drop;
 }
 .search_main .list_item input::placeholder,
 .search_main .list_item select::placeholder {

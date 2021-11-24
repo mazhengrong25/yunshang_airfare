@@ -2,7 +2,7 @@
  * @Description: 首页
  * @Author: wish.WuJunLong
  * @Date: 2021-07-22 16:47:18
- * @LastEditTime: 2021-11-18 09:27:55
+ * @LastEditTime: 2021-11-22 13:43:35
  * @LastEditors: wish.WuJunLong
 -->
 
@@ -64,7 +64,7 @@
                   value="PVG"
                   placeholder="请输入出发地三字码"
                   onkeyup="toUpperCase(this)"
-                  style="text-transform:uppercase"
+                  style="text-transform: uppercase"
                 />
               </div>
               <div class="list_item">
@@ -75,7 +75,7 @@
                   value="LHR"
                   placeholder="请输入到达地三字码"
                   onkeyup="toUpperCase(this)"
-                  style="text-transform:uppercase"
+                  style="text-transform: uppercase"
                 />
               </div>
             </div>
@@ -87,7 +87,19 @@
               <div class="search_title">到达时间</div>
               <input name="date" placeholder="选择日期" type="text" id="endTime" />
             </div>
-            <div class="search_list">
+            <div class="list_item">
+              <div class="ax-flex-block">
+                <label class="ax-chera ax-lg"
+                  ><input
+                    id="internationalCheckbox"
+                    type="checkbox"
+                  /><span class="international">留学生</span></label
+                >
+              </div>
+
+              <!-- <label class="ax-chera ax-lg"><input id="internationalCheckbox" name="" value="" type="checkbox"><span class="international">留学生</span></label> -->
+            </div>
+            <div class="search_list_three">
               <div class="list_item">
                 <div class="search_title">成人</div>
                 <select class="ax-select" id="adtNumber">
@@ -105,6 +117,21 @@
               <div class="list_item">
                 <div class="search_title">儿童</div>
                 <select class="ax-select" id="chdNumber">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+              </div>
+              <div class="list_item">
+                <div class="search_title">婴儿</div>
+                <select class="ax-select" id="infantNumber">
                   <option value="0">0</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -302,6 +329,19 @@
           });
       }
 
+      // 留学生开关
+      $("#internationalCheckbox").change(function () {
+        if($("#internationalCheckbox[type='checkbox']:checked").val()){
+          $("#chdNumber").select2("val",'0')
+          $("#infantNumber").select2("val",'0')
+          $("#chdNumber").attr("disabled","disabled")
+          $("#infantNumber").attr("disabled","disabled")
+        }else {
+          $("#chdNumber").removeAttr("disabled")
+          $("#infantNumber").removeAttr("disabled")
+        }
+      });
+
       // 显示隐藏搜索栏
       function showSearch() {
         $(".search_main").toggle();
@@ -349,12 +389,11 @@
             retDate: $("#endTime").val().replace(/\//g, "-") || null,
             adultNumber: Number($("#adtNumber").val()),
             childNumber: Number($("#chdNumber").val()),
+            infantNumber: Number($("#infantNumber").val()),
             currency: "CNY",
             cabinlevel: "Y",
-            data: "",
+            data: $("#internationalCheckbox[type='checkbox']:checked").val()?"S:STU;":"",
           };
-
-          console.log(config.airConfig);
 
           sessionStorage.setItem("ticketData", JSON.stringify(ticketData));
         });
@@ -373,6 +412,7 @@
           routing: JSON.parse(checkAirNumber),
           adultNumber: Number($("#adtNumber").val()),
           childNumber: Number($("#chdNumber").val()),
+          infantNumber: Number($("#infantNumber").val()),
           quoteType: 0,
         };
         fetch(config.airConfig[$("#configType").val()] + "/verify", {
@@ -391,6 +431,7 @@
                 JSON.stringify({
                   adultNumber: Number($("#adtNumber").val()),
                   childNumber: Number($("#chdNumber").val()),
+                  infantNumber: Number($("#infantNumber").val()),
                 })
               );
 
