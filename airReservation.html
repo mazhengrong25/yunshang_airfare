@@ -2,7 +2,7 @@
  * @Description: 预定页面
  * @Author: wish.WuJunLong
  * @Date: 2021-08-03 15:57:24
- * @LastEditTime: 2021-11-24 17:39:53
+ * @LastEditTime: 2021-11-25 16:26:18
  * @LastEditors: mzr
 -->
 
@@ -372,7 +372,39 @@
             : "") +
           "</div>" +
           "</div>" +
-          "</div>";
+          // "<div class='item_box_tip_message'>" +
+          // "<div class='message_title'>行李件数：</div>" +
+          // "<div class='message_content'>" +
+          // val[0].baggagePiece +
+          // "件" +
+          // "</div>" +
+          // "</div>" +
+          // "<div class='item_box_tip_message'>" +
+          // "<div class='message_title'>行李件数：</div>" +
+          // "<div class='message_content'>" +
+          // val[0].baggageWeight +
+          // "KG" +
+          // "</div>" +
+          // "</div>" +
+          (val[0].baggagePiece > 0
+            ? "<div class='item_box_tip_message'>" +
+              "<div class='message_title'>行李件数：</div>" +
+              "<div class='message_content'>" +
+              val[0].baggagePiece +
+              "件" +
+              "</div>" +
+              "</div>"
+            : "") +
+          (val[0].baggageWeight > 0
+            ? "<div class='item_box_tip_message'>" +
+              "<div class='message_title'>行李额：</div>" +
+              "<div class='message_content'>" +
+              val[0].baggageWeight +
+              "KG" +
+              "</div>" +
+              "</div>"
+            : "");
+        ("</div>");
 
         data =
           "<div class='item_message'>" +
@@ -458,7 +490,7 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name">出生日期：</div>' +
+          '<div class="item_name"><span class="from_required">*</span>出生日期：</div>' +
           '<div class="item_input">' +
           '<input placeholder="输入出生日期" name="date" value="" class="ax-md pas_data" type="text" id="pas_birthday_' +
           i +
