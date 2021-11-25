@@ -17,18 +17,17 @@
   border-radius: 5px 5px 0px 0px;
 }
 .air_header .air_back_btn {
-  display: inline-block;
-  margin-left: auto;
-  text-align: right;
+  width: 110px;
   height: 30px;
   line-height: 30px;
-  width: 110px;
   background-color: #3ABFC2;
+  color: #fff;
   border-radius: 5px;
-  text-transform: uppercase;
+  letter-spacing: 5px;
 }
-.air_header .air_back_btn :hover {
-  
+.air_header .air_back_btn:hover{
+  background-color: #3ABFC2;
+  color: #fff;
 }
 .air_message {
   padding: 10px 25px;
@@ -275,7 +274,7 @@
 }
 .passenger_box .box_list .list_item .item_name {
   display: inline-block;
-  min-width: 80px;
+  min-width: 85px;
   text-align: right;
 }
 .passenger_box .box_list .list_item .item_name .from_required {

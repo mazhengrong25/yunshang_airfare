@@ -2,8 +2,8 @@
  * @Description: 预定页面
  * @Author: wish.WuJunLong
  * @Date: 2021-08-03 15:57:24
- * @LastEditTime: 2021-11-22 13:43:49
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-11-24 17:39:53
+ * @LastEditors: mzr
 -->
 
 <!DOCTYPE html>
@@ -36,8 +36,7 @@
     <div class="air_reservation">
       <div class="air_header">
         <div class="air_title">机票预定</div>
-        <!-- <button class="air_back_btn ax-primary ax-btn ax-ripple">返回</button> -->
-        <button class="air_back_btn">返回</button>
+        <button class="air_back_btn ax-btn ax-ripple">返回</button>
       </div>
       <div class="air_message"></div>
 
@@ -177,6 +176,11 @@
         sessionStorage.getItem("passengerMessage")
       );
       sessionStorage.removeItem("passengerMessage");
+      // 留学生状态
+      var internationalStatus = JSON.parse(
+        sessionStorage.getItem("internationalStatus")
+      );
+      sessionStorage.removeItem("internationalStatus");
 
       // 组装航班数据
       function getTicketDetail(val, retVal) {
@@ -421,7 +425,9 @@
           '<div class="box_list">' +
           '<div class="box_title">乘客 ' +
           (i + 1) +
-          " - 成人</div>" +
+          " - " +
+          (internationalStatus ? "留学生" : "成人") +
+          "</div>" +
           '<div class="list_item" style="display: none">' +
           '<div class="item_name">乘客类型：</div>' +
           '<div class="item_input">' +
@@ -462,9 +468,13 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
+          '<input placeholder="输入证件到期日期" name="date" value="" class="ax-md pas_data" id="pas_cardExpired_' +
+          i +
+          '" onfocus="getCardExpiredTimeDate(' +
+          i +
+          ')" type="text"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
@@ -493,13 +503,9 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入证件到期日期" name="date" value="" class="ax-md pas_data" id="pas_cardExpired_' +
-          i +
-          '" onfocus="getCardExpiredTimeDate(' +
-          i +
-          ')" type="text"/>' +
+          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
@@ -557,9 +563,13 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
+          '<input placeholder="输入证件到期日期" value="" class="ax-md pas_data" type="text" id="pas_chd_cardExpired_' +
+          i +
+          '" onfocus="getCHDCardExpiredTimeDate(' +
+          i +
+          ')"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
@@ -588,13 +598,15 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入证件到期日期" value="" class="ax-md pas_data" type="text" id="pas_chd_cardExpired_' +
-          i +
-          '" onfocus="getCHDCardExpiredTimeDate(' +
-          i +
-          ')"/>' +
+          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件发行国：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入证件发行国" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
           "</div>" +
           "</div>" +
           "</div>";
@@ -638,17 +650,21 @@
           '<div class="list_item">' +
           '<div class="item_name">出生日期：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入出生日期" value="" class="ax-md pas_data" type="text" id="pas_chd_birthday_' +
+          '<input placeholder="输入出生日期" value="" class="ax-md pas_data" type="text" id="pas_inf_birthday_' +
           i +
-          '" onfocus="getCHDBirthdayTimeDate(' +
+          '" onfocus="getINFBirthdayTimeDate(' +
           i +
           ')"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
+          '<input placeholder="输入证件到期日期" value="" class="ax-md pas_data" type="text" id="pas_inf_cardExpired_' +
+          i +
+          '" onfocus="getINFCardExpiredTimeDate(' +
+          i +
+          ')"/>' +
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
@@ -677,13 +693,15 @@
           "</div>" +
           "</div>" +
           '<div class="list_item">' +
-          '<div class="item_name"><span class="is_from_required">*</span>到期日期：</div>' +
+          '<div class="item_name"><span class="is_from_required">*</span>国籍：</div>' +
           '<div class="item_input">' +
-          '<input placeholder="输入证件到期日期" value="" class="ax-md pas_data" type="text" id="pas_chd_cardExpired_' +
-          i +
-          '" onfocus="getCHDCardExpiredTimeDate(' +
-          i +
-          ')"/>' +
+          '<input placeholder="输入国籍" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
+          "</div>" +
+          "</div>" +
+          '<div class="list_item">' +
+          '<div class="item_name"><span class="is_from_required">*</span>证件发行国：</div>' +
+          '<div class="item_input">' +
+          '<input placeholder="输入证件发行国" value="" class="ax-md pas_data" type="text" onkeyup="toUpperCase(this)" style="text-transform:uppercase"/>' +
           "</div>" +
           "</div>" +
           "</div>";
@@ -895,6 +913,61 @@
           });
       }
 
+      // 婴儿乘客日期处理
+      function getINFBirthdayTimeDate(val) {
+        // 日期选择器
+        $("#pas_inf_birthday_" + val)
+          .mobiscroll()
+          .calendar({
+            theme: "ax",
+            lang: "zh",
+            touchUi: false,
+            onBeforeShow: function (event, inst) {
+              //显示前的点击事件
+              $("#" + this.id).addClass("ax-focus"); //input焦点
+              //inst.settings.cssClass='ax-mask';//添加遮罩
+            },
+            onClose: function (event, inst) {
+              //关闭事件
+              $("#" + this.id).removeClass("ax-focus");
+            },
+            display: "bubble",
+            dateFormat: "yy-mm-dd",
+            min: new Date(
+              new Date().getFullYear() - 2,
+              new Date().getMonth(),
+              new Date().getDate()
+            ),
+            max: new Date(
+              new Date().getFullYear(),
+              new Date().getMonth(),
+              new Date().getDate()
+            ),
+          });
+      }
+      function getINFCardExpiredTimeDate(val) {
+        // 日期选择器
+        $("#pas_inf_cardExpired_" + val)
+          .mobiscroll()
+          .calendar({
+            theme: "ax",
+            lang: "zh",
+            touchUi: false,
+            onBeforeShow: function (event, inst) {
+              //显示前的点击事件
+              $("#" + this.id).addClass("ax-focus"); //input焦点
+              //inst.settings.cssClass='ax-mask';//添加遮罩
+            },
+            onClose: function (event, inst) {
+              //关闭事件
+              $("#" + this.id).removeClass("ax-focus");
+            },
+            display: "bubble",
+            dateFormat: "yy-mm-dd",
+            min: new Date(),
+          });
+      }
+
       // 返回时间 年-月-日
       function getNotTimeDate(val) {
         var year = val.getFullYear();
@@ -936,11 +1009,11 @@
               firstName: passenger[2], //first
               lastName: passenger[3], //last
               birthday: passenger[4], //出生日期
-              nationality: passenger[5], //国籍
+              cardExpired: passenger[5], //证件到期日期
               cardIssuePlace: passenger[5], //证件发行国
               cardType: passenger[6], // 证件类型 OT: 其他;ID: 身份证;PP: 护照;GA: 港澳通行证;TW: 台湾通行证;TB: 台胞证;HX: 回乡证;HY: 国际海员证;
               cardNumber: passenger[7], //证件号码
-              cardExpired: passenger[8], //证件到期日期
+              nationality: passenger[8], //国籍
               cardIssuePlace: passenger[9], // 证件发行国
               airCode: null,
               airMemberNo: null,

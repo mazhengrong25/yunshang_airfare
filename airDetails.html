@@ -2,8 +2,8 @@
  * @Description: 详情页
  * @Author: wish.WuJunLong
  * @Date: 2021-08-31 09:38:41
- * @LastEditTime: 2021-11-22 09:44:05
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-11-24 18:17:07
+ * @LastEditors: mzr
 -->
 
 <!DOCTYPE html>
@@ -88,7 +88,11 @@
             取消订单
           </button>
         </div>
-        <button type="button" class="ax-btn ax-ripple ax-success" id="paySubmit">
+        <button
+          type="button"
+          class="ax-btn ax-ripple ax-success"
+          id="paySubmit"
+        >
           订单出票
         </button>
       </div>
@@ -97,14 +101,19 @@
       <div class="ax-window" data-mask="true" id="selectOrderMessage">
         <div class="ax-window-overlay"></div>
         <div class="ax-window-contain">
-          <span class="ax-window-close"><i class="ax-iconfont ax-icon-close"></i></span>
+          <span class="ax-window-close"
+            ><i class="ax-iconfont ax-icon-close"></i
+          ></span>
           <div class="ax-window-title">选择需要操作的乘客</div>
           <div class="ax-break-line"></div>
           <div class="ax-window-content dialogContent"></div>
           <div class="ax-break-line"></div>
           <div class="ax-padding ax-window-operate ax-align-center">
             <div class="ax-btns">
-              <button type="button" class="ax-btn ax-ripple ax-ignore ax-window-close">
+              <button
+                type="button"
+                class="ax-btn ax-ripple ax-ignore ax-window-close"
+              >
                 取消
               </button>
               <button
@@ -123,14 +132,19 @@
       <div class="ax-window" data-mask="true" id="confirmRefundPrice">
         <div class="ax-window-overlay"></div>
         <div class="ax-window-contain">
-          <span class="ax-window-close"><i class="ax-iconfont ax-icon-close"></i></span>
+          <span class="ax-window-close"
+            ><i class="ax-iconfont ax-icon-close"></i
+          ></span>
           <div class="ax-window-title">当前订单可退票金额</div>
           <div class="ax-break-line"></div>
           <div class="ax-window-content dialogContent"></div>
           <div class="ax-break-line"></div>
           <div class="ax-padding ax-window-operate ax-align-center">
             <div class="ax-btns">
-              <button type="button" class="ax-btn ax-ripple ax-ignore ax-window-close">
+              <button
+                type="button"
+                class="ax-btn ax-ripple ax-ignore ax-window-close"
+              >
                 取消
               </button>
               <button
@@ -173,7 +187,12 @@
                 </div>
                 <div class="list_item">
                   <div class="search_title">出发时间</div>
-                  <input name="date" placeholder="选择日期" type="text" id="startTime" />
+                  <input
+                    name="date"
+                    placeholder="选择日期"
+                    type="text"
+                    id="startTime"
+                  />
                 </div>
                 <button
                   type="button"
@@ -194,7 +213,10 @@
 
           <div class="ax-padding ax-window-operate">
             <div class="ax-btns">
-              <button type="button" class="ax-btn ax-ripple ax-ignore ax-window-close">
+              <button
+                type="button"
+                class="ax-btn ax-ripple ax-ignore ax-window-close"
+              >
                 取消
               </button>
               <span class="change_air_price"></span>
@@ -221,7 +243,9 @@
               当前操作将取消当前订单，请确认无误后点击确认按钮！
             </div>
             <div class="ax-tips-btn">
-              <button class="ax-btn ax-ripple ax-long ax-window-close">关闭</button>
+              <button class="ax-btn ax-ripple ax-long ax-window-close">
+                关闭
+              </button>
               <button
                 class="ax-btn ax-ripple ax-longer ax-primary"
                 onclick="closeOrderSubmit()"
@@ -303,7 +327,8 @@
           if (url.match(reg)) {
             var url2 = url.replace(reg, "$1" + value); //正则替换
           } else {
-            var url2 = url + (url.indexOf("?") > -1 ? "&" : "?") + name + "=" + value; //没有参数添加参数
+            var url2 =
+              url + (url.indexOf("?") > -1 ? "&" : "?") + name + "=" + value; //没有参数添加参数
           }
         }
         history.replaceState(null, null, url2); //替换地址栏
@@ -331,7 +356,7 @@
         airDetail, // 航段详情
         airTip, // 航段信息
         passengerData, // 乘客数据
-        abolitionType;  // 已出票订单废票状态
+        abolitionType; // 已出票订单废票状态
 
       // 组装航班数据
       function getTicketDetail(val, retVal, type, newAirIndex) {
@@ -346,14 +371,17 @@
           "（" +
           val[0].depTime.split(" ")[0] +
           "）" +
-          (retVal.length > 0 ? "-（" + retVal[0].depTime.split(" ")[0] + "）" : "") +
+          (retVal.length > 0
+            ? "-（" + retVal[0].depTime.split(" ")[0] + "）"
+            : "") +
           "</div>";
 
         // 航班时间组装
         var dateStart = new Date(val[0].depTime);
         var dateEnd = new Date(val[val.length - 1].arrTime);
         var difValue = parseInt(
-          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) / (1000 * 60 * 60 * 24)
+          (getNotTimeDate(dateEnd) - getNotTimeDate(dateStart)) /
+            (1000 * 60 * 60 * 24)
         );
 
         airTimeDom =
@@ -366,7 +394,9 @@
             ? "0" + dateStart.getMinutes()
             : dateStart.getMinutes()) +
           " - " +
-          (dateEnd.getHours() < 10 ? "0" + dateEnd.getHours() : dateEnd.getHours()) +
+          (dateEnd.getHours() < 10
+            ? "0" + dateEnd.getHours()
+            : dateEnd.getHours()) +
           ":" +
           (dateEnd.getMinutes() < 10
             ? "0" + dateEnd.getMinutes()
@@ -396,7 +426,9 @@
               ) > 0
                 ? "<span>+" +
                   parseInt(
-                    (getNotTimeDate(new Date(retVal[retVal.length - 1].arrTime)) -
+                    (getNotTimeDate(
+                      new Date(retVal[retVal.length - 1].arrTime)
+                    ) -
                       getNotTimeDate(new Date(retVal[0].depTime))) /
                       (1000 * 60 * 60 * 24)
                   ) +
@@ -500,7 +532,8 @@
           "<div class='message_content message_air_type'>" +
           (val.length > 1 ? "中转 +" + (val.length - 1) : "直达") +
           (retVal.length > 0
-            ? "," + (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
+            ? "," +
+              (retVal.length > 1 ? "中转 +" + (retVal.length - 1) : "直达")
             : "") +
           "</div>" +
           "</div>" +
@@ -615,7 +648,7 @@
               $("#paySubmit").hide();
               $("#orderChangeBtn").hide();
               $("#orderRefundBtn").hide();
-              $("#orderAbolitionBtn").hide()
+              $("#orderAbolitionBtn").hide();
               if (airMessage.remark === "T-A") {
                 // 未出票状态
                 $("#orderCancelBtn").show();
@@ -627,7 +660,9 @@
               }
 
               // 组装航班信息
-              $(".air_message").html(getTicketDetail(oneAirMessage, retAirMessage));
+              $(".air_message").html(
+                getTicketDetail(oneAirMessage, retAirMessage)
+              );
 
               // 组装乘客信息
               var adtNumber = 0; // 成人数量
@@ -648,9 +683,17 @@
                 passengerList +=
                   '<div class="passenger_box">' +
                   '<div class="passenger_type" style="background: ' +
-                  (passengerData[i].passengerType === 0 ? "#4dbd73" : passengerData[i].passengerType === 1 ? "#3b97e6" : "#FF87CA") +
+                  (passengerData[i].passengerType === 0
+                    ? "#4dbd73"
+                    : passengerData[i].passengerType === 1
+                    ? "#3b97e6"
+                    : "#FF87CA") +
                   '">' +
-                  (passengerData[i].passengerType === 0 ? "成" : passengerData[i].passengerType === 1 ? "童" : "婴") +
+                  (passengerData[i].passengerType === 0
+                    ? "成"
+                    : passengerData[i].passengerType === 1
+                    ? "童"
+                    : "婴") +
                   "</div>" +
                   '<div class="passenger_list">' +
                   '<div class="list_name">名(First)：</div>' +
@@ -667,7 +710,7 @@
                   '<div class="passenger_list">' +
                   '<div class="list_name">性别：</div>' +
                   '<div class="list_message" style="min-width: 30px;">' +
-                  (passengerData[i].gender === 0?'男':'女') +
+                  (passengerData[i].gender === 0 ? "男" : "女") +
                   "</div>" +
                   "</div>" +
                   '<div class="passenger_list">' +
@@ -743,7 +786,11 @@
                 priceList +=
                   '<div class="price_box">' +
                   '<div class="price_title">' +
-                  (priceData[i].passengerType === 0 ? "成人" : priceData[i].passengerType === 1 ? "儿童" : "婴儿") +
+                  (priceData[i].passengerType === 0
+                    ? "成人"
+                    : priceData[i].passengerType === 1
+                    ? "儿童"
+                    : "婴儿") +
                   "</div>" +
                   '<div class="price_list">' +
                   '<div class="list_item">票面价：</div>' +
@@ -755,7 +802,11 @@
                   priceData[i].price +
                   "</p>" +
                   '<p class="number">x ' +
-                  (priceData[i].passengerType === 0 ? adtNumber : priceData[i].passengerType === 0 ? chdNumber : infNumber) +
+                  (priceData[i].passengerType === 0
+                    ? adtNumber
+                    : priceData[i].passengerType === 0
+                    ? chdNumber
+                    : infNumber) +
                   "</p>" +
                   "</div>" +
                   "</div>" +
@@ -769,7 +820,11 @@
                   priceData[i].tax +
                   "</p>" +
                   '<p class="number">x ' +
-                    (priceData[i].passengerType === 0 ? adtNumber : priceData[i].passengerType === 0 ? chdNumber : infNumber) +
+                  (priceData[i].passengerType === 0
+                    ? adtNumber
+                    : priceData[i].passengerType === 0
+                    ? chdNumber
+                    : infNumber) +
                   "</p>" +
                   "</div>" +
                   "</div>" +
@@ -827,9 +882,17 @@
             '" type="checkbox">' +
             "<span>" +
             '<div class="passenger_type" style="background: ' +
-            (passengerData[i].passengerType === 0 ? "#4dbd73" : "#3b97e6") +
+            (passengerData[i].passengerType === 0
+              ? "#4dbd73"
+              : passengerData[i].passengerType === 1
+              ? "#3b97e6"
+              : "#ff8400") +
             '">' +
-            (passengerData[i].passengerType === 0 ? "成" : "童") +
+            (passengerData[i].passengerType === 0
+              ? "成"
+              : passengerData[i].passengerType === 1
+              ? "童"
+              : "婴") +
             "</div>" +
             '<div class="passenger_list">' +
             '<div class="list_name">名(Last)：</div>' +
@@ -890,7 +953,9 @@
         }
 
         $("#selectOrderMessage .dialogContent").html(
-          '<div class="ax-form-group" id="selectPassenger">' + dialogPassenger + "</div>"
+          '<div class="ax-form-group" id="selectPassenger">' +
+            dialogPassenger +
+            "</div>"
         );
       }
 
@@ -953,10 +1018,13 @@
             passengers: selectList,
             data: airMessage.offerItemData, //订单详情中响应的data 原样传入
           };
-          fetch(config.airConfig[airMessage.validatingCarrier] + "/splitorder", {
-            method: "POST",
-            body: JSON.stringify(splitData),
-          })
+          fetch(
+            config.airConfig[airMessage.validatingCarrier] + "/splitorder",
+            {
+              method: "POST",
+              body: JSON.stringify(splitData),
+            }
+          )
             .then(function (data) {
               return data.json();
             })
@@ -980,7 +1048,9 @@
                 aLabel.setAttribute("id", "reportpoint");
                 // 防止反复添加
                 if (document.getElementById("reportpoint")) {
-                  document.body.removeChild(document.getElementById("reportpoint"));
+                  document.body.removeChild(
+                    document.getElementById("reportpoint")
+                  );
                 }
                 document.body.appendChild(aLabel);
                 aLabel.click();
@@ -1006,7 +1076,9 @@
               $("#loading").hide();
               $("#warning_tip").addClass("ax-window-show");
               $(".ax-tips-title").html("访问错误");
-              $(".ax-tips-des").html("数据获取失败，请检查网络连接或联系管理员");
+              $(".ax-tips-des").html(
+                "数据获取失败，请检查网络连接或联系管理员"
+              );
             });
         }
 
@@ -1060,7 +1132,11 @@
                 priceList +=
                   '<div class="price_box">' +
                   '<div class="price_title">' +
-                  (data.refunds[i].passengerType === 0 ? "成人" : "儿童") +
+                  (refunds[i].passengerType === 0
+                    ? "成人"
+                    : refunds[i].passengerType === 1
+                    ? "儿童"
+                    : "婴儿") +
                   "</div>" +
                   '<div class="price_list">' +
                   '<div class="list_item">罚金：</div>' +
@@ -1072,7 +1148,11 @@
                   data.refunds[i].penalty +
                   "</p>" +
                   '<p class="number">x ' +
-                  (data.refunds[i].passengerType === 0 ? adtNumber : data.refunds[i].passengerType === 1 ? chdNumber : infNumber) +
+                  (data.refunds[i].passengerType === 0
+                    ? adtNumber
+                    : data.refunds[i].passengerType === 1
+                    ? chdNumber
+                    : infNumber) +
                   "</p>" +
                   "</div>" +
                   "</div>" +
@@ -1086,7 +1166,11 @@
                   data.refunds[i].refund +
                   "</p>" +
                   '<p class="number">x ' +
-                    (data.refunds[i].passengerType === 0 ? adtNumber : data.refunds[i].passengerType === 1 ? chdNumber : infNumber) +
+                  (data.refunds[i].passengerType === 0
+                    ? adtNumber
+                    : data.refunds[i].passengerType === 1
+                    ? chdNumber
+                    : infNumber) +
                   "</p>" +
                   "</div>" +
                   "</div>" +
@@ -1234,7 +1318,9 @@
         });
 
         $("#startAddress").html(selectAirTime[0].depAirport);
-        $("#endAddress").html(selectAirTime[selectAirTime.length - 1].arrAirport);
+        $("#endAddress").html(
+          selectAirTime[selectAirTime.length - 1].arrAirport
+        );
 
         $("#startTime").val(selectAirTime[0].depTime.split(" ")[0]);
         // 日期选择器
@@ -1333,7 +1419,12 @@
               for (var i = 0; i < newAirDataList.length; i++) {
                 newAirList +=
                   "<div class='air_message'>" +
-                  getTicketDetail(newAirDataList[i].routing.fromSegments, [], false, i) +
+                  getTicketDetail(
+                    newAirDataList[i].routing.fromSegments,
+                    [],
+                    false,
+                    i
+                  ) +
                   "</div>";
               }
 
@@ -1430,11 +1521,11 @@
 
       // 打开取消订单确认框
       function cancelOrderBtn(type) {
-        console.log(airMessage)
+        console.log(airMessage);
         if (!type && airMessage.remark !== "T-A") {
           return false;
         }
-        abolitionType = type?type: false;
+        abolitionType = type ? type : false;
         $("#closeOrderTip").addClass("ax-window-show");
       }
       // 取消订单操作
@@ -1446,7 +1537,7 @@
           pnrCode: pnrCode, //pnr
           otherCode: otherCode,
           remark: null,
-          controlType: abolitionType?406:405, // 0：提取编码信息；405：取消编码; 406 已出票订单废票
+          controlType: abolitionType ? 406 : 405, // 0：提取编码信息；405：取消编码; 406 已出票订单废票
         };
         fetch(config.airConfig[airMessage.validatingCarrier] + "/confirm", {
           method: "POST",
@@ -1460,12 +1551,16 @@
             $("#closeOrderTip").removeClass("ax-window-show");
             if (data.status === 0) {
               $("#success_tip").addClass("ax-window-show");
-              $("#success_tip .ax-tips-title").html(abolitionType?"废票成功":"取消订单成功");
+              $("#success_tip .ax-tips-title").html(
+                abolitionType ? "废票成功" : "取消订单成功"
+              );
               $("#success_tip .ax-tips-des").html("已获取最新订单数据");
               getDomData();
             } else {
               $("#warning_tip").addClass("ax-window-show");
-              $("#warning_tip .ax-tips-title").html(abolitionType?"废票失败":"取消失败");
+              $("#warning_tip .ax-tips-title").html(
+                abolitionType ? "废票失败" : "取消失败"
+              );
               $("#warning_tip .ax-tips-des").html(data.message);
             }
           })

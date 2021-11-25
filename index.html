@@ -2,8 +2,8 @@
  * @Description: 首页
  * @Author: wish.WuJunLong
  * @Date: 2021-07-22 16:47:18
- * @LastEditTime: 2021-11-22 13:43:35
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-11-24 15:26:19
+ * @LastEditors: mzr
 -->
 
 <!DOCTYPE html>
@@ -81,19 +81,29 @@
             </div>
             <div class="list_item">
               <div class="search_title">出发时间</div>
-              <input name="date" placeholder="选择日期" type="text" id="startTime" />
+              <input
+                name="date"
+                placeholder="选择日期"
+                type="text"
+                id="startTime"
+              />
             </div>
             <div class="list_item ret_item">
               <div class="search_title">到达时间</div>
-              <input name="date" placeholder="选择日期" type="text" id="endTime" />
+              <input
+                name="date"
+                placeholder="选择日期"
+                type="text"
+                id="endTime"
+              />
             </div>
             <div class="list_item">
               <div class="ax-flex-block">
                 <label class="ax-chera ax-lg"
-                  ><input
-                    id="internationalCheckbox"
-                    type="checkbox"
-                  /><span class="international">留学生</span></label
+                  ><input id="internationalCheckbox" type="checkbox" /><span
+                    class="international"
+                    >留学生</span
+                  ></label
                 >
               </div>
 
@@ -152,7 +162,10 @@
             <div class="search_list submit_btn">
               <button
                 type="button"
-                class="ax-btn ax-ripple ax-primary ax-full ax-square search_submit_btn"
+                class="
+                  ax-btn ax-ripple ax-primary ax-full ax-square
+                  search_submit_btn
+                "
               >
                 查询
               </button>
@@ -221,7 +234,9 @@
           ? "0" + (new Date().getMonth() + 1)
           : new Date().getMonth() + 1) +
         "-" +
-        (new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate());
+        (new Date().getDate() < 10
+          ? "0" + new Date().getDate()
+          : new Date().getDate());
       $("#startTime").val(thisTImeDate);
 
       console.log(thisTImeDate);
@@ -283,7 +298,9 @@
             $("#" + this.id).removeClass("ax-focus");
 
             getEndTime();
-            if (new Date($("#startTime").val()) > new Date($("#endTime").val())) {
+            if (
+              new Date($("#startTime").val()) > new Date($("#endTime").val())
+            ) {
               $("#endTime").val("");
             }
           },
@@ -308,7 +325,9 @@
             onClose: function (event, inst) {
               //关闭事件
               $("#" + this.id).removeClass("ax-focus");
-              if (new Date($("#startTime").val()) > new Date($("#endTime").val())) {
+              if (
+                new Date($("#startTime").val()) > new Date($("#endTime").val())
+              ) {
                 $("#endTime").val("");
               }
             },
@@ -328,18 +347,26 @@
             ),
           });
       }
+      var isInternational = false;
 
       // 留学生开关
       $("#internationalCheckbox").change(function () {
-        if($("#internationalCheckbox[type='checkbox']:checked").val()){
-          $("#chdNumber").select2("val",'0')
-          $("#infantNumber").select2("val",'0')
-          $("#chdNumber").attr("disabled","disabled")
-          $("#infantNumber").attr("disabled","disabled")
-        }else {
-          $("#chdNumber").removeAttr("disabled")
-          $("#infantNumber").removeAttr("disabled")
+        if ($("#internationalCheckbox[type='checkbox']:checked").val()) {
+          $("#chdNumber").select2("val", "0");
+          $("#infantNumber").select2("val", "0");
+          $("#chdNumber").attr("disabled", "disabled");
+          $("#infantNumber").attr("disabled", "disabled");
+
+          isInternational = true;
+        } else {
+          isInternational = false;
+          $("#chdNumber").removeAttr("disabled");
+          $("#infantNumber").removeAttr("disabled");
         }
+        sessionStorage.setItem(
+          "internationalStatus",
+          JSON.stringify(isInternational)
+        );
       });
 
       // 显示隐藏搜索栏
@@ -392,7 +419,9 @@
             infantNumber: Number($("#infantNumber").val()),
             currency: "CNY",
             cabinlevel: "Y",
-            data: $("#internationalCheckbox[type='checkbox']:checked").val()?"S:STU;":"",
+            data: $("#internationalCheckbox[type='checkbox']:checked").val()
+              ? "S:STU;"
+              : "",
           };
 
           sessionStorage.setItem("ticketData", JSON.stringify(ticketData));
@@ -425,7 +454,10 @@
           .then(function (data) {
             $("#loading").hide();
             if (data.status === 0) {
-              sessionStorage.setItem("airMessage", JSON.stringify(data.routing));
+              sessionStorage.setItem(
+                "airMessage",
+                JSON.stringify(data.routing)
+              );
               sessionStorage.setItem(
                 "passengerMessage",
                 JSON.stringify({

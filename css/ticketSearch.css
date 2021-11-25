@@ -81,7 +81,7 @@
 }
 
 .ticket_main .ticket_list {
-  min-height: 600px;
+  min-height: 85vh;
 }
 
 .ticket_main .list_item {
