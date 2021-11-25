@@ -2,8 +2,8 @@
  * @Description:全局配置文件
  * @Author: wish.WuJunLong
  * @Date: 2021-09-14 16:55:14
- * @LastEditTime: 2021-11-24 09:30:53
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-11-25 11:42:51
+ * @LastEditors: mzr
  */
 
 var isTest = true; // true测试 false正式
@@ -48,16 +48,18 @@ for (var i = 0; i < config.airConfig.header.length; i++) {
 }
 $(".body").prepend(
   "<header>" +
-    '<div class="tab_header">' +
-    '<div class="header_logo_box">' +
-    '<a class="header_logo" href="/">' +
-    '<img src="/img/logo.png" alt="logo" />' +
-    "</a>" +
-    (isTest ? "测试版" : "正式版") +
-    "</div>" +
-    '<div class="header_tab_box">' +
-    headerUrl +
-    "</div>" +
-    "</div>" +
-    "</header>"
+  '<div class="tab_header">' +
+  '<div class="header_logo_box">' +
+  '<a class="header_logo" href="/">' +
+  '<img src="/img/logo.png" alt="logo" />' +
+  "</a>" +
+  '<div class="header_text">' +
+  (isTest ? "测试版" : "正式版") +
+  '</div>' +
+  "</div>" +
+  '<div class="header_tab_box">' +
+  headerUrl +
+  "</div>" +
+  "</div>" +
+  "</header>"
 );

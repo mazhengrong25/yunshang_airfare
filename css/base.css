@@ -57,13 +57,13 @@ header .tab_header .header_logo img {
 }
 header .tab_header .header_logo span {
   color: #999;
+  /* color: #fff; */
   font-size: 12px;
   position: absolute;
   left: 100%;
   top: 14px;
   width: 50px;
 }
-
 
 header .tab_header .header_logo_box{
   display: inline-block;
@@ -72,6 +72,14 @@ header .tab_header .header_logo_box{
   height: 56px;
 }
 
+header .tab_header .header_logo_box .header_text {
+  font-size: 14px;
+  color: #999;
+  position: absolute;
+  left: 100%;
+  top: 14px;
+  width: 80px;
+}
 
 header .tab_header #selectObjectType{
   display: inline-block;

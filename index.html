@@ -2,7 +2,7 @@
  * @Description: 首页
  * @Author: wish.WuJunLong
  * @Date: 2021-07-22 16:47:18
- * @LastEditTime: 2021-11-24 15:26:19
+ * @LastEditTime: 2021-11-25 10:40:14
  * @LastEditors: mzr
 -->
 
@@ -158,6 +158,13 @@
             <div class="list_item">
               <div class="search_title">渠道</div>
               <select class="ax-select" id="configType"></select>
+            </div>
+            <div class="list_item">
+              <div class="search_title">舱等</div>
+              <select class="ax-select" id="cabinlevel">
+                <option value="Y">经济舱</option>
+                <option value="C">公务舱</option>
+              </select>
             </div>
             <div class="search_list submit_btn">
               <button
@@ -422,6 +429,7 @@
             data: $("#internationalCheckbox[type='checkbox']:checked").val()
               ? "S:STU;"
               : "",
+            cabinlevel: $("#cabinlevel").val(),
           };
 
           sessionStorage.setItem("ticketData", JSON.stringify(ticketData));

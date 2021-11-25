@@ -2,7 +2,7 @@
  * @Description: 详情页
  * @Author: wish.WuJunLong
  * @Date: 2021-08-31 09:38:41
- * @LastEditTime: 2021-11-24 18:17:07
+ * @LastEditTime: 2021-11-25 11:19:48
  * @LastEditors: mzr
 -->
 
@@ -895,15 +895,15 @@
               : "婴") +
             "</div>" +
             '<div class="passenger_list">' +
-            '<div class="list_name">名(Last)：</div>' +
-            '<div class="list_message">' +
-            passengerData[i].lastName +
-            "</div>" +
-            "</div>" +
-            '<div class="passenger_list">' +
             '<div class="list_name">姓(First)：</div>' +
             '<div class="list_message">' +
             passengerData[i].firstName +
+            "</div>" +
+            "</div>" +
+            '<div class="passenger_list">' +
+            '<div class="list_name">名(Last)：</div>' +
+            '<div class="list_message">' +
+            passengerData[i].lastName +
             "</div>" +
             "</div>" +
             '<div class="passenger_list">' +
@@ -1107,6 +1107,7 @@
           .then(function (data) {
             $("#loading").hide();
             if (data.status === 0) {
+              console.log("AA", data);
               $("#selectOrderMessage").removeClass("ax-window-show");
               refundCurrency = data.currency;
               refundAmount = data.totalRefundAmount;
@@ -1132,9 +1133,9 @@
                 priceList +=
                   '<div class="price_box">' +
                   '<div class="price_title">' +
-                  (refunds[i].passengerType === 0
+                  (data.refunds[i].passengerType === 0
                     ? "成人"
-                    : refunds[i].passengerType === 1
+                    : data.refunds[i].passengerType === 1
                     ? "儿童"
                     : "婴儿") +
                   "</div>" +
@@ -1195,6 +1196,7 @@
             }
           })
           .catch(function (e) {
+            console.log(e);
             $("#loading").hide();
             $("#warning_tip").addClass("ax-window-show");
             $(".ax-tips-title").html("访问错误");
